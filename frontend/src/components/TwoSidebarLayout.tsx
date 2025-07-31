@@ -68,15 +68,15 @@ export const TwoSidebarLayout: React.FC<TwoSidebarLayoutProps> = ({
   );
 
   return (
-    <div className="flex h-screen" suppressHydrationWarning>
-      {/* Left Sidebar - Always render but control visibility */}
+    <div className="relative flex h-screen overflow-hidden bg-green-500" suppressHydrationWarning>
+      {/* Left Sidebar - Always render but control position */}
       <div
-        className={`bg-blue-500 transition-all duration-300 ease-in-out ${
-          mounted && isMobile
-            ? 'hidden' // Hide desktop sidebar on mobile after mount
+        className={`bg-blue-500 w-64 transition-transform duration-300 ease-in-out absolute left-0 top-0 h-full z-10 ${
+          isMobile
+            ? '-translate-x-full' // Always hide desktop sidebar on mobile
             : leftSidebarOpen
-            ? 'w-64'
-            : 'w-0 overflow-hidden'
+            ? 'translate-x-0'
+            : '-translate-x-full'
         }`}
       >
         <SidebarContent>{leftContent}</SidebarContent>
@@ -100,18 +100,24 @@ export const TwoSidebarLayout: React.FC<TwoSidebarLayoutProps> = ({
       )}
 
       {/* Main Content */}
-      <div className="flex-1 bg-green-500 flex flex-col items-center justify-center text-white">
+      <div 
+        className={`flex-1 flex flex-col items-center justify-center text-white transition-all duration-300 ease-in-out ${
+          !isMobile
+            ? `${leftSidebarOpen ? 'ml-64' : 'ml-0'} ${rightSidebarOpen ? 'mr-64' : 'mr-0'}`
+            : 'ml-0 mr-0'
+        }`}
+      >
         {children}
       </div>
 
-      {/* Right Sidebar - Always render but control visibility */}
+      {/* Right Sidebar - Always render but control position */}
       <div
-        className={`bg-red-500 transition-all duration-300 ease-in-out ${
-          mounted && isMobile
-            ? 'hidden' // Hide desktop sidebar on mobile after mount
+        className={`bg-red-500 w-64 transition-transform duration-300 ease-in-out absolute right-0 top-0 h-full z-10 ${
+          isMobile
+            ? 'translate-x-full' // Always hide desktop sidebar on mobile
             : rightSidebarOpen
-            ? 'w-64'
-            : 'w-0 overflow-hidden'
+            ? 'translate-x-0'
+            : 'translate-x-full'
         }`}
       >
         <SidebarContent>{rightContent}</SidebarContent>
