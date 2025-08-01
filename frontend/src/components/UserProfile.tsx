@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { fakeUserProfile } from '../data/fakeUserData';
+import { getExperienceLevel, getExperienceLevelDisplay } from '../utils/experienceLevel';
 
 const UserProfile = () => {
   const { name, email, avatar, memberSince, stats, goals, measurements, achievements } = fakeUserProfile;
@@ -26,23 +27,44 @@ const UserProfile = () => {
                 </div>
                 
                 <div className="flex-1 md:ml-8">
-                  <h3 className="text-lg font-semibold mb-4">Body Metrics</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Current Weight</span>
-                      <span className="font-semibold">{latestWeight.value} {latestWeight.unit}</span>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Body Metrics</h3>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Current Weight</span>
+                          <span className="font-semibold">{latestWeight.value} {latestWeight.unit}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Body Fat</span>
+                          <span className="font-semibold">{latestBodyFat.value}{latestBodyFat.unit}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Total Workouts</span>
+                          <span className="font-semibold">{stats.totalWorkouts}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Current Streak</span>
+                          <span className="font-semibold">{stats.currentStreak} days</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Body Fat</span>
-                      <span className="font-semibold">{latestBodyFat.value}{latestBodyFat.unit}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Total Workouts</span>
-                      <span className="font-semibold">{stats.totalWorkouts}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Current Streak</span>
-                      <span className="font-semibold">{stats.currentStreak} days</span>
+                    
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Experience Level</h3>
+                      <div className="space-y-3">
+                        <div className="text-center p-4 bg-primary/10 rounded-lg">
+                          <div className="text-lg font-bold text-primary mb-1">
+                            {getExperienceLevelDisplay(fakeUserProfile.experienceLevel)}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Level {fakeUserProfile.experienceLevel}/10
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground text-center">
+                          {getExperienceLevel(fakeUserProfile.experienceLevel).description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

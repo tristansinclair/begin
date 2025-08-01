@@ -23,6 +23,7 @@ export interface WorkoutTemplate {
   targetMuscles: string;
   intensity: 'low' | 'medium' | 'high';
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  experienceLevelRange: [number, number]; // [min, max] experience level
   equipment: string[];
   sections: WorkoutSection[];
   totalExercises: number;
@@ -39,6 +40,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Chest, Back, Shoulders, Arms',
     intensity: 'high',
     difficulty: 'intermediate',
+    experienceLevelRange: [4, 7],
     equipment: ['Barbell', 'Dumbbells', 'Pull-up Bar', 'Cable Machine'],
     totalExercises: 6,
     estimatedCalories: 400,
@@ -100,6 +102,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Full Body',
     intensity: 'high',
     difficulty: 'intermediate',
+    experienceLevelRange: [3, 6],
     equipment: ['Bodyweight', 'Timer'],
     totalExercises: 8,
     estimatedCalories: 350,
@@ -145,6 +148,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Quadriceps, Glutes, Hamstrings, Calves',
     intensity: 'high',
     difficulty: 'advanced',
+    experienceLevelRange: [7, 10],
     equipment: ['Barbell', 'Dumbbells', 'Leg Press Machine', 'Calf Raise Machine'],
     totalExercises: 8,
     estimatedCalories: 450,
@@ -195,6 +199,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Full Body',
     intensity: 'medium',
     difficulty: 'intermediate',
+    experienceLevelRange: [3, 7],
     equipment: ['Dumbbells', 'Kettlebell', 'Resistance Bands', 'Mat'],
     totalExercises: 7,
     estimatedCalories: 380,
@@ -243,6 +248,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Full Body Mobility',
     intensity: 'low',
     difficulty: 'beginner',
+    experienceLevelRange: [1, 4],
     equipment: ['Yoga Mat', 'Foam Roller'],
     totalExercises: 12,
     estimatedCalories: 150,
@@ -288,6 +294,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     targetMuscles: 'Cardiovascular System, Legs',
     intensity: 'medium',
     difficulty: 'intermediate',
+    experienceLevelRange: [2, 8],
     equipment: ['Running Shoes', 'GPS Watch'],
     totalExercises: 1,
     estimatedCalories: 400,
@@ -339,4 +346,11 @@ export const getWorkoutsByType = (type: string): WorkoutTemplate[] => {
 // Helper function to get workouts by difficulty
 export const getWorkoutsByDifficulty = (difficulty: string): WorkoutTemplate[] => {
   return workoutTemplates.filter(workout => workout.difficulty === difficulty);
+};
+
+// Helper function to get workouts by experience level
+export const getWorkoutsByExperienceLevel = (level: number): WorkoutTemplate[] => {
+  return workoutTemplates.filter(workout => 
+    level >= workout.experienceLevelRange[0] && level <= workout.experienceLevelRange[1]
+  );
 };

@@ -21,7 +21,6 @@ export const exerciseTypes: ExerciseType[] = [
     equipment: [
       { id: 'dumbbells', name: 'Dumbbells', icon: '🏋️' },
       { id: 'barbells', name: 'Barbells', icon: '⚖️' },
-      { id: 'weight_plates', name: 'Weight Plates', icon: '🥏' },
       { id: 'power_rack', name: 'Power Rack/Squat Rack', icon: '🏗️' },
       { id: 'bench', name: 'Weight Bench', icon: '🪑' }
     ]

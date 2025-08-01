@@ -4,6 +4,7 @@ import WorkoutActivity from './WorkoutActivity';
 import DailySummary from './DailySummary';
 import WorkoutCalendar from './WorkoutCalendar';
 import StatCard from './StatCard';
+import ExperienceLevelCard from './ExperienceLevelCard';
 import { useDashboardStore } from '../../store/dashboardStore';
 import { getWorkoutTemplateById } from '../../data/workoutSchedule';
 
@@ -75,8 +76,8 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       {/* Main Content */}
       <main className="p-6">
-          {/* Main Dashboard Grid - 2x2 layout on large screens */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-6 mb-8">
+          {/* Main Dashboard Grid - 2x3 layout on large screens */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 gap-6 mb-8">
             {/* Daily Summary - Takes 2x2 on large screens, full width on mobile */}
             <div className="col-span-2 lg:row-span-2 h-full">
               <DailySummary 
@@ -86,7 +87,10 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Workout Streak - Takes 1x1 on large screens (top right) */}
+            {/* Experience Level - Takes 1x1 on large screens (top right) */}
+            <ExperienceLevelCard level={userProfile.experienceLevel} />
+
+            {/* Workout Streak - Takes 1x1 on large screens (middle right) */}
             <StatCard
               title="Workout Streak"
               value={userProfile.stats.currentStreak}
@@ -98,21 +102,23 @@ const Dashboard = () => {
               titleColor="foreground"
             />
 
-            {/* Total Volume - Takes 1x1 on large screens (middle right) */}
-            <StatCard
-              title="Total Volume"
-              value={userProfile.stats.totalVolume}
-              icon="💪"
-              change={{
-                value: "12% this week",
-                direction: "up"
-              }}
-              titleColor="muted-foreground"
-            />
-
             {/* Activity Heatmap - Takes 2x1 on large screens, full width on mobile */}
             <div className="col-span-2 h-full">
               <WorkoutActivity />
+            </div>
+
+            {/* Total Volume - Takes 2x1 on large screens (bottom right) */}
+            <div className="col-span-2">
+              <StatCard
+                title="Total Volume"
+                value={userProfile.stats.totalVolume}
+                icon="💪"
+                change={{
+                  value: "12% this week",
+                  direction: "up"
+                }}
+                titleColor="muted-foreground"
+              />
             </div>
           </div>
 

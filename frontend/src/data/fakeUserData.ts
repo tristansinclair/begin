@@ -33,6 +33,8 @@ export const fakeUserProfile = {
     preferredWorkoutTime: 'morning' as 'morning' | 'afternoon' | 'evening'
   },
   
+  experienceLevel: 6, // Strength Seeker level
+  
   goals: [
     {
       id: 'goal-001',
