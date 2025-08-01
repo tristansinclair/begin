@@ -2,6 +2,13 @@
 import React from 'react';
 import { fakeUserProfile } from '../data/fakeUserData';
 import { getExperienceLevel, getExperienceLevelDisplay } from '../utils/experienceLevel';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
 
 const UserProfile = () => {
   const { name, email, avatar, memberSince, stats, goals, measurements, achievements } = fakeUserProfile;
@@ -190,18 +197,28 @@ const UserProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Units</label>
-                      <select className="mt-1 w-full p-2 border rounded-lg bg-background">
-                        <option value="imperial" selected={fakeUserProfile.preferences.units === 'imperial'}>Imperial (lbs, ft)</option>
-                        <option value="metric" selected={fakeUserProfile.preferences.units === 'metric'}>Metric (kg, m)</option>
-                      </select>
+                      <Select defaultValue={fakeUserProfile.preferences.units}>
+                        <SelectTrigger className="mt-1 w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="imperial">Imperial (lbs, ft)</SelectItem>
+                          <SelectItem value="metric">Metric (kg, m)</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Preferred Workout Time</label>
-                      <select className="mt-1 w-full p-2 border rounded-lg bg-background">
-                        <option value="morning" selected={fakeUserProfile.preferences.preferredWorkoutTime === 'morning'}>Morning</option>
-                        <option value="afternoon" selected={fakeUserProfile.preferences.preferredWorkoutTime === 'afternoon'}>Afternoon</option>
-                        <option value="evening" selected={fakeUserProfile.preferences.preferredWorkoutTime === 'evening'}>Evening</option>
-                      </select>
+                      <Select defaultValue={fakeUserProfile.preferences.preferredWorkoutTime}>
+                        <SelectTrigger className="mt-1 w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="morning">Morning</SelectItem>
+                          <SelectItem value="afternoon">Afternoon</SelectItem>
+                          <SelectItem value="evening">Evening</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>

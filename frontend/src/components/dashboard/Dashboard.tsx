@@ -17,10 +17,10 @@ const Dashboard = () => {
     workoutStats,
     setIsWorkoutCompleted
   } = useDashboardStore();
-  
+
   // Get today's workout template for upcoming workout data
   const todayWorkoutTemplate = todaysWorkout?.templateId ? getWorkoutTemplateById(todaysWorkout.templateId) : null;
-  
+
   // Sample data for upcoming workout using the template
   const upcomingWorkout = todayWorkoutTemplate ? {
     name: todayWorkoutTemplate.name,
@@ -73,57 +73,55 @@ const Dashboard = () => {
 
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-[75vh] bg-background max-w-6xl mx-auto">
       {/* Main Content */}
       <main className="p-6">
-          {/* Main Dashboard Grid - 2x3 layout on large screens */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-3 gap-6 mb-8">
-            {/* Daily Summary - Takes 2x2 on large screens, full width on mobile */}
-            <div className="col-span-2 lg:row-span-2 h-full">
-              <DailySummary 
-                isWorkoutCompleted={isWorkoutCompleted}
-                workoutStats={isWorkoutCompleted ? workoutStats : undefined}
-                upcomingWorkout={!isWorkoutCompleted ? upcomingWorkout : undefined}
-              />
-            </div>
-
-            {/* Experience Level - Takes 1x1 on large screens (top right) */}
-            <ExperienceLevelCard level={userProfile.experienceLevel} />
-
-            {/* Workout Streak - Takes 1x1 on large screens (middle right) */}
-            <StatCard
-              title="Workout Streak"
-              value={userProfile.stats.currentStreak}
-              icon="🔥"
-              change={{
-                value: "4 days from last week",
-                direction: "up"
-              }}
-              titleColor="foreground"
+        {/* Main Dashboard Grid - 2x3 layout on large screens */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-6 mb-8">
+          {/* Daily Summary - Takes 2x2 on large screens, full width on mobile */}
+          <div className="col-span-2 lg:row-span-2 h-full">
+            <DailySummary
+              isWorkoutCompleted={isWorkoutCompleted}
+              workoutStats={isWorkoutCompleted ? workoutStats : undefined}
+              upcomingWorkout={!isWorkoutCompleted ? upcomingWorkout : undefined}
             />
-
-            {/* Activity Heatmap - Takes 2x1 on large screens, full width on mobile */}
-            <div className="col-span-2 h-full">
-              <WorkoutActivity />
-            </div>
-
-            {/* Total Volume - Takes 2x1 on large screens (bottom right) */}
-            <div className="col-span-2">
-              <StatCard
-                title="Total Volume"
-                value={userProfile.stats.totalVolume}
-                icon="💪"
-                change={{
-                  value: "12% this week",
-                  direction: "up"
-                }}
-                titleColor="muted-foreground"
-              />
-            </div>
           </div>
 
-          <WorkoutCalendar />
-        </main>
+          {/* Total Volume - Takes 2x1 on large screens (bottom right) */}
+          <StatCard
+            title="Total Volume"
+            value={userProfile.stats.totalVolume}
+            icon="💪"
+            change={{
+              value: "12% this week",
+              direction: "up"
+            }}
+            titleColor="muted-foreground"
+          />
+
+
+          {/* Workout Streak - Takes 1x1 on large screens (middle right) */}
+          <StatCard
+            title="Workout Streak"
+            value={userProfile.stats.currentStreak}
+            icon="🔥"
+            change={{
+              value: "4 days from last week",
+              direction: "up"
+            }}
+            titleColor="foreground"
+          />
+
+          {/* Activity Heatmap - Takes 2x1 on large screens, full width on mobile */}
+          <div className="col-span-2 h-full">
+            <WorkoutActivity />
+          </div>
+
+
+        </div>
+
+        <WorkoutCalendar />
+      </main>
     </div>
   );
 };
