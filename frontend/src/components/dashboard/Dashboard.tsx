@@ -2,14 +2,11 @@
 import React, { useState } from 'react';
 import WorkoutActivity from './WorkoutActivity';
 import DayCard from './DayCard';
-import { TwoSidebarLayout } from '../TwoSidebarLayout';
-import LeftSidebar from '../LeftSidebar';
 import { userProfile } from '../../data/userProfile';
-import { useSidebar } from '@/contexts/SidebarContext';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const Dashboard = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(2);
-  const { toggleLeftSidebar } = useSidebar();
 
   const workouts = [
     { 
@@ -201,22 +198,13 @@ const Dashboard = () => {
   };
 
   return (
-    <TwoSidebarLayout leftSidebar={<LeftSidebar />}>
-      <div className="min-h-screen bg-background">
-        {/* Toggle Button */}
-        <div className="p-4">
-          <button
-            onClick={toggleLeftSidebar}
-            className="fixed top-4 left-4 z-20 p-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl"
-            aria-label="Toggle navigation"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-        {/* Main Content */}
-        <main className="p-10">
+    <div className="min-h-screen bg-background">
+      {/* Toggle Button */}
+      <div className="p-4">
+        <SidebarTrigger className="fixed top-4 left-4 z-20" />
+      </div>
+      {/* Main Content */}
+      <main className="p-10">
           {/* AI Trainer Card */}
           <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-3xl p-8 mb-8 relative overflow-hidden border border-primary/20">
             <div className="absolute -top-1/2 -right-1/4 w-[300px] h-[300px] bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
@@ -250,7 +238,7 @@ const Dashboard = () => {
             {/* Workout Streak */}
             <div className="bg-card border rounded-2xl p-6">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-medium text-muted-foreground">Workout Streak</span>
+                <span className="text-sm font-medium text-foreground">Workout Streak</span>
                 <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
                   🔥
                 </div>
@@ -324,8 +312,7 @@ const Dashboard = () => {
             </div>
           </section>
         </main>
-      </div>
-    </TwoSidebarLayout>
+    </div>
   );
 };
 
