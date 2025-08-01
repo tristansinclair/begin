@@ -146,7 +146,7 @@ const WorkoutActivity = () => {
       }
     });
     
-    totalWorkoutsEl.textContent = `${totalWorkouts} workouts in the last 3 months`;
+    totalWorkoutsEl.textContent = `${totalWorkouts} sessions in the last 3 months`;
   };
 
   return (

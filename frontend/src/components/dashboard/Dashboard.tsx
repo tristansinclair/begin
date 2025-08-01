@@ -1,18 +1,30 @@
 'use client';
 import React, { useState } from 'react';
 import WorkoutActivity from './WorkoutActivity';
-import DayCard from './DayCard';
 import DailySummary from './DailySummary';
+import WorkoutCalendar from './WorkoutCalendar';
 import { userProfile } from '../../data/userProfile';
+import { 
+  getTodaysWorkout,
+  getWorkoutTemplateById 
+} from '../../data/workoutSchedule';
 
 const Dashboard = () => {
-  const [selectedWorkout, setSelectedWorkout] = useState(2);
-  
   // Toggle this to test both states - in real app this would come from API/state
   const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
   
-  // Sample data for completed workout
-  const workoutStats = {
+  // Get today's workout
+  const todaysWorkout = getTodaysWorkout();
+  
+  // Sample data for completed workout (using today's workout if completed)
+  const workoutStats = todaysWorkout?.completedStats ? {
+    duration: todaysWorkout.completedStats.actualDuration,
+    exercisesCompleted: typeof todaysWorkout.exercises === 'number' ? todaysWorkout.exercises : 6,
+    totalSets: todaysWorkout.completedStats.totalSets,
+    averageWeight: todaysWorkout.completedStats.averageWeight,
+    caloriesBurned: todaysWorkout.completedStats.caloriesBurned,
+    personalRecords: todaysWorkout.completedStats.personalRecords
+  } : {
     duration: '48m',
     exercisesCompleted: 6,
     totalSets: 16,
@@ -21,204 +33,43 @@ const Dashboard = () => {
     personalRecords: 2
   };
   
-  // Sample data for upcoming workout
-  const upcomingWorkout = {
-    name: 'Upper Body Power',
+  // Get today's workout template for upcoming workout data
+  const todayWorkoutTemplate = todaysWorkout?.templateId ? getWorkoutTemplateById(todaysWorkout.templateId) : null;
+  
+  // Sample data for upcoming workout using the template
+  const upcomingWorkout = todayWorkoutTemplate ? {
+    name: todayWorkoutTemplate.name,
     type: 'AI Recommended',
-    duration: '45 min',
-    exercises: 6,
-    targetMuscles: 'Chest & Triceps',
-    intensity: 'high'
+    duration: todayWorkoutTemplate.duration,
+    exercises: todayWorkoutTemplate.totalExercises,
+    targetMuscles: todayWorkoutTemplate.targetMuscles,
+    intensity: todayWorkoutTemplate.intensity,
+    exerciseList: todayWorkoutTemplate.sections
+      .filter(section => section.type === 'main' || section.type === 'superset')
+      .flatMap(section => section.exercises.map(ex => ex.name))
+      .slice(0, 6),
+    restTime: '90s',
+    warmupTime: '10m'
+  } : {
+    name: 'Leg Day Destroyer',
+    type: 'AI Recommended',
+    duration: '60 min',
+    exercises: 8,
+    targetMuscles: 'Quadriceps, Glutes, Hamstrings, Calves',
+    intensity: 'high' as const,
+    exerciseList: [
+      'Back Squats',
+      'Romanian Deadlifts',
+      'Bulgarian Split Squats',
+      'Leg Press',
+      'Leg Curls',
+      'Leg Extensions'
+    ],
+    restTime: '2-3min',
+    warmupTime: '10m'
   };
 
-  const workouts = [
-    { 
-      day: 'MON', 
-      date: 28, 
-      type: 'AI Recommended', 
-      name: 'Upper Body Power', 
-      duration: '45 min', 
-      exercises: 6, 
-      intensity: 'high',
-      workoutLabel: 'Upper Body',
-      summaryLine: 'Chest & Triceps • 6 exercises',
-      mainMetric: '45',
-      metricUnit: 'MIN',
-      workoutType: 'strength' as const
-    },
-    { 
-      day: 'TUE', 
-      date: 29, 
-      type: 'Cardio', 
-      name: 'HIIT Sprint Session', 
-      duration: '30 min', 
-      exercises: 4, 
-      intensity: 'high',
-      workoutLabel: 'HIIT Cardio',
-      summaryLine: 'High intensity • Sprint intervals',
-      mainMetric: '30',
-      metricUnit: 'MIN',
-      workoutType: 'cardio' as const
-    },
-    { 
-      day: 'WED', 
-      date: 30, 
-      type: 'Recovery', 
-      name: 'Active Recovery Flow', 
-      duration: '30 min', 
-      exercises: 'Mobility', 
-      intensity: 'low',
-      workoutLabel: 'Recovery',
-      summaryLine: 'Active recovery • Mobility work',
-      mainMetric: '30',
-      metricUnit: 'MIN',
-      workoutType: 'recovery' as const
-    },
-    { 
-      day: 'THU', 
-      date: 31, 
-      type: 'Strength', 
-      name: 'Leg Day Destroyer', 
-      duration: '60 min', 
-      exercises: 8, 
-      intensity: 'high',
-      workoutLabel: 'Leg Day',
-      summaryLine: 'Quads & Glutes • 8 exercises',
-      mainMetric: '60',
-      metricUnit: 'MIN',
-      workoutType: 'strength' as const
-    },
-    { 
-      day: 'FRI', 
-      date: 1, 
-      type: 'AI Recommended', 
-      name: 'Full Body Circuit', 
-      duration: '50 min', 
-      exercises: 7, 
-      intensity: 'medium',
-      workoutLabel: 'Full Body',
-      summaryLine: 'Circuit training • 7 exercises',
-      mainMetric: '50',
-      metricUnit: 'MIN',
-      workoutType: 'strength' as const
-    },
-    { 
-      day: 'SAT', 
-      date: 2, 
-      type: 'Cardio', 
-      name: 'Endurance Run', 
-      duration: '40 min', 
-      exercises: 1, 
-      intensity: 'medium',
-      workoutLabel: 'Running',
-      summaryLine: 'Steady pace • Endurance',
-      mainMetric: '5.2',
-      metricUnit: 'KM',
-      workoutType: 'cardio' as const
-    },
-    { 
-      day: 'SUN', 
-      date: 3, 
-      type: 'Rest', 
-      name: 'Rest Day', 
-      duration: '-', 
-      exercises: '-', 
-      intensity: 'rest',
-      workoutLabel: 'Rest Day',
-      summaryLine: 'Recovery time • Take it easy',
-      mainMetric: '',
-      metricUnit: '',
-      workoutType: 'rest' as const
-    }
-  ];
 
-
-  const generateWorkoutContent = (workout: typeof workouts[0]) => {
-    if (workout.type === 'Rest') {
-      return (
-        <p className="text-muted-foreground">Your body needs time to recover. Consider light stretching or a walk.</p>
-      );
-    }
-
-    return (
-      <>
-        <div className="bg-secondary rounded-xl p-4 mb-6">
-          <div className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Overview</div>
-          <div className="flex flex-wrap gap-6">
-            <div className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">Duration:</span> {workout.duration}</div>
-            <div className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">Target:</span> Upper Body</div>
-            <div className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">Weight:</span> 65-85% 1RM</div>
-            <div className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">Total Sets:</span> 16</div>
-          </div>
-        </div>
-        
-        <div className="space-y-6">
-          <div className="border-l-2 border-primary pl-5 relative">
-            <div className="absolute -left-[6px] top-2 w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_0_3px_hsl(var(--card))]"></div>
-            <div className="text-base font-semibold mb-1 flex items-center gap-2">Superset A</div>
-            <div className="text-xs text-muted-foreground mb-3">3 rounds</div>
-            <div className="space-y-2 ml-5">
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">A1: Bench Press</span>
-                <span className="text-primary font-semibold text-xs">8-10 reps</span>
-              </div>
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">A2: Pull-ups</span>
-                <span className="text-primary font-semibold text-xs">8-12 reps</span>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground italic mt-2 ml-5">Rest: 2 minutes between supersets</div>
-          </div>
-          
-          <div className="border-l-2 border-primary/60 pl-5 relative">
-            <div className="absolute -left-[6px] top-2 w-2.5 h-2.5 bg-primary/60 rounded-full shadow-[0_0_0_3px_hsl(var(--card))]"></div>
-            <div className="text-base font-semibold mb-1 flex items-center gap-2">Superset B</div>
-            <div className="text-xs text-muted-foreground mb-3">3 rounds</div>
-            <div className="space-y-2 ml-5">
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">B1: Shoulder Press</span>
-                <span className="text-primary font-semibold text-xs">10 reps</span>
-              </div>
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">B2: Barbell Rows</span>
-                <span className="text-primary font-semibold text-xs">10-12 reps</span>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground italic mt-2 ml-5">Rest: 90 seconds between supersets</div>
-          </div>
-          
-          <div className="border-l-2 border-muted-foreground pl-5 relative">
-            <div className="absolute -left-[6px] top-2 w-2.5 h-2.5 bg-muted-foreground rounded-full shadow-[0_0_0_3px_hsl(var(--card))]"></div>
-            <div className="text-base font-semibold mb-1">Isolation Work</div>
-            <div className="space-y-2 ml-5">
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">Cable Flyes</span>
-                <span className="text-primary font-semibold text-xs">3 × 12-15 reps</span>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground mt-2">60 sec rest between sets</div>
-          </div>
-          
-          <div className="border-l-2 border-destructive pl-5 relative">
-            <div className="absolute -left-[6px] top-2 w-2.5 h-2.5 bg-destructive rounded-full shadow-[0_0_0_3px_hsl(var(--card))]"></div>
-            <div className="text-base font-semibold mb-1">Finisher</div>
-            <div className="text-xs text-muted-foreground mb-3">2 rounds</div>
-            <div className="space-y-2 ml-5">
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">Tricep Dips</span>
-                <span className="text-primary font-semibold text-xs">To failure</span>
-              </div>
-              <div className="flex justify-between items-baseline text-sm">
-                <span className="font-medium">Barbell Curls</span>
-                <span className="text-primary font-semibold text-xs">21s</span>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground italic mt-2 ml-5">Rest: 90 seconds between rounds</div>
-          </div>
-        </div>
-      </>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -273,53 +124,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Workout Calendar */}
-          <section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Your Weekly Schedule</h2>
-              <div className="flex items-center gap-4">
-                <button className="w-8 h-8 rounded-lg bg-secondary border hover:bg-accent hover:border-primary flex items-center justify-center transition-all duration-300">
-                  ←
-                </button>
-                <span className="text-sm text-muted-foreground">July 28 - Aug 3</span>
-                <button className="w-8 h-8 rounded-lg bg-secondary border hover:bg-accent hover:border-primary flex items-center justify-center transition-all duration-300">
-                  →
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 mb-6">
-              {workouts.map((workout, index) => (
-                <DayCard
-                  key={index}
-                  day={workout.day}
-                  date={workout.date}
-                  workoutLabel={workout.workoutLabel}
-                  summaryLine={workout.summaryLine}
-                  mainMetric={workout.mainMetric}
-                  metricUnit={workout.metricUnit}
-                  workoutType={workout.workoutType}
-                  isSelected={selectedWorkout === index}
-                  onClick={() => setSelectedWorkout(index)}
-                />
-              ))}
-            </div>
-            <div>
-              <div className="bg-card border rounded-2xl p-8 mt-6">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-2">{workouts[selectedWorkout].name}</h3>
-                    <div className="text-primary text-xs font-semibold uppercase tracking-wider">{workouts[selectedWorkout].type}</div>
-                  </div>
-                  {workouts[selectedWorkout].type !== 'Rest' && (
-                    <button className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl font-medium transition-all duration-300">
-                      Start Workout
-                    </button>
-                  )}
-                </div>
-                {generateWorkoutContent(workouts[selectedWorkout])}
-              </div>
-            </div>
-          </section>
+          <WorkoutCalendar />
         </main>
     </div>
   );

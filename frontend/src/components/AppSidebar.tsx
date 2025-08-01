@@ -43,8 +43,6 @@ const menuItems = [
     icon: Dumbbell,
     items: [
       { title: "Today's Workout", icon: Calendar, url: '/workouts/today' },
-      { title: 'Browse Library', icon: Library, url: '/workouts/library' },
-      { title: 'Custom Workouts', icon: Plus, url: '/workouts/custom' },
       { title: 'History', icon: History, url: '/workouts/history' },
     ],
   },
@@ -63,9 +61,9 @@ const menuItems = [
     icon: User,
     items: [
       { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
-      { title: 'Progress Photos', icon: Camera, url: '/profile/photos' },
-      { title: 'Settings', icon: Settings, url: '/profile/settings' },
       { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
+      { title: 'Progress Photos', icon: Camera, url: '/profile/photos' },
+      
     ],
   },
 ];
@@ -79,7 +77,7 @@ export function AppSidebar() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Dumbbell className="h-4 w-4" />
             </div>
-            <span className="text-xl font-bold">Begin</span>
+            <span className="text-xl font-bold">BEGIN</span>
           </a>
         </div>
       </SidebarHeader>
