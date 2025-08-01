@@ -1,5 +1,7 @@
 import { workoutTemplates, WorkoutTemplate } from './workoutTemplates';
 
+export type WorkoutStatus = 'Completed' | 'Missed' | 'Canceled' | 'Future';
+
 export interface WeeklyWorkout {
   day: string;
   date: number;
@@ -16,6 +18,7 @@ export interface WeeklyWorkout {
   mainMetric: string;
   metricUnit: string;
   workoutType: 'strength' | 'cardio' | 'recovery' | 'rest';
+  status: WorkoutStatus;
   isCompleted?: boolean;
   completedStats?: {
     actualDuration: string;
@@ -62,6 +65,26 @@ const formatWeekRange = (startDate: Date): string => {
   }
 };
 
+// Helper function to determine workout status based on date and completion
+const getWorkoutStatus = (date: Date, isCompleted: boolean = false): WorkoutStatus => {
+  const today = new Date(2025, 6, 31); // July 31st, 2025
+  const workoutDate = new Date(date);
+  
+  // Set time to midnight for accurate date comparison
+  today.setHours(0, 0, 0, 0);
+  workoutDate.setHours(0, 0, 0, 0);
+  
+  if (workoutDate > today) {
+    return 'Future';
+  } else if (isCompleted) {
+    return 'Completed';
+  } else {
+    // For past dates that aren't completed, randomly assign Missed or Canceled for variety
+    // In a real app, this would be based on user input
+    return Math.random() > 0.7 ? 'Canceled' : 'Missed';
+  }
+};
+
 // Helper function to create workout from template
 const createWorkoutFromTemplate = (
   date: Date, 
@@ -90,6 +113,7 @@ const createWorkoutFromTemplate = (
       mainMetric: '',
       metricUnit: '',
       workoutType: 'rest',
+      status: getWorkoutStatus(date, isCompleted),
       isCompleted
     };
   }
@@ -121,6 +145,7 @@ const createWorkoutFromTemplate = (
     workoutType: template.type === 'Cardio' ? 'cardio' : 
                  template.type === 'Recovery' ? 'recovery' : 
                  'strength',
+    status: getWorkoutStatus(date, isCompleted),
     isCompleted
   };
 
@@ -206,6 +231,30 @@ export const generateWorkoutSchedule = (weeksCount: number = 3): WeekData[] => {
     const weekStartDate = new Date(startDate);
     weekStartDate.setDate(startDate.getDate() + (i * 7));
     weeks.push(generateWeek(weekStartDate, i));
+  }
+  
+  return weeks;
+};
+
+// Generate additional weeks dynamically for unlimited scrolling
+export const generateAdditionalWeeks = (currentWeeksCount: number, direction: 'past' | 'future', additionalWeeks: number = 4): WeekData[] => {
+  const weeks: WeekData[] = [];
+  const currentWeekStart = new Date(2025, 6, 27); // July 27th, 2025 (Sunday)
+  
+  if (direction === 'past') {
+    // Generate past weeks
+    for (let i = 1; i <= additionalWeeks; i++) {
+      const weekStartDate = new Date(currentWeekStart);
+      weekStartDate.setDate(currentWeekStart.getDate() - (14 + (currentWeeksCount - 3) * 7) - (i * 7));
+      weeks.unshift(generateWeek(weekStartDate, -(currentWeeksCount + i - 3)));
+    }
+  } else {
+    // Generate future weeks
+    for (let i = 1; i <= additionalWeeks; i++) {
+      const weekStartDate = new Date(currentWeekStart);
+      weekStartDate.setDate(currentWeekStart.getDate() + (currentWeeksCount - 2) * 7 + (i * 7));
+      weeks.push(generateWeek(weekStartDate, currentWeeksCount - 3 + i));
+    }
   }
   
   return weeks;

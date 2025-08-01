@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { ChatMessage } from './Chat';
+import { Button } from '../ui/button';
 
 interface MessageProps {
   message: ChatMessage;
@@ -56,12 +57,12 @@ const Message: React.FC<MessageProps> = ({ message }) => {
           {/* Action buttons for workout plans */}
           {isWorkoutPlan && (
             <div className="flex gap-2 mt-3 pt-3 border-t border-blue-200">
-              <button className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-lg transition-colors">
+              <Button size="sm" className="text-xs">
                 View Full Plan
-              </button>
-              <button className="px-3 py-1.5 bg-white hover:bg-gray-50 text-blue-600 text-xs rounded-lg border border-blue-200 transition-colors">
+              </Button>
+              <Button variant="outline" size="sm" className="text-xs">
                 Customize
-              </button>
+              </Button>
             </div>
           )}
         </div>

@@ -35,16 +35,6 @@ const WorkoutActivity = () => {
     const startDate = new Date(threeMonthsAgo);
     startDate.setDate(startDate.getDate() - startDate.getDay());
     
-    const weekdayLabelsContainer = document.createElement('div');
-    weekdayLabelsContainer.className = 'grid grid-rows-7 gap-[3px] pr-1';
-    const weekdays = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
-    weekdays.forEach(day => {
-      const label = document.createElement('div');
-      label.className = 'text-muted-foreground h-2.5 flex items-center text-xs';
-      label.textContent = day;
-      weekdayLabelsContainer.appendChild(label);
-    });
-    heatmapGrid.appendChild(weekdayLabelsContainer);
     
     let totalWorkouts = 0;
     
@@ -67,7 +57,8 @@ const WorkoutActivity = () => {
         
         // Create tooltip element
         const tooltip = document.createElement('div');
-        tooltip.className = 'absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-lg border opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap';
+        tooltip.className = 'fixed px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-lg border opacity-0 transition-opacity duration-200 pointer-events-none whitespace-nowrap';
+        tooltip.style.zIndex = '9999';
         
         if (currentDate <= today && currentDate >= threeMonthsAgo) {
           const dateKey = currentDate.toISOString().split('T')[0];
@@ -124,7 +115,25 @@ const WorkoutActivity = () => {
           monthPositions[week] = currentMonth;
         }
         
-        cell.appendChild(tooltip);
+        // Add hover event listeners for tooltip positioning
+        cell.addEventListener('mouseenter', (e) => {
+          const rect = cell.getBoundingClientRect();
+          tooltip.style.left = `${rect.left + rect.width / 2}px`;
+          tooltip.style.top = `${rect.top - 8}px`;
+          tooltip.style.transform = 'translate(-50%, -100%)';
+          tooltip.style.opacity = '1';
+          document.body.appendChild(tooltip);
+        });
+        
+        cell.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          setTimeout(() => {
+            if (tooltip.parentNode === document.body) {
+              document.body.removeChild(tooltip);
+            }
+          }, 200);
+        });
+        
         weekColumn.appendChild(cell);
         currentDate.setDate(currentDate.getDate() + 1);
       }
@@ -158,9 +167,9 @@ const WorkoutActivity = () => {
         </div>
       </div>
       <div className="relative min-w-[350px] flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-12 gap-[3px] mb-2 pl-10 text-xs text-muted-foreground" id="month-labels">
+        <div className="grid grid-cols-12 gap-[3px] mb-2 text-xs text-muted-foreground" id="month-labels">
         </div>
-        <div className="grid grid-cols-[auto_repeat(13,_1fr)] gap-[3px] text-xs" id="heatmap-grid">
+        <div className="grid grid-cols-13 gap-[3px] text-xs" id="heatmap-grid">
         </div>
       </div>
     </div>

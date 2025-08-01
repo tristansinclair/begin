@@ -66,4 +66,4 @@ const DayCard: React.FC<DayCardProps> = ({
   );
 };
 
-export default DayCard;
+export default React.memo(DayCard);

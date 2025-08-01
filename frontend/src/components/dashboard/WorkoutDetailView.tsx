@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { WeeklyWorkout, getWorkoutTemplateById } from '../../data/workoutSchedule';
+import { Button } from '../ui/button';
 
 interface WorkoutDetailViewProps {
   workout: WeeklyWorkout;
@@ -126,9 +127,9 @@ const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ workout }) => {
           <div className="text-primary text-xs font-semibold uppercase tracking-wider">{workout.type}</div>
         </div>
         {workout.type !== 'Rest' && (
-          <button className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl font-medium transition-all duration-300">
-            Start Workout
-          </button>
+          <Button variant="outline" onClick={() => window.location.href = '/today'}>
+            View Today's Workout
+          </Button>
         )}
       </div>
       {generateWorkoutContent(workout)}
@@ -136,4 +137,4 @@ const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ workout }) => {
   );
 };
 
-export default WorkoutDetailView;
+export default React.memo(WorkoutDetailView);

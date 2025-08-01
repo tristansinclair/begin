@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
+import { Button } from '../ui/button';
 
 export interface ChatMessage {
   id: string;
@@ -107,11 +108,11 @@ const Chat = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-accent rounded-lg transition-colors">
+          <Button variant="ghost" size="sm" className="p-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
 

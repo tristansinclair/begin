@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, KeyboardEvent } from 'react';
+import { Button } from '../ui/button';
 
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
@@ -60,14 +61,16 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, disabled = f
       {/* Quick Prompts */}
       <div className="flex flex-wrap gap-2 mb-3">
         {quickPrompts.map((prompt, index) => (
-          <button
+          <Button
             key={index}
+            variant="secondary"
+            size="sm"
             onClick={() => handleQuickPrompt(prompt)}
             disabled={disabled}
-            className="px-3 py-1.5 text-xs bg-accent hover:bg-accent/80 text-accent-foreground rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 text-xs rounded-full h-auto"
           >
             {prompt}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -94,15 +97,16 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, disabled = f
         </div>
 
         {/* Send Button */}
-        <button
+        <Button
           onClick={handleSend}
           disabled={!message.trim() || disabled}
-          className="p-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          className="p-3 rounded-xl flex-shrink-0"
+          size="sm"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
           </svg>
-        </button>
+        </Button>
       </div>
 
       {/* Typing Indicator */}

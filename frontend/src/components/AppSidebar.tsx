@@ -62,7 +62,6 @@ const menuItems = [
     items: [
       { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
       { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
-      { title: 'Progress Photos', icon: Camera, url: '/profile/photos' },
       
     ],
   },
