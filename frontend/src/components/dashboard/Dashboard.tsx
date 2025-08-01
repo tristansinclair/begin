@@ -1,37 +1,21 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import WorkoutActivity from './WorkoutActivity';
 import DailySummary from './DailySummary';
 import WorkoutCalendar from './WorkoutCalendar';
-import { userProfile } from '../../data/userProfile';
-import { 
-  getTodaysWorkout,
-  getWorkoutTemplateById 
-} from '../../data/workoutSchedule';
+import StatCard from './StatCard';
+import { useDashboardStore } from '../../store/dashboardStore';
+import { getWorkoutTemplateById } from '../../data/workoutSchedule';
 
 const Dashboard = () => {
-  // Toggle this to test both states - in real app this would come from API/state
-  const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
-  
-  // Get today's workout
-  const todaysWorkout = getTodaysWorkout();
-  
-  // Sample data for completed workout (using today's workout if completed)
-  const workoutStats = todaysWorkout?.completedStats ? {
-    duration: todaysWorkout.completedStats.actualDuration,
-    exercisesCompleted: typeof todaysWorkout.exercises === 'number' ? todaysWorkout.exercises : 6,
-    totalSets: todaysWorkout.completedStats.totalSets,
-    averageWeight: todaysWorkout.completedStats.averageWeight,
-    caloriesBurned: todaysWorkout.completedStats.caloriesBurned,
-    personalRecords: todaysWorkout.completedStats.personalRecords
-  } : {
-    duration: '48m',
-    exercisesCompleted: 6,
-    totalSets: 16,
-    averageWeight: '72kg',
-    caloriesBurned: 387,
-    personalRecords: 2
-  };
+  // Get data and actions from Dashboard store
+  const {
+    userProfile,
+    isWorkoutCompleted,
+    todaysWorkout,
+    workoutStats,
+    setIsWorkoutCompleted
+  } = useDashboardStore();
   
   // Get today's workout template for upcoming workout data
   const todayWorkoutTemplate = todaysWorkout?.templateId ? getWorkoutTemplateById(todaysWorkout.templateId) : null;
@@ -103,36 +87,28 @@ const Dashboard = () => {
             </div>
 
             {/* Workout Streak - Takes 1x1 on large screens (top right) */}
-            <div className="bg-card border rounded-2xl p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-medium text-foreground">Workout Streak</span>
-                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                  🔥
-                </div>
-              </div>
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="text-3xl font-bold mb-2">{userProfile.stats.currentStreak}</div>
-                <div className="flex items-center gap-2 text-green-600 text-sm">
-                  <span>↑ 4 days from last week</span>
-                </div>
-              </div>
-            </div>
+            <StatCard
+              title="Workout Streak"
+              value={userProfile.stats.currentStreak}
+              icon="🔥"
+              change={{
+                value: "4 days from last week",
+                direction: "up"
+              }}
+              titleColor="foreground"
+            />
 
             {/* Total Volume - Takes 1x1 on large screens (middle right) */}
-            <div className="bg-card border rounded-2xl p-6 h-full flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-sm font-medium text-muted-foreground">Total Volume</span>
-                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                  💪
-                </div>
-              </div>
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="text-3xl font-bold mb-2">{userProfile.stats.totalVolume.toLocaleString()}</div>
-                <div className="flex items-center gap-2 text-green-600 text-sm">
-                  <span>↑ 12% this week</span>
-                </div>
-              </div>
-            </div>
+            <StatCard
+              title="Total Volume"
+              value={userProfile.stats.totalVolume}
+              icon="💪"
+              change={{
+                value: "12% this week",
+                direction: "up"
+              }}
+              titleColor="muted-foreground"
+            />
 
             {/* Activity Heatmap - Takes 2x1 on large screens, full width on mobile */}
             <div className="col-span-2 h-full">

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { 
   Calendar, 
   Dumbbell, 
@@ -13,7 +14,8 @@ import {
   Camera,
   BarChart3,
   BookOpen,
-  Heart
+  Heart,
+  Home
 } from 'lucide-react';
 import {
   Sidebar,
@@ -38,6 +40,11 @@ import {
 import { ChevronDown } from 'lucide-react';
 
 const menuItems = [
+  {
+    title: 'Overview',
+    icon: Home,
+    url: '/',
+  },
   {
     title: 'Workouts',
     icon: Dumbbell,
@@ -68,6 +75,15 @@ const menuItems = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
+  const isActive = (url: string) => {
+    if (url === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(url);
+  };
+
   return (
     <Sidebar>
       <SidebarHeader className="p-6">
@@ -86,31 +102,42 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
-                <Collapsible key={item.title} defaultOpen className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton>
+                item.items ? (
+                  <Collapsible key={item.title} defaultOpen className="group/collapsible">
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                          <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {item.items.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild isActive={isActive(subItem.url)}>
+                                <a href={subItem.url}>
+                                  <subItem.icon className="h-4 w-4" />
+                                  <span>{subItem.title}</span>
+                                </a>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                      <a href={item.url}>
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
-                        <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <a href={subItem.url}>
-                                <subItem.icon className="h-4 w-4" />
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
+                      </a>
+                    </SidebarMenuButton>
                   </SidebarMenuItem>
-                </Collapsible>
+                )
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

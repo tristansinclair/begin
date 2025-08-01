@@ -15,7 +15,7 @@ const TodaysWorkout: React.FC = () => {
 
   // Get today's workout
   const todaysWorkout = useMemo(() => {
-    const currentWeekIndex = getCurrentWeekIndex();
+    const currentWeekIndex = getCurrentWeekIndex(workoutScheduleData);
     const currentWeek = workoutScheduleData[currentWeekIndex];
     
     if (!currentWeek) return null;

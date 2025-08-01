@@ -1,6 +1,11 @@
 import { workoutTemplates, WorkoutTemplate } from './workoutTemplates';
 
-export type WorkoutStatus = 'Completed' | 'Missed' | 'Canceled' | 'Future';
+export enum WorkoutStatus {
+  Completed = 'Completed',
+  Missed = 'Missed',
+  Canceled = 'Canceled',
+  Future = 'Future'
+}
 
 export interface WeeklyWorkout {
   day: string;
@@ -75,14 +80,83 @@ const getWorkoutStatus = (date: Date, isCompleted: boolean = false): WorkoutStat
   workoutDate.setHours(0, 0, 0, 0);
   
   if (workoutDate > today) {
-    return 'Future';
+    return WorkoutStatus.Future;
   } else if (isCompleted) {
-    return 'Completed';
+    return WorkoutStatus.Completed;
   } else {
     // For past dates that aren't completed, randomly assign Missed or Canceled for variety
     // In a real app, this would be based on user input
-    return Math.random() > 0.7 ? 'Canceled' : 'Missed';
+    return Math.random() > 0.7 ? WorkoutStatus.Canceled : WorkoutStatus.Missed;
   }
+};
+
+// Helper function to create workout from user data
+const createWorkoutFromUserData = (date: Date, userData: any): WeeklyWorkout => {
+  const workoutTypeMap: { [key: string]: 'strength' | 'cardio' | 'recovery' | 'rest' } = {
+    'strength': 'strength',
+    'cardio': 'cardio',
+    'recovery': 'recovery',
+    'rest': 'rest'
+  };
+
+  const getWorkoutStatus = (status: string): WorkoutStatus => {
+    switch (status) {
+      case 'Completed': return WorkoutStatus.Completed;
+      case 'Missed': return WorkoutStatus.Missed;
+      case 'Canceled': return WorkoutStatus.Canceled;
+      default: return WorkoutStatus.Future;
+    }
+  };
+
+  return {
+    day: getDayAbbr(date),
+    date: date.getDate(),
+    month: getMonthName(date),
+    year: date.getFullYear(),
+    templateId: null,
+    type: userData.workoutType || 'Unknown',
+    name: userData.name || userData.workoutType || 'Workout',
+    duration: userData.duration ? `${userData.duration}m` : '0m',
+    exercises: userData.exercises ? userData.exercises.length : 0,
+    intensity: userData.workoutType === 'rest' ? 'rest' as const : 'medium' as const,
+    workoutLabel: userData.name || userData.workoutType || 'Workout',
+    summaryLine: userData.notes || `${userData.duration || 0} min • ${userData.calories || 0} cal`,
+    mainMetric: userData.calories ? userData.calories.toString() : '0',
+    metricUnit: 'cal',
+    workoutType: workoutTypeMap[userData.workoutType] || 'rest',
+    status: getWorkoutStatus(userData.status),
+    isCompleted: userData.status === 'Completed',
+    completedStats: userData.status === 'Completed' ? {
+      actualDuration: `${userData.duration}m`,
+      caloriesBurned: userData.calories,
+      personalRecords: 0,
+      averageWeight: '185lbs',
+      totalSets: userData.exercises ? userData.exercises.reduce((total: number, ex: any) => total + (ex.sets || 0), 0) : 0
+    } : undefined
+  };
+};
+
+// Helper function to create empty workout entry for dates outside planning range
+const createEmptyWorkoutEntry = (date: Date): WeeklyWorkout => {
+  return {
+    day: getDayAbbr(date),
+    date: date.getDate(),
+    month: getMonthName(date),
+    year: date.getFullYear(),
+    templateId: null,
+    type: 'No workout planned',
+    name: 'No workout planned',
+    duration: '0m',
+    exercises: 0,
+    intensity: 'rest' as const,
+    workoutLabel: 'Not Scheduled',
+    summaryLine: 'No workout scheduled for this date',
+    mainMetric: '—',
+    metricUnit: '',
+    workoutType: 'rest' as const,
+    status: WorkoutStatus.Future,
+    isCompleted: false
+  };
 };
 
 // Helper function to create workout from template
@@ -183,28 +257,39 @@ const generateWeek = (startDate: Date, weekOffset: number = 0): WeekData => {
   const workouts: WeeklyWorkout[] = [];
   const currentDate = new Date(startDate);
   
+  // Define realistic planning boundaries
+  const today = new Date(2025, 6, 31); // July 31st, 2025 (current day)
+  const planningStartDate = new Date(2025, 6, 1); // July 1st, 2025 (start of planned workouts)
+  const planningEndDate = new Date(2025, 7, 31); // August 31st, 2025 (end of planning horizon)
+  
   // Determine if workouts should be marked as completed (past weeks)
-  const today = new Date(2025, 6, 31); // July 31st, 2025
   const isCompletedWeek = currentDate < today;
   
   for (let i = 0; i < 7; i++) {
     const workoutDate = new Date(currentDate);
     workoutDate.setDate(currentDate.getDate() + i);
     
-    // For variety, occasionally swap workouts or add rest days
-    let templateId = weeklyPattern[i];
-    
-    // Add some variety every few weeks
-    if (weekOffset % 3 === 1 && i === 2) { // Every 3rd week, make Wednesday a strength day instead of recovery
-      templateId = 'upper-body-power';
+    // Only generate workouts within our planning boundaries
+    if (workoutDate >= planningStartDate && workoutDate <= planningEndDate) {
+      // For variety, occasionally swap workouts or add rest days
+      let templateId = weeklyPattern[i];
+      
+      // Add some variety every few weeks
+      if (weekOffset % 3 === 1 && i === 2) { // Every 3rd week, make Wednesday a strength day instead of recovery
+        templateId = 'upper-body-power';
+      }
+      if (weekOffset % 4 === 2 && i === 1) { // Every 4th week, make Tuesday a rest day
+        templateId = null;
+      }
+      
+      const isWorkoutCompleted = isCompletedWeek || workoutDate < today;
+      const workout = createWorkoutFromTemplate(workoutDate, templateId, isWorkoutCompleted);
+      workouts.push(workout);
+    } else {
+      // For dates outside planning range, create empty/no-workout entries
+      const workout = createEmptyWorkoutEntry(workoutDate);
+      workouts.push(workout);
     }
-    if (weekOffset % 4 === 2 && i === 1) { // Every 4th week, make Tuesday a rest day
-      templateId = null;
-    }
-    
-    const isWorkoutCompleted = isCompletedWeek || workoutDate < today;
-    const workout = createWorkoutFromTemplate(workoutDate, templateId, isWorkoutCompleted);
-    workouts.push(workout);
   }
 
   return {
@@ -214,60 +299,123 @@ const generateWeek = (startDate: Date, weekOffset: number = 0): WeekData => {
   };
 };
 
-// Generate multiple weeks of workout data
-export const generateWorkoutSchedule = (weeksCount: number = 3): WeekData[] => {
+// Create workout data lookup from fake user data
+const createUserDataLookup = (userWorkoutHistory: any[]): Map<string, any> => {
+  const userDataLookup = new Map<string, any>();
+  
+  userWorkoutHistory.forEach(workout => {
+    const date = new Date(workout.date);
+    const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    userDataLookup.set(dateKey, workout);
+  });
+  
+  return userDataLookup;
+};
+
+// Generate a single week of workouts for any given start date
+export const generateWeekForDate = (weekStartDate: Date, userDataLookup: Map<string, any>): WeekData => {
+  const workouts: WeeklyWorkout[] = [];
+  
+  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+    const currentDate = new Date(weekStartDate);
+    currentDate.setDate(weekStartDate.getDate() + dayOffset);
+    
+    const dateKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+    const userData = userDataLookup.get(dateKey);
+    
+    if (userData) {
+      // Convert user data to WeeklyWorkout format
+      const workout = createWorkoutFromUserData(currentDate, userData);
+      workouts.push(workout);
+    } else {
+      // Create empty workout entry for dates without data
+      const workout = createEmptyWorkoutEntry(currentDate);
+      workouts.push(workout);
+    }
+  }
+  
+  return {
+    weekOf: formatWeekRange(weekStartDate),
+    startDate: new Date(weekStartDate),
+    workouts
+  };
+};
+
+// Create initial weeks covering June 8 - August 19, 2025
+export const createInitialWorkoutSchedule = (userWorkoutHistory: any[]): WeekData[] => {
+  const userDataLookup = createUserDataLookup(userWorkoutHistory);
   const weeks: WeekData[] = [];
   
-  // July 31st, 2025 is a Thursday
-  // We want the current week to be July 28 - Aug 3 (Monday to Sunday)
-  // So we need to start from Sunday July 27th to make Monday July 28th index 1
-  const currentWeekStart = new Date(2025, 6, 27); // July 27th, 2025 (Sunday)
+  // Data range: June 1 - August 31, 2025 
+  // Start from Sunday June 1, 2025 and create weeks until we cover August 31
+  const startDate = new Date(2025, 5, 1); // June 1, 2025 (Sunday)
+  const endDate = new Date(2025, 7, 31);  // August 31, 2025
   
-  // Generate weeks: past 2 weeks + current week
-  const startDate = new Date(currentWeekStart);
-  startDate.setDate(currentWeekStart.getDate() - (14)); // Go back 2 weeks (14 days)
+  let currentWeekStart = new Date(startDate);
   
-  for (let i = 0; i < weeksCount; i++) {
-    const weekStartDate = new Date(startDate);
-    weekStartDate.setDate(startDate.getDate() + (i * 7));
-    weeks.push(generateWeek(weekStartDate, i));
+  while (currentWeekStart <= endDate) {
+    weeks.push(generateWeekForDate(currentWeekStart, userDataLookup));
+    currentWeekStart = new Date(currentWeekStart);
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
   }
   
   return weeks;
 };
 
-// Generate additional weeks dynamically for unlimited scrolling
-export const generateAdditionalWeeks = (currentWeeksCount: number, direction: 'past' | 'future', additionalWeeks: number = 4): WeekData[] => {
+// Dynamic week generation for unlimited navigation
+export const generateAdditionalWeeks = (
+  baseWeekStart: Date, 
+  direction: 'past' | 'future', 
+  weekCount: number,
+  userDataLookup: Map<string, any>
+): WeekData[] => {
   const weeks: WeekData[] = [];
-  const currentWeekStart = new Date(2025, 6, 27); // July 27th, 2025 (Sunday)
   
-  if (direction === 'past') {
-    // Generate past weeks
-    for (let i = 1; i <= additionalWeeks; i++) {
-      const weekStartDate = new Date(currentWeekStart);
-      weekStartDate.setDate(currentWeekStart.getDate() - (14 + (currentWeeksCount - 3) * 7) - (i * 7));
-      weeks.unshift(generateWeek(weekStartDate, -(currentWeeksCount + i - 3)));
+  for (let i = 1; i <= weekCount; i++) {
+    const weekStart = new Date(baseWeekStart);
+    
+    if (direction === 'past') {
+      weekStart.setDate(baseWeekStart.getDate() - (i * 7));
+    } else {
+      weekStart.setDate(baseWeekStart.getDate() + (i * 7));
     }
-  } else {
-    // Generate future weeks
-    for (let i = 1; i <= additionalWeeks; i++) {
-      const weekStartDate = new Date(currentWeekStart);
-      weekStartDate.setDate(currentWeekStart.getDate() + (currentWeeksCount - 2) * 7 + (i * 7));
-      weeks.push(generateWeek(weekStartDate, currentWeeksCount - 3 + i));
+    
+    const week = generateWeekForDate(weekStart, userDataLookup);
+    
+    if (direction === 'past') {
+      weeks.unshift(week);
+    } else {
+      weeks.push(week);
     }
   }
   
   return weeks;
 };
 
-// Get current week index (for navigation)
-export const getCurrentWeekIndex = (): number => {
-  // July 31st, 2025 falls in the week of July 28 - Aug 3, which should be index 2 (3rd week)
-  return 2;
+// Get current week index (for navigation) 
+export const getCurrentWeekIndex = (allWeeksData: WeekData[]): number => {
+  // July 31st, 2025 - find which week contains this date
+  const today = new Date(2025, 6, 31); // July 31, 2025
+  
+  for (let i = 0; i < allWeeksData.length; i++) {
+    const week = allWeeksData[i];
+    const weekStart = week.startDate;
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    
+    if (today >= weekStart && today <= weekEnd) {
+      return i;
+    }
+  }
+  
+  // Fallback - should not happen with proper data
+  return Math.floor(allWeeksData.length / 2);
 };
 
-// Generate the default 3 weeks of data
-export const workoutScheduleData = generateWorkoutSchedule(3);
+// Import fake user data and create initial workout schedule
+import { fakeUserProfile } from './fakeUserData';
+export const workoutScheduleData = createInitialWorkoutSchedule(fakeUserProfile.workoutHistory);
+export const userDataLookup = createUserDataLookup(fakeUserProfile.workoutHistory);
 
 // Helper to get workout by week and day
 export const getWorkoutByWeekAndDay = (weekIndex: number, dayIndex: number): WeeklyWorkout | null => {
@@ -278,7 +426,7 @@ export const getWorkoutByWeekAndDay = (weekIndex: number, dayIndex: number): Wee
 
 // Helper to get today's workout (July 31st, 2025 = Thursday)
 export const getTodaysWorkout = (): WeeklyWorkout | null => {
-  const currentWeekIndex = getCurrentWeekIndex();
+  const currentWeekIndex = getCurrentWeekIndex(workoutScheduleData);
   const todayIndex = 4; // Thursday = index 4 (0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat)
   return getWorkoutByWeekAndDay(currentWeekIndex, todayIndex);
 };
@@ -287,3 +435,5 @@ export const getTodaysWorkout = (): WeeklyWorkout | null => {
 export const getWorkoutTemplateById = (templateId: string): WorkoutTemplate | undefined => {
   return workoutTemplates.find(template => template.id === templateId);
 };
+
+// No longer needed - workout schedule data already contains fake user data

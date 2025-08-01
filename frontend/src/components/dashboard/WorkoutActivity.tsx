@@ -1,11 +1,18 @@
 'use client';
 import React, { useEffect } from 'react';
-import { userProfile } from '../../data/userProfile';
+import { useWorkoutStore } from '../../store/workoutStore';
+import { WorkoutStatus } from '../../data/workoutSchedule';
 
 const WorkoutActivity = () => {
+  const { allWeeksData, initialize } = useWorkoutStore();
+  
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+  
   useEffect(() => {
     generateHeatmap();
-  }, []);
+  }, [allWeeksData]);
 
   const generateHeatmap = () => {
     const heatmapGrid = document.getElementById('heatmap-grid');
@@ -17,15 +24,41 @@ const WorkoutActivity = () => {
     heatmapGrid.innerHTML = '';
     monthLabels.innerHTML = '';
     
-    // Create workout data lookup from userProfile
-    const workoutLookup: { [key: string]: { workoutType: string; duration: number; calories: number; workouts: number } } = {};
-    userProfile.workoutHistory.forEach(workout => {
-      workoutLookup[workout.date] = {
-        workoutType: workout.workoutType,
-        duration: workout.duration,
-        calories: workout.calories,
-        workouts: workout.workouts
-      };
+    // Create workout data lookup from allWeeksData
+    const workoutLookup: { [key: string]: Array<{ workoutType: string; duration: number; calories: number; isCompleted: boolean }> } = {};
+    
+    allWeeksData.forEach(week => {
+      week.workouts.forEach(workout => {
+        const dateKey = `${workout.year}-${String(workout.month === 'January' ? 1 : 
+          workout.month === 'February' ? 2 :
+          workout.month === 'March' ? 3 :
+          workout.month === 'April' ? 4 :
+          workout.month === 'May' ? 5 :
+          workout.month === 'June' ? 6 :
+          workout.month === 'July' ? 7 :
+          workout.month === 'August' ? 8 :
+          workout.month === 'September' ? 9 :
+          workout.month === 'October' ? 10 :
+          workout.month === 'November' ? 11 : 12).padStart(2, '0')}-${String(workout.date).padStart(2, '0')}`;
+        
+        // Only include completed workouts or estimate calories for scheduled ones
+        const isCompleted = workout.status === 'Completed';
+        const estimatedCalories = workout.type === 'Rest' ? 0 : 
+          workout.type === 'Upper' ? 350 :
+          workout.type === 'Lower' ? 400 :
+          workout.type === 'Full Body' ? 450 : 300;
+        
+        if (!workoutLookup[dateKey]) {
+          workoutLookup[dateKey] = [];
+        }
+        
+        workoutLookup[dateKey].push({
+          workoutType: workout.type,
+          duration: isCompleted ? 45 : 0, // Assume 45 min if completed, 0 if not
+          calories: isCompleted ? estimatedCalories : (workout.status === WorkoutStatus.Future ? estimatedCalories * 0.5 : 0),
+          isCompleted: isCompleted
+        });
+      });
     });
     
     const today = new Date();
@@ -49,61 +82,68 @@ const WorkoutActivity = () => {
     
     for (let week = 0; week < 13; week++) {
       const weekColumn = document.createElement('div');
-      weekColumn.className = 'grid grid-rows-7 gap-[3px]';
+      weekColumn.className = 'grid grid-rows-7 gap-[2px]';
       
       for (let day = 0; day < 7; day++) {
         const cell = document.createElement('div');
-        cell.className = 'w-2.5 h-2.5 rounded-sm cursor-pointer hover:outline hover:outline-1 hover:outline-border relative group';
+        cell.className = 'w-2.5 h-2.5 rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-300 relative group';
         
         // Create tooltip element
         const tooltip = document.createElement('div');
-        tooltip.className = 'fixed px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-lg border opacity-0 transition-opacity duration-200 pointer-events-none whitespace-nowrap';
+        tooltip.className = 'fixed px-3 py-2 bg-gray-900 text-white text-xs rounded-md shadow-lg opacity-0 transition-opacity duration-200 pointer-events-none whitespace-nowrap';
         tooltip.style.zIndex = '9999';
         
         if (currentDate <= today && currentDate >= threeMonthsAgo) {
           const dateKey = currentDate.toISOString().split('T')[0];
-          const workoutData = workoutLookup[dateKey];
+          const workoutData = workoutLookup[dateKey] || [];
           
-          let workouts = 0;
-          let workoutType = '';
-          let duration = 0;
-          let calories = 0;
+          let completedWorkouts = 0;
+          let totalCalories = 0;
+          let totalDuration = 0;
           
-          if (workoutData) {
-            workouts = workoutData.workouts;
-            workoutType = workoutData.workoutType;
-            duration = workoutData.duration;
-            calories = workoutData.calories;
-            totalWorkouts += workouts;
-          }
+          workoutData.forEach(workout => {
+            if (workout.isCompleted) {
+              completedWorkouts++;
+              totalCalories += workout.calories;
+              totalDuration += workout.duration;
+            }
+          });
+          
+          totalWorkouts += completedWorkouts;
           
           // Color based on calories burned
           let level = 0;
-          if (calories === 0) level = 0;
-          else if (calories <= 200) level = 1;
-          else if (calories <= 400) level = 2;
-          else if (calories <= 600) level = 3;
-          else if (calories <= 800) level = 4;
+          if (totalCalories === 0) level = 0;
+          else if (totalCalories <= 200) level = 1;
+          else if (totalCalories <= 400) level = 2;
+          else if (totalCalories <= 600) level = 3;
+          else if (totalCalories <= 800) level = 4;
           else level = 5;
           
-          if (level === 0) cell.classList.add('bg-muted');
-          else if (level === 1) cell.classList.add('bg-primary/10');
-          else if (level === 2) cell.classList.add('bg-primary/25');
-          else if (level === 3) cell.classList.add('bg-primary/50');
-          else if (level === 4) cell.classList.add('bg-primary/75');
-          else cell.classList.add('bg-primary');
+          if (level === 0) cell.classList.add('bg-slate-100', 'dark:bg-slate-800');
+          else if (level === 1) cell.classList.add('bg-green-100', 'dark:bg-green-900/40');
+          else if (level === 2) cell.classList.add('bg-green-200', 'dark:bg-green-800/60');
+          else if (level === 3) cell.classList.add('bg-green-300', 'dark:bg-green-700/80');
+          else if (level === 4) cell.classList.add('bg-green-400', 'dark:bg-green-600');
+          else cell.classList.add('bg-green-500', 'dark:bg-green-500');
           
           const dateStr = currentDate.toLocaleDateString('en-US', { 
-            weekday: 'short', 
-            month: 'short', 
+            month: 'numeric', 
             day: 'numeric', 
             year: 'numeric' 
           });
-          
-          if (workouts === 0) {
-            tooltip.textContent = `No workout on ${dateStr}`;
+
+          if (completedWorkouts === 0) {
+            tooltip.textContent = `No workouts on ${dateStr}`;
           } else {
-            tooltip.innerHTML = `<div><strong>${workoutType}</strong></div><div>${dateStr}</div><div>Duration: ${duration} min</div><div>Calories: ${calories}</div>`;
+            let tooltipContent = `${dateStr}<br/>`;
+            workoutData.forEach((workout, index) => {
+              if (workout.isCompleted) {
+                tooltipContent += `<strong>${workout.workoutType}</strong> - ${workout.duration} min, ${workout.calories} cal`;
+                if (index < workoutData.length - 1) tooltipContent += '<br/>';
+              }
+            });
+            tooltip.innerHTML = tooltipContent;
           }
         } else {
           cell.style.visibility = 'hidden';
@@ -116,7 +156,7 @@ const WorkoutActivity = () => {
         }
         
         // Add hover event listeners for tooltip positioning
-        cell.addEventListener('mouseenter', (e) => {
+        cell.addEventListener('mouseenter', () => {
           const rect = cell.getBoundingClientRect();
           tooltip.style.left = `${rect.left + rect.width / 2}px`;
           tooltip.style.top = `${rect.top - 8}px`;
@@ -167,9 +207,37 @@ const WorkoutActivity = () => {
         </div>
       </div>
       <div className="relative min-w-[350px] flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-12 gap-[3px] mb-2 text-xs text-muted-foreground" id="month-labels">
-        </div>
-        <div className="grid grid-cols-13 gap-[3px] text-xs" id="heatmap-grid">
+        <div className="flex">
+          <div className="w-8 mr-2">
+            <div className="h-4 mb-2"></div>
+            <div className="grid grid-rows-7 gap-[2px] text-xs text-muted-foreground">
+              <div></div>
+              <div>Mon</div>
+              <div></div>
+              <div>Wed</div>
+              <div></div>
+              <div>Fri</div>
+              <div></div>
+            </div>
+          </div>
+          <div className="flex-1">
+            <div className="grid grid-cols-13 gap-[2px] mb-2 text-xs text-muted-foreground" id="month-labels">
+            </div>
+            <div className="grid grid-cols-13 gap-[2px] text-xs" id="heatmap-grid">
+            </div>
+            <div className="flex items-center justify-end mt-3 text-xs text-muted-foreground">
+              <span className="mr-2">Less</span>
+              <div className="flex gap-1">
+                <div className="w-2.5 h-2.5 rounded-sm bg-slate-100 dark:bg-slate-800"></div>
+                <div className="w-2.5 h-2.5 rounded-sm bg-green-100 dark:bg-green-900/40"></div>
+                <div className="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-green-800/60"></div>
+                <div className="w-2.5 h-2.5 rounded-sm bg-green-300 dark:bg-green-700/80"></div>
+                <div className="w-2.5 h-2.5 rounded-sm bg-green-400 dark:bg-green-600"></div>
+                <div className="w-2.5 h-2.5 rounded-sm bg-green-500 dark:bg-green-500"></div>
+              </div>
+              <span className="ml-2">More</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

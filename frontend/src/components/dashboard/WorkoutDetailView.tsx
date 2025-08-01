@@ -119,16 +119,52 @@ const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ workout }) => {
     );
   };
 
+  if (!workout) {
+    return (
+      <div className="bg-card border rounded-2xl p-8 mt-6">
+        <p className="text-muted-foreground">Select a workout to view details.</p>
+      </div>
+    );
+  }
+
+  // Handle empty/unplanned workout entries
+  if (workout.type === 'No workout planned') {
+    return (
+      <div className="bg-card border rounded-2xl p-8 mt-6">
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h3 className="text-2xl font-semibold mb-2">No Workout Planned</h3>
+            <div className="text-muted-foreground text-sm">No workout scheduled for {workout.month} {workout.date}, {workout.year}</div>
+          </div>
+          <Button variant="default" onClick={() => window.location.href = '/plan'}>
+            Generate Workout
+          </Button>
+        </div>
+        <div className="bg-secondary rounded-xl p-6 text-center">
+          <p className="text-muted-foreground mb-4">
+            This date is outside your current workout planning period. 
+            Generate a personalized workout plan or extend your current program.
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Button variant="outline" onClick={() => window.location.href = '/plan'}>
+              Create Workout Plan
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-card border rounded-2xl p-8 mt-6">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-2xl font-semibold mb-2">{workout.name}</h3>
-          <div className="text-primary text-xs font-semibold uppercase tracking-wider">{workout.type}</div>
+          <div className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">{workout.type}</div>
         </div>
         {workout.type !== 'Rest' && (
           <Button variant="outline" onClick={() => window.location.href = '/today'}>
-            View Today's Workout
+            View Session
           </Button>
         )}
       </div>
