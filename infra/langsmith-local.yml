@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  langsmith-postgres:
+    image: postgres:15
+    container_name: langsmith-postgres
+    environment:
+      POSTGRES_DB: langsmith
+      POSTGRES_USER: langsmith
+      POSTGRES_PASSWORD: langsmith
+    ports:
+      - "5433:5432"
+    volumes:
+      - langsmith_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langsmith"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  langsmith-redis:
+    image: redis:7-alpine
+    container_name: langsmith-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - langsmith_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  langsmith-server:
+    image: langchain/langsmith:latest
+    container_name: langsmith-server
+    environment:
+      # Database Configuration
+      DATABASE_URL: postgresql://langsmith:langsmith@langsmith-postgres:5432/langsmith
+      REDIS_DATABASE_URL: redis://langsmith-redis:6379
+      
+      # Server Configuration
+      PORT: 8080
+      HOST: 0.0.0.0
+      
+      # Authentication (for local development)
+      LANGSMITH_LICENSE_KEY: ""
+      AUTH_TYPE: none  # Disable auth for local development
+      
+      # Optional: Set a custom organization name
+      ORGANIZATION_NAME: "Local Development"
+      
+      # Logging
+      LOG_LEVEL: info
+    ports:
+      - "8080:8080"
+    depends_on:
+      langsmith-postgres:
+        condition: service_healthy
+      langsmith-redis:
+        condition: service_healthy
+    volumes:
+      - langsmith_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  langsmith_postgres_data:
+  langsmith_redis_data:
+  langsmith_data:

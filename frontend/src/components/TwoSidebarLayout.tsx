@@ -34,7 +34,7 @@ const SidebarContent: React.FC<{
         </button>
       </div>
     )}
-    <div className="p-4 text-white">
+    <div className={`p-0 ${bgColor === 'bg-background' ? 'text-foreground' : 'text-white'}`}>
       {children}
     </div>
   </div>
@@ -71,7 +71,7 @@ export const TwoSidebarLayout: React.FC<TwoSidebarLayoutProps> = ({
     <div className="relative flex h-screen overflow-hidden bg-green-500" suppressHydrationWarning>
       {/* Left Sidebar - Always render but control position */}
       <div
-        className={`bg-blue-500 w-64 transition-transform duration-300 ease-in-out absolute left-0 top-0 h-full z-10 ${
+        className={`bg-background border-r border-border w-64 transition-transform duration-300 ease-in-out absolute left-0 top-0 h-full z-10 ${
           isMobile
             ? '-translate-x-full' // Always hide desktop sidebar on mobile
             : leftSidebarOpen
@@ -79,7 +79,7 @@ export const TwoSidebarLayout: React.FC<TwoSidebarLayoutProps> = ({
             : '-translate-x-full'
         }`}
       >
-        <SidebarContent>{leftContent}</SidebarContent>
+        <SidebarContent bgColor="bg-background">{leftContent}</SidebarContent>
       </div>
 
       {/* Mobile Left Sheet */}
@@ -92,7 +92,7 @@ export const TwoSidebarLayout: React.FC<TwoSidebarLayoutProps> = ({
           <SidebarContent 
             onClose={() => toggleLeftSidebar()} 
             isMobile 
-            bgColor="bg-blue-500"
+            bgColor="bg-background"
           >
             {leftContent}
           </SidebarContent>

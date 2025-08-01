@@ -25,18 +25,7 @@ const DayCard: React.FC<DayCardProps> = ({
   onClick
 }) => {
   const getTypeStyles = () => {
-    switch (workoutType) {
-      case 'strength':
-        return 'bg-blue-500';
-      case 'cardio':
-        return 'bg-red-500';
-      case 'recovery':
-        return 'bg-green-500';
-      case 'rest':
-        return 'bg-muted-foreground';
-      default:
-        return 'bg-primary';
-    }
+    return 'bg-secondary';
   };
 
   return (
@@ -47,7 +36,7 @@ const DayCard: React.FC<DayCardProps> = ({
       onClick={onClick}
     >
       {/* Date Sidebar */}
-      <div className={`flex flex-col items-center justify-center px-1.5 rounded-l-xl ${getTypeStyles()} text-white w-[45px] flex-shrink-0`}>
+      <div className={`flex flex-col items-center justify-center px-1.5 rounded-l-xl ${getTypeStyles()} text-foreground w-[45px] flex-shrink-0`}>
         <div className="text-sm font-bold leading-none">{date}</div>
         <div className="text-[9px] font-medium uppercase tracking-wider leading-none mt-0.5">{day}</div>
       </div>

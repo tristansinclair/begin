@@ -2,9 +2,14 @@
 import React, { useState } from 'react';
 import WorkoutActivity from './WorkoutActivity';
 import DayCard from './DayCard';
+import { TwoSidebarLayout } from '../TwoSidebarLayout';
+import LeftSidebar from '../LeftSidebar';
+import { userProfile } from '../../data/userProfile';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 const Dashboard = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(2);
+  const { toggleLeftSidebar } = useSidebar();
 
   const workouts = [
     { 
@@ -196,8 +201,20 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="">
+    <TwoSidebarLayout leftSidebar={<LeftSidebar />}>
       <div className="min-h-screen bg-background">
+        {/* Toggle Button */}
+        <div className="p-4">
+          <button
+            onClick={toggleLeftSidebar}
+            className="fixed top-4 left-4 z-20 p-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl"
+            aria-label="Toggle navigation"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
         {/* Main Content */}
         <main className="p-10">
           {/* AI Trainer Card */}
@@ -238,7 +255,7 @@ const Dashboard = () => {
                   🔥
                 </div>
               </div>
-              <div className="text-3xl font-bold mb-2">12</div>
+              <div className="text-3xl font-bold mb-2">{userProfile.stats.currentStreak}</div>
               <div className="flex items-center gap-2 text-green-600 text-sm">
                 <span>↑ 4 days from last week</span>
               </div>
@@ -252,7 +269,7 @@ const Dashboard = () => {
                   💪
                 </div>
               </div>
-              <div className="text-3xl font-bold mb-2">24,850</div>
+              <div className="text-3xl font-bold mb-2">{userProfile.stats.totalVolume.toLocaleString()}</div>
               <div className="flex items-center gap-2 text-green-600 text-sm">
                 <span>↑ 12% this week</span>
               </div>
@@ -308,7 +325,7 @@ const Dashboard = () => {
           </section>
         </main>
       </div>
-    </div>
+    </TwoSidebarLayout>
   );
 };
 

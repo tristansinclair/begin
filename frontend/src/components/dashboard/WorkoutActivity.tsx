@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
+import { userProfile } from '../../data/userProfile';
 
 const WorkoutActivity = () => {
   useEffect(() => {
@@ -15,6 +16,17 @@ const WorkoutActivity = () => {
     
     heatmapGrid.innerHTML = '';
     monthLabels.innerHTML = '';
+    
+    // Create workout data lookup from userProfile
+    const workoutLookup: { [key: string]: { workoutType: string; duration: number; calories: number; workouts: number } } = {};
+    userProfile.workoutHistory.forEach(workout => {
+      workoutLookup[workout.date] = {
+        workoutType: workout.workoutType,
+        duration: workout.duration,
+        calories: workout.calories,
+        workouts: workout.workouts
+      };
+    });
     
     const today = new Date();
     const threeMonthsAgo = new Date(today);
@@ -34,7 +46,6 @@ const WorkoutActivity = () => {
     });
     heatmapGrid.appendChild(weekdayLabelsContainer);
     
-    const workoutData: { [key: string]: number } = {};
     let totalWorkouts = 0;
     
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -52,27 +63,43 @@ const WorkoutActivity = () => {
       
       for (let day = 0; day < 7; day++) {
         const cell = document.createElement('div');
-        cell.className = 'w-2.5 h-2.5 rounded-sm cursor-pointer hover:outline hover:outline-1 hover:outline-border relative';
+        cell.className = 'w-2.5 h-2.5 rounded-sm cursor-pointer hover:outline hover:outline-1 hover:outline-border relative group';
+        
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded shadow-lg border opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap';
         
         if (currentDate <= today && currentDate >= threeMonthsAgo) {
           const dateKey = currentDate.toISOString().split('T')[0];
-          const random = Math.random();
-          let workouts = 0;
+          const workoutData = workoutLookup[dateKey];
           
-          if (random > 0.25) {
-            if (random > 0.9) workouts = 3;
-            else if (random > 0.7) workouts = 2;
-            else workouts = 1;
+          let workouts = 0;
+          let workoutType = '';
+          let duration = 0;
+          let calories = 0;
+          
+          if (workoutData) {
+            workouts = workoutData.workouts;
+            workoutType = workoutData.workoutType;
+            duration = workoutData.duration;
+            calories = workoutData.calories;
+            totalWorkouts += workouts;
           }
           
-          workoutData[dateKey] = workouts;
-          totalWorkouts += workouts;
+          // Color based on calories burned
+          let level = 0;
+          if (calories === 0) level = 0;
+          else if (calories <= 200) level = 1;
+          else if (calories <= 400) level = 2;
+          else if (calories <= 600) level = 3;
+          else if (calories <= 800) level = 4;
+          else level = 5;
           
-          const level = Math.min(workouts, 4);
           if (level === 0) cell.classList.add('bg-muted');
-          else if (level === 1) cell.classList.add('bg-primary/20');
-          else if (level === 2) cell.classList.add('bg-primary/40');
-          else if (level === 3) cell.classList.add('bg-primary/60');
+          else if (level === 1) cell.classList.add('bg-primary/10');
+          else if (level === 2) cell.classList.add('bg-primary/25');
+          else if (level === 3) cell.classList.add('bg-primary/50');
+          else if (level === 4) cell.classList.add('bg-primary/75');
           else cell.classList.add('bg-primary');
           
           const dateStr = currentDate.toLocaleDateString('en-US', { 
@@ -81,9 +108,15 @@ const WorkoutActivity = () => {
             day: 'numeric', 
             year: 'numeric' 
           });
-          cell.title = `${workouts} workout${workouts !== 1 ? 's' : ''} on ${dateStr}`;
+          
+          if (workouts === 0) {
+            tooltip.textContent = `No workout on ${dateStr}`;
+          } else {
+            tooltip.innerHTML = `<div><strong>${workoutType}</strong></div><div>${dateStr}</div><div>Duration: ${duration} min</div><div>Calories: ${calories}</div>`;
+          }
         } else {
           cell.style.visibility = 'hidden';
+          tooltip.style.visibility = 'hidden';
         }
         
         if (day === 0 && currentDate.getMonth() !== currentMonth) {
@@ -91,6 +124,7 @@ const WorkoutActivity = () => {
           monthPositions[week] = currentMonth;
         }
         
+        cell.appendChild(tooltip);
         weekColumn.appendChild(cell);
         currentDate.setDate(currentDate.getDate() + 1);
       }
@@ -112,7 +146,7 @@ const WorkoutActivity = () => {
       }
     });
     
-    totalWorkoutsEl.textContent = `${totalWorkouts} sessions`;
+    totalWorkoutsEl.textContent = `${totalWorkouts} workouts in the last 3 months`;
   };
 
   return (
