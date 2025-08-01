@@ -2,11 +2,34 @@
 import React, { useState } from 'react';
 import WorkoutActivity from './WorkoutActivity';
 import DayCard from './DayCard';
+import DailySummary from './DailySummary';
 import { userProfile } from '../../data/userProfile';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const Dashboard = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(2);
+  
+  // Toggle this to test both states - in real app this would come from API/state
+  const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false);
+  
+  // Sample data for completed workout
+  const workoutStats = {
+    duration: '48m',
+    exercisesCompleted: 6,
+    totalSets: 16,
+    averageWeight: '72kg',
+    caloriesBurned: 387,
+    personalRecords: 2
+  };
+  
+  // Sample data for upcoming workout
+  const upcomingWorkout = {
+    name: 'Upper Body Power',
+    type: 'AI Recommended',
+    duration: '45 min',
+    exercises: 6,
+    targetMuscles: 'Chest & Triceps',
+    intensity: 'high'
+  };
 
   const workouts = [
     { 
@@ -199,68 +222,54 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Toggle Button */}
-      <div className="p-4">
-        <SidebarTrigger className="fixed top-4 left-4 z-20" />
-      </div>
       {/* Main Content */}
-      <main className="p-10">
-          {/* AI Trainer Card */}
-          <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-3xl p-8 mb-8 relative overflow-hidden border border-primary/20">
-            <div className="absolute -top-1/2 -right-1/4 w-[300px] h-[300px] bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
-            <div className="flex items-center gap-5 mb-6 relative z-10">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-3xl shadow-lg">
-                🤖
-              </div>
-              <div>
-                <h1 className="text-3xl font-semibold mb-1">Ready to crush today's workout?</h1>
-                <p className="text-muted-foreground">Your AI trainer has prepared a personalized plan based on your progress</p>
-              </div>
+      <main className="p-6">
+          {/* Main Dashboard Grid - 2x2 layout on large screens */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-6 mb-8">
+            {/* Daily Summary - Takes 2x2 on large screens, full width on mobile */}
+            <div className="col-span-2 lg:row-span-2 h-full">
+              <DailySummary 
+                isWorkoutCompleted={isWorkoutCompleted}
+                workoutStats={isWorkoutCompleted ? workoutStats : undefined}
+                upcomingWorkout={!isWorkoutCompleted ? upcomingWorkout : undefined}
+              />
             </div>
-            <div className="flex gap-4 relative z-10">
-              <button className="px-6 py-3 bg-background/50 hover:bg-background/70 border border-border rounded-2xl font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm">
-                Start Today's Workout
-              </button>
-              <button className="px-6 py-3 bg-background/50 hover:bg-background/70 border border-border rounded-2xl font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm">
-                Adjust My Plan
-              </button>
-              <button className="px-6 py-3 bg-background/50 hover:bg-background/70 border border-border rounded-2xl font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm">
-                Chat with AI Trainer
-              </button>
-            </div>
-          </div>
 
-          {/* Activity Heatmap and Stats Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr] gap-6 mb-8">
-            {/* Activity Heatmap */}
-            <WorkoutActivity />
-
-            {/* Workout Streak */}
-            <div className="bg-card border rounded-2xl p-6">
+            {/* Workout Streak - Takes 1x1 on large screens (top right) */}
+            <div className="bg-card border rounded-2xl p-6 h-full flex flex-col">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-sm font-medium text-foreground">Workout Streak</span>
                 <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
                   🔥
                 </div>
               </div>
-              <div className="text-3xl font-bold mb-2">{userProfile.stats.currentStreak}</div>
-              <div className="flex items-center gap-2 text-green-600 text-sm">
-                <span>↑ 4 days from last week</span>
+              <div className="flex-1 flex flex-col justify-center">
+                <div className="text-3xl font-bold mb-2">{userProfile.stats.currentStreak}</div>
+                <div className="flex items-center gap-2 text-green-600 text-sm">
+                  <span>↑ 4 days from last week</span>
+                </div>
               </div>
             </div>
 
-            {/* Total Volume */}
-            <div className="bg-card border rounded-2xl p-6">
+            {/* Total Volume - Takes 1x1 on large screens (middle right) */}
+            <div className="bg-card border rounded-2xl p-6 h-full flex flex-col">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-sm font-medium text-muted-foreground">Total Volume</span>
                 <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
                   💪
                 </div>
               </div>
-              <div className="text-3xl font-bold mb-2">{userProfile.stats.totalVolume.toLocaleString()}</div>
-              <div className="flex items-center gap-2 text-green-600 text-sm">
-                <span>↑ 12% this week</span>
+              <div className="flex-1 flex flex-col justify-center">
+                <div className="text-3xl font-bold mb-2">{userProfile.stats.totalVolume.toLocaleString()}</div>
+                <div className="flex items-center gap-2 text-green-600 text-sm">
+                  <span>↑ 12% this week</span>
+                </div>
               </div>
+            </div>
+
+            {/* Activity Heatmap - Takes 2x1 on large screens, full width on mobile */}
+            <div className="col-span-2 h-full">
+              <WorkoutActivity />
             </div>
           </div>
 

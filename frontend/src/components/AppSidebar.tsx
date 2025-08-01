@@ -52,7 +52,7 @@ const menuItems = [
     title: 'Plans',
     icon: BookOpen,
     items: [
-      { title: 'Current Plan', icon: Trophy, url: '/plans/current' },
+      { title: 'Current Plan', icon: Trophy, url: '/plan' },
       { title: 'Browse Plans', icon: Library, url: '/plans/browse' },
       { title: 'Create Plan', icon: Plus, url: '/plans/create' },
       { title: 'Plan History', icon: History, url: '/plans/history' },
@@ -74,11 +74,13 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="p-6">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Dumbbell className="h-4 w-4" />
-          </div>
-          <span className="text-xl font-bold">Begin</span>
+        <div className="flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <Dumbbell className="h-4 w-4" />
+            </div>
+            <span className="text-xl font-bold">Begin</span>
+          </a>
         </div>
       </SidebarHeader>
 

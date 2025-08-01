@@ -150,14 +150,14 @@ const WorkoutActivity = () => {
   };
 
   return (
-    <div className="bg-card border rounded-2xl p-6 overflow-x-auto">
+    <div className="bg-card border rounded-2xl p-6 overflow-x-auto h-full flex flex-col">
       <div className="flex justify-between items-center mb-5">
         <h3 className="text-base font-semibold">Workout Activity</h3>
         <div className="text-sm text-muted-foreground">
           <span id="total-workouts">0 workouts in the last 3 months</span>
         </div>
       </div>
-      <div className="relative min-w-[350px]">
+      <div className="relative min-w-[350px] flex-1 flex flex-col justify-center">
         <div className="grid grid-cols-12 gap-[3px] mb-2 pl-10 text-xs text-muted-foreground" id="month-labels">
         </div>
         <div className="grid grid-cols-[auto_repeat(13,_1fr)] gap-[3px] text-xs" id="heatmap-grid">
