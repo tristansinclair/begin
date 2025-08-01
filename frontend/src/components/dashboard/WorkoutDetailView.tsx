@@ -2,6 +2,7 @@
 import React from 'react';
 import { WeeklyWorkout, getWorkoutTemplateById } from '../../data/workoutSchedule';
 import { Button } from '../ui/button';
+import { SquareArrowOutUpRight } from 'lucide-react';
 
 interface WorkoutDetailViewProps {
   workout: WeeklyWorkout;
@@ -165,6 +166,7 @@ const WorkoutDetailView: React.FC<WorkoutDetailViewProps> = ({ workout }) => {
         {workout.type !== 'Rest' && (
           <Button variant="outline" onClick={() => window.location.href = '/today'}>
             View Session
+            <SquareArrowOutUpRight className="w-3 h-3" />
           </Button>
         )}
       </div>

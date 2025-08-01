@@ -10,7 +10,6 @@ export default function SettingsPage() {
       <div className="grid gap-6">
         {/* User Profile Section */}
         <div className="border rounded-lg p-6 bg-card">
-          <h2 className="text-xl font-semibold mb-4">Profile</h2>
           <div className="space-y-3">
             <div>
               <p className="text-sm text-muted-foreground">Name</p>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   Calendar, 
@@ -48,6 +49,7 @@ const menuItems = [
   {
     title: 'Workouts',
     icon: Dumbbell,
+    url: '/workouts',
     items: [
       { title: "Today's Workout", icon: Calendar, url: '/workouts/today' },
       { title: 'History', icon: History, url: '/workouts/history' },
@@ -56,6 +58,7 @@ const menuItems = [
   {
     title: 'Plans',
     icon: BookOpen,
+    url: '/plans',
     items: [
       { title: 'Current Plan', icon: Trophy, url: '/plan' },
       { title: 'Browse Plans', icon: Library, url: '/plans/browse' },
@@ -66,6 +69,7 @@ const menuItems = [
   {
     title: 'Profile',
     icon: User,
+    url: '/profile',
     items: [
       { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
       { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
@@ -88,12 +92,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="p-6">
         <div className="flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Dumbbell className="h-4 w-4" />
             </div>
             <span className="text-xl font-bold">BEGIN</span>
-          </a>
+          </Link>
         </div>
       </SidebarHeader>
 
@@ -105,22 +109,26 @@ export function AppSidebar() {
                 item.items ? (
                   <Collapsible key={item.title} defaultOpen className="group/collapsible">
                     <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton>
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
-                          <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                      <div className="flex items-center">
+                        <SidebarMenuButton asChild isActive={isActive(item.url)} className="flex-1">
+                          <Link href={item.url}>
+                            <item.icon className="h-4 w-4" />
+                            <span>{item.title}</span>
+                          </Link>
                         </SidebarMenuButton>
-                      </CollapsibleTrigger>
+                        <CollapsibleTrigger className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                          <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                        </CollapsibleTrigger>
+                      </div>
                       <CollapsibleContent>
                         <SidebarMenuSub>
                           {item.items.map((subItem) => (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton asChild isActive={isActive(subItem.url)}>
-                                <a href={subItem.url}>
+                                <Link href={subItem.url}>
                                   <subItem.icon className="h-4 w-4" />
                                   <span>{subItem.title}</span>
-                                </a>
+                                </Link>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ))}
@@ -131,10 +139,10 @@ export function AppSidebar() {
                 ) : (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )
@@ -148,7 +156,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/profile">
+              <Link href="/profile">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <User className="size-4" />
                 </div>
@@ -156,7 +164,7 @@ export function AppSidebar() {
                   <span className="truncate font-semibold">My Account</span>
                   <span className="truncate text-xs">Manage settings</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

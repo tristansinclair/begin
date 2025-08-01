@@ -263,9 +263,9 @@ const DailySummary: React.FC<DailySummaryProps> = ({
           )}
         </div>
 
-        <Button className="w-full rounded-xl py-3 text-sm font-medium flex items-center justify-center gap-2 mt-auto">
-          <Play className="w-4 h-4" />
+        <Button variant="action" className="w-full rounded-xl py-3 text-sm font-medium flex items-center justify-center gap-2 mt-auto">
           Start Workout
+          <Play className="w-3 h-3" />
         </Button>
       </div>
     );
