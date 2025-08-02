@@ -51,8 +51,8 @@ const menuItems = [
     icon: Dumbbell,
     url: '/workouts',
     items: [
-      { title: "Today's Workout", icon: Calendar, url: '/workouts/today' },
-      { title: 'History', icon: History, url: '/workouts/history' },
+      { title: "Today's Workout", icon: Calendar, url: '/today' },
+      { title: 'History', icon: History, url: '/workouts' },
     ],
   },
   {

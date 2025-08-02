@@ -111,7 +111,211 @@ export const fakeUserProfile = {
   ],
   
   workoutHistory: [
+    // August 2025 - Future and current workouts
+    {
+      date: '2025-08-14',
+      workoutType: 'strength' as const,
+      duration: 62,
+      calories: 405,
+      workouts: 1,
+      name: 'Lower Body Power',
+      exercises: [
+        { name: 'Back Squat', sets: 5, reps: [5, 5, 3, 3, 1], weight: [235, 255, 275, 285, 305] },
+        { name: 'Romanian Deadlift', sets: 4, reps: [6, 6, 6, 4], weight: [195, 205, 205, 215] },
+        { name: 'Bulgarian Split Squats', sets: 3, reps: [10, 10, 8], weight: [40, 40, 45] },
+        { name: 'Hip Thrusts', sets: 3, reps: [12, 12, 10], weight: [185, 185, 205] }
+      ],
+      notes: 'New squat PR! Finally broke 300lbs',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-13',
+      workoutType: 'cardio' as const,
+      duration: 42,
+      calories: 365,
+      workouts: 1,
+      name: 'Endurance Run',
+      exercises: [
+        { name: 'Distance Run', duration: 42, distance: 5.8, unit: 'miles', pace: '7:15/mile' }
+      ],
+      notes: 'Longest run yet, felt great throughout',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-12',
+      workoutType: 'recovery' as const,
+      duration: 35,
+      calories: 150,
+      workouts: 1,
+      name: 'Active Recovery Flow',
+      exercises: [
+        { name: 'Yoga Flow', duration: 25 },
+        { name: 'Meditation', duration: 10 }
+      ],
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-11',
+      workoutType: 'strength' as const,
+      duration: 56,
+      calories: 375,
+      workouts: 1,
+      name: 'Upper Body Volume',
+      exercises: [
+        { name: 'Incline Dumbbell Press', sets: 4, reps: [10, 10, 8, 8], weight: [55, 60, 60, 65] },
+        { name: 'Cable Rows', sets: 4, reps: [12, 10, 10, 8], weight: [130, 140, 140, 150] },
+        { name: 'Lateral Raises', sets: 4, reps: [15, 12, 12, 10], weight: [15, 17, 17, 20] },
+        { name: 'Close-Grip Bench', sets: 3, reps: [10, 8, 8], weight: [135, 145, 145] }
+      ],
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-10',
+      workoutType: 'cardio' as const,
+      duration: 38,
+      calories: 340,
+      workouts: 1,
+      name: 'HIIT Circuit',
+      exercises: [
+        { name: 'Burpees', sets: 5, reps: 10, rest: 45 },
+        { name: 'Mountain Climbers', sets: 5, duration: 30, rest: 45 },
+        { name: 'Jump Squats', sets: 5, reps: 15, rest: 45 },
+        { name: 'Push-ups', sets: 5, reps: 12, rest: 45 }
+      ],
+      notes: 'High intensity, great sweat session',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-09',
+      workoutType: 'strength' as const,
+      duration: 0,
+      calories: 0,
+      workouts: 0,
+      name: 'Lower Body Strength',
+      status: 'Missed' as WorkoutStatus,
+      notes: 'Woke up with lower back stiffness, took rest day instead'
+    },
+    {
+      date: '2025-08-08',
+      workoutType: 'cardio' as const,
+      duration: 32,
+      calories: 290,
+      workouts: 1,
+      name: 'Tempo Run',
+      exercises: [
+        { name: 'Warm-up Jog', duration: 8, distance: 0.7, unit: 'miles' },
+        { name: 'Tempo Run', duration: 20, distance: 3.0, unit: 'miles', pace: '6:40/mile' },
+        { name: 'Cool-down Walk', duration: 4, distance: 0.3, unit: 'miles' }
+      ],
+      notes: 'Maintained strong pace, felt controlled',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-07',
+      workoutType: 'strength' as const,
+      duration: 64,
+      calories: 420,
+      workouts: 1,
+      name: 'Upper Body Power',
+      exercises: [
+        { name: 'Bench Press', sets: 5, reps: [8, 6, 5, 3, 1], weight: [185, 205, 215, 225, 235] },
+        { name: 'Weighted Pull-ups', sets: 4, reps: [8, 6, 6, 5], weight: [25, 30, 30, 35] },
+        { name: 'Overhead Press', sets: 4, reps: [6, 6, 5, 4], weight: [105, 110, 110, 115] },
+        { name: 'Barbell Rows', sets: 3, reps: [8, 8, 6], weight: [145, 155, 155] }
+      ],
+      notes: 'Heavy day, new bench PR attempt at 235lbs!',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-06',
+      workoutType: 'recovery' as const,
+      duration: 28,
+      calories: 110,
+      workouts: 1,
+      name: 'Mobility & Stretching',
+      exercises: [
+        { name: 'Dynamic Stretching', duration: 15 },
+        { name: 'Foam Rolling', duration: 13 }
+      ],
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-05',
+      workoutType: 'strength' as const,
+      duration: 59,
+      calories: 390,
+      workouts: 1,
+      name: 'Lower Body Volume',
+      exercises: [
+        { name: 'Front Squat', sets: 4, reps: [10, 8, 8, 6], weight: [155, 165, 165, 175] },
+        { name: 'Romanian Deadlift', sets: 4, reps: [10, 10, 8, 8], weight: [185, 195, 195, 205] },
+        { name: 'Leg Press', sets: 3, reps: [15, 15, 12], weight: [360, 405, 405] },
+        { name: 'Calf Raises', sets: 4, reps: [20, 18, 15, 15], weight: [180, 200, 200, 220] }
+      ],
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-04',
+      workoutType: 'rest' as const,
+      duration: 0,
+      calories: 0,
+      workouts: 0,
+      name: 'Complete Rest Day',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-03',
+      workoutType: 'cardio' as const,
+      duration: 45,
+      calories: 385,
+      workouts: 1,
+      name: 'Cycling Session',
+      exercises: [
+        { name: 'Outdoor Cycling', duration: 45, distance: 12.5, unit: 'miles', pace: '16.7 mph' }
+      ],
+      notes: 'Beautiful weather, explored new route',
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-02',
+      workoutType: 'strength' as const,
+      duration: 55,
+      calories: 370,
+      workouts: 1,
+      name: 'Full Body Circuit',
+      exercises: [
+        { name: 'Deadlift', sets: 4, reps: [8, 6, 6, 5], weight: [225, 245, 255, 265] },
+        { name: 'Push-ups', sets: 3, reps: [15, 12, 10] },
+        { name: 'Pull-ups', sets: 3, reps: [8, 7, 6] },
+        { name: 'Goblet Squats', sets: 3, reps: [12, 12, 10], weight: [50, 55, 55] }
+      ],
+      status: 'Completed' as WorkoutStatus
+    },
+    {
+      date: '2025-08-01',
+      workoutType: 'recovery' as const,
+      duration: 40,
+      calories: 160,
+      workouts: 1,
+      name: 'Pool Recovery',
+      exercises: [
+        { name: 'Easy Swimming', duration: 30, distance: 800, unit: 'meters' },
+        { name: 'Water Walking', duration: 10 }
+      ],
+      notes: 'Perfect way to start August',
+      status: 'Completed' as WorkoutStatus
+    },
     // July 2025 - Recent completed workouts
+    {
+      date: '2025-07-31',
+      workoutType: 'strength' as const,
+      duration: 0,
+      calories: 0,
+      workouts: 0,
+      name: 'Upper Body Power',
+      status: 'Future' as WorkoutStatus,
+      notes: 'Planned for today'
+    },
     {
       date: '2025-07-30',
       workoutType: 'strength' as const,
