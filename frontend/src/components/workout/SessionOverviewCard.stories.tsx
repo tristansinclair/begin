@@ -220,6 +220,26 @@ const completedLiftSession: TrainingSession = {
   notes: 'Incredible session! Hit new PRs on bench press. Form felt solid throughout.'
 };
 
+// Additional status examples to showcase colored badges
+const missedRunSession: TrainingSession = {
+  ...upcomingRunSession,
+  id: 'missed-run',
+  name: 'Missed Morning Run',
+  status: TrainingSessionStatus.Missed,
+  dateTime: new Date('2025-01-14T07:00:00'), // Yesterday
+  notes: 'Overslept and missed the morning run session.'
+};
+
+const cancelledLiftSession: TrainingSession = {
+  ...upcomingLiftSession,
+  id: 'cancelled-lift',
+  name: 'Cancelled Gym Session',
+  status: TrainingSessionStatus.Cancelled,
+  dateTime: new Date('2025-01-14T18:00:00'), // Yesterday evening
+  notes: 'Gym was closed due to maintenance.'
+};
+
+
 const meta: Meta<typeof SessionOverviewCard> = {
   title: 'Workout/SessionOverviewCard',
   component: SessionOverviewCard,
@@ -240,7 +260,9 @@ const meta: Meta<typeof SessionOverviewCard> = {
         'In Progress Run',
         'In Progress Lift', 
         'Completed Run',
-        'Completed Lift'
+        'Completed Lift',
+        'Missed Run',
+        'Cancelled Lift'
       ],
       mapping: {
         'Upcoming Run': upcomingRunSession,
@@ -248,9 +270,11 @@ const meta: Meta<typeof SessionOverviewCard> = {
         'In Progress Run': inProgressRunSession,
         'In Progress Lift': inProgressLiftSession,
         'Completed Run': completedRunSession,
-        'Completed Lift': completedLiftSession
+        'Completed Lift': completedLiftSession,
+        'Missed Run': missedRunSession,
+        'Cancelled Lift': cancelledLiftSession
       },
-      description: 'Select different session states and types to see how the card adapts'
+      description: 'Select different session states and types to see how the card adapts with colored status badges'
     }
   },
   tags: ['autodocs'],
@@ -354,6 +378,34 @@ export const CompletedLift: Story = {
     docs: {
       description: {
         story: 'A completed strength session showing actual vs planned performance, including weight increases and extra reps achieved.',
+      },
+    },
+  },
+};
+
+export const MissedRun: Story = {
+  name: 'Missed Run Session',
+  args: {
+    session: missedRunSession
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A missed cardio session with red status badge indicating the session was not completed.',
+      },
+    },
+  },
+};
+
+export const CancelledLift: Story = {
+  name: 'Cancelled Lift Session',
+  args: {
+    session: cancelledLiftSession
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A cancelled strength session with gray status badge indicating the session was cancelled.',
       },
     },
   },
