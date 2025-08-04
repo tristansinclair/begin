@@ -48,40 +48,28 @@ const menuItems = [
     url: '/',
   },
   {
-    title: 'Workouts',
+    title: 'Sessions',
     icon: Dumbbell,
-    url: '/today', // TODO: add a page that shows the current day + past workouts, for /workouts
+    url: '/sessions', // TODO: add a page that shows the current day + past workouts, for /workouts
     items: [
-      { title: "Today's Workout", icon: Calendar, url: '/today' },
-      { title: 'History', icon: History, url: '/workouts' },
+      { title: "Today", icon: Calendar, url: '/sessions' },
+      { title: 'History', icon: History, url: '/sessions/all' },
     ],
   },
   {
     title: 'Plans',
     icon: BookOpen,
-    url: '/plans/current', // TODO: add a page that is for just /plans?
+    url: '/plan',
     items: [
-      { title: 'Current Plan', icon: Trophy, url: '/plans/current' },
-      { title: 'Create Plan', icon: Plus, url: '/plans/create' },
-      { title: 'Plan History', icon: History, url: '/plans/history' },
+      { title: 'Active Plan', icon: Trophy, url: '/plan' },
+      { title: 'Create', icon: Plus, url: '/plan/create' },
+      { title: 'History', icon: History, url: '/plan/history' },
     ],
   },
   {
     title: 'Profile',
     icon: User,
-    url: '/profile',
-    // items: [
-    //   { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
-    //   { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
-    // ],
-  },
-  {
-    title: 'Examples',
-    icon: FileText,
-    url: '/plan/example',
-    items: [
-      { title: 'Sample Plan', icon: BookOpen, url: '/plan/example' },
-    ],
+    url: '/profile'
   },
 ];
 

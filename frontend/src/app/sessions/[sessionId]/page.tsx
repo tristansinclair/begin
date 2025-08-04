@@ -8,6 +8,7 @@ import { sampleWorkoutPlan } from "@/examples/sample-workout-plan"
 import { formatDate, formatDay, formatTime } from "@/lib/format"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 interface SessionPageProps {
   params: {
@@ -18,6 +19,7 @@ interface SessionPageProps {
 export default function SessionPage({ params }: SessionPageProps) {
   const plan = sampleWorkoutPlan
   const session = plan.sessions.find(s => s.id === params.sessionId)
+  const useNavigate = useRouter()
 
   if (!session) {
     notFound()
@@ -33,7 +35,7 @@ export default function SessionPage({ params }: SessionPageProps) {
       {/* Navigation */}
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
-          <Link href="/plan/example">
+          <Link onClick={() => useNavigate.back()} href={""}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Plan
           </Link>

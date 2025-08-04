@@ -29,6 +29,11 @@ export type SetInstance = {
   actualWeight?: Weight;
   actualTime?: number;
   actualDistance?: number;
+  actualRestTime?: number;   // actual rest taken after this set
+  
+  // Set completion status
+  completed?: boolean;
+  skipped?: boolean;
   
   notes?: string;
 }
@@ -41,6 +46,10 @@ export type ExerciseInstance = {
   repetitionType: RepetitionType;
   
   sets: SetInstance[];
+  
+  // Exercise substitution tracking
+  isSubstituted?: boolean;
+  originalExerciseId?: string;
   
   notes?: string;
 }
@@ -55,10 +64,14 @@ export type ExerciseBlock = {
   exercises?: ExerciseInstance[];
   blocks?: ExerciseBlock[];
   
-  // Block-level parameters
+  // Block-level parameters (planned)
   rounds?: number;      // how many times to repeat this block
   restBetweenRounds?: number; // seconds
   timeLimit?: number;   // seconds (for timed circuits)
+  
+  // Actual execution data
+  actualRounds?: number;     // how many rounds actually completed
+  actualRestBetweenRounds?: number;
   
   notes?: string;
 }

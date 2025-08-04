@@ -3,46 +3,30 @@ import React, { useEffect } from 'react';
 import DayCard from './DayCard';
 import WeekNavigation from './WeekNavigation';
 import WorkoutDetailView from './WorkoutDetailView';
-import { useWorkoutStore } from '../../store/workoutStore';
 
 const WorkoutCalendar: React.FC = () => {
-  // Get all data and actions from Zustand store
-  const {
-    // Data
-    workouts,
-    viewingWeekData,
-    selectedDate,
-    isViewingCurrentWeek,
-    todayIndex,
-    selectedWorkoutIndex,
-    visibleCardsCount,
-    
-    // Actions
-    goToPreviousWeek,
-    goToNextWeek,
-    goBackToToday,
-    selectWorkout,
-    getDateKey,
-    getResponsiveWeekRanges,
-    getVisibleWorkouts,
-    updateVisibleCardsCount,
-    initialize
-  } = useWorkoutStore();
+
+
+
+
+
+  // // Get all data and actions from Zustand store
   
-  // Initialize the store on component mount
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
   
-  // Update visible cards count on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      updateVisibleCardsCount();
-    };
+  // // Initialize the store on component mount
+  // useEffect(() => {
+  //   initialize();
+  // }, [initialize]);
+  
+  // // Update visible cards count on window resize
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     updateVisibleCardsCount();
+  //   };
     
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [updateVisibleCardsCount]);
+  //   window.addEventListener('resize', handleResize);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, [updateVisibleCardsCount]);
 
 
   return (

@@ -53,7 +53,7 @@ export default function PlanExamplePage() {
 
         <div className="grid gap-4">
           {plan.sessions.map((session) => (
-            <Link key={session.id} href={`/plan/example/session/${session.id}`}>
+            <Link key={session.id} href={`/sessions/${session.id}`}>
               <Card className="w-full hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader>
                   <div className="flex items-start justify-between">
