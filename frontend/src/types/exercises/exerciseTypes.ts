@@ -26,33 +26,6 @@ export const exerciseTypes: ExerciseType[] = [
     ]
   },
   {
-    id: 'strength',
-    name: 'weightlifting',
-    icon: '💪',
-    description: 'Comprehensive strength building using various equipment and resistance methods. Combines free weights, machines, and bodyweight exercises to develop functional strength.',
-    equipment: [
-      { id: 'dumbbells', name: 'Dumbbells', icon: '🏋️' },
-      { id: 'kettlebells', name: 'Kettlebells', icon: '⛳' },
-      { id: 'resistance_bands', name: 'Resistance Bands', icon: '🎯' },
-      { id: 'cable_machine', name: 'Cable Machine', icon: '🔗' },
-      { id: 'barbell', name: 'Barbell', icon: '🏋️' },
-      { id: 'weight_machines', name: 'Lifting Platform', icon: '🏭' }
-    ]
-  },
-  {
-    id: 'bodyweight',
-    name: 'Bodyweight',
-    icon: '💪',
-    description: 'No equipment needed! Use your own body weight for resistance through push-ups, pull-ups, squats, and other calisthenics movements. Perfect for home workouts.',
-    equipment: [
-      { id: 'pull_up_bar', name: 'Pull-up Bar', icon: '🏗️' },
-      { id: 'dip_bars', name: 'Dip Bars/Station', icon: '🤸' },
-      { id: 'gymnastic_rings', name: 'Gymnastic Rings', icon: '⚪' },
-      { id: 'suspension_trainer', name: 'Suspension Trainer (TRX)', icon: '🔗' },
-      { id: 'yoga_mat', name: 'Exercise Mat', icon: '🧘' }
-    ]
-  },
-  {
     id: 'cardio',
     name: 'Cardio',
     icon: '🔥',

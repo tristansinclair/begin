@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, ChevronRight } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface WeekNavigationProps {
   currentWeekIndex: number;

@@ -13,7 +13,7 @@ import {
   CardioType
 } from "@/types";
 
-import { threeMileRunSession, upperBodyStrengthSession, murphWorkoutSession, fullBodyStrengthSession, recoveryWalkSession } from "./sample-workout-sessions";
+import { threeMileRunSession, upperBodyStrengthSession, murphWorkoutSession, fullBodyStrengthSession, recoveryWalkSession, completedMorning5K, completedBenchPressWorkout, ongoingSquatWorkout } from "./sample-workout-sessions";
 
 // Sample workout plan with various session types
 export const sampleWorkoutPlan: WorkoutPlan = {
@@ -32,7 +32,10 @@ export const sampleWorkoutPlan: WorkoutPlan = {
     upperBodyStrengthSession,
     murphWorkoutSession,
     fullBodyStrengthSession,
-    recoveryWalkSession
+    recoveryWalkSession,
+    completedMorning5K,
+    completedBenchPressWorkout,
+    ongoingSquatWorkout
   ]
 };
 

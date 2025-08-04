@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { WeeklyWorkout, getWorkoutTemplateById } from '../../data/workoutSchedule';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { SquareArrowOutUpRight } from 'lucide-react';
 
 interface WorkoutDetailViewProps {

@@ -67,7 +67,7 @@ export const upperBodyStrengthSession: TrainingSession = {
                         id: "pushups-warmup",
                         exerciseDefinitionId: "pushup",
                         variationId: "standard-pushup",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "set-1",
@@ -96,7 +96,7 @@ export const upperBodyStrengthSession: TrainingSession = {
                         id: "bench-press-1",
                         exerciseDefinitionId: "bench-press",
                         variationId: "barbell-bench",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "bench-set-1",
@@ -137,7 +137,7 @@ export const upperBodyStrengthSession: TrainingSession = {
                         id: "rows-1",
                         exerciseDefinitionId: "bent-over-row",
                         variationId: "barbell-row",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "row-set-1",
@@ -217,7 +217,7 @@ export const murphWorkoutSession: TrainingSession = {
                         id: "pullups-murph",
                         exerciseDefinitionId: "pullup",
                         variationId: "standard-pullup",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "pullup-set",
@@ -236,7 +236,7 @@ export const murphWorkoutSession: TrainingSession = {
                         id: "pushups-murph",
                         exerciseDefinitionId: "pushup",
                         variationId: "standard-pushup",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "pushup-set",
@@ -255,7 +255,7 @@ export const murphWorkoutSession: TrainingSession = {
                         id: "squats-murph",
                         exerciseDefinitionId: "squat",
                         variationId: "air-squat",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "squat-set",
@@ -356,7 +356,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "deadlift-fullbody",
                         exerciseDefinitionId: "deadlift",
                         variationId: "conventional-deadlift",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "dl-set-1",
@@ -396,7 +396,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "squat-fullbody",
                         exerciseDefinitionId: "squat",
                         variationId: "back-squat",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "sq-set-1",
@@ -436,7 +436,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "ohp-fullbody",
                         exerciseDefinitionId: "overhead-press",
                         variationId: "military-press",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "ohp-set-1",
@@ -492,7 +492,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "rows-accessory",
                         exerciseDefinitionId: "bent-over-row",
                         variationId: "dumbbell-row",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "row-acc-set",
@@ -512,7 +512,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "lunges-accessory",
                         exerciseDefinitionId: "lunge",
                         variationId: "dumbbell-lunge",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "lunge-acc-set",
@@ -560,7 +560,7 @@ export const fullBodyStrengthSession: TrainingSession = {
                         id: "mountain-climbers-core",
                         exerciseDefinitionId: "mountain-climber",
                         variationId: "standard-mountain-climber",
-                        repetitionType: "Reps" as any,
+                        repetitionType: RepetitionType.Reps,
                         sets: [
                             {
                                 id: "mc-core-set",
@@ -961,4 +961,322 @@ export const compareUnifiedSession = (session: TrainingSession) => {
   });
   
   if (session.intensityRating) console.log(`Intensity: ${session.intensityRating}/10`);
+};
+
+// ================================================================
+// NEW EXAMPLE SESSIONS - REQUESTED VARIATIONS
+// ================================================================
+
+// 1. Completed Run Workout - Morning 5K with actual performance data
+export const completedMorning5K: TrainingSession = {
+  id: "completed-5k-run",
+  name: "Morning 5K Run",
+  dateTime: new Date("2025-01-11T07:00:00"),
+  status: TrainingSessionStatus.Completed,
+  estimatedDuration: 30,
+  actualDuration: 28,
+  startedAt: new Date("2025-01-11T07:00:00"),
+  completedAt: new Date("2025-01-11T07:28:00"),
+  intensityRating: 8,
+  enjoymentRating: 9,
+  blocks: [
+    {
+      id: "warmup-walk-block",
+      name: "Warm-up Walk",
+      type: ActivityBlockType.Cardio,
+      cardioActivity: {
+        id: "warmup-walk-activity",
+        type: CardioType.Walk,
+        name: "Pre-run Walk",
+        plannedTime: 300,
+        plannedDistance: 400,
+        actualTime: 240, // 4 minutes instead of planned 5
+        actualDistance: 350, // 350m instead of planned 400m
+        notes: "Felt ready to start running sooner"
+      }
+    },
+    {
+      id: "main-5k-block",
+      name: "5K Run",
+      type: ActivityBlockType.Cardio,
+      cardioActivity: {
+        id: "main-5k-activity",
+        type: CardioType.Run,
+        name: "5K Distance Run",
+        plannedDistance: 5000,
+        plannedTime: 1500, // planned 25 minutes
+        actualDistance: 5000, // completed full 5K
+        actualTime: 1440, // 24 minutes - faster than planned!
+        actualPace: 4.8, // seconds per meter
+        heartRate: {
+          average: 165,
+          max: 178
+        },
+        calories: 320,
+        notes: "Felt strong throughout, negative split with faster second half"
+      }
+    }
+  ],
+  notes: "Great morning run! Beat my planned time and felt energized all day.",
+  tags: ["cardio", "running", "morning", "5k"]
+};
+
+// 2. Completed Lift Workout - User lifted different weights than planned
+export const completedBenchPressWorkout: TrainingSession = {
+  id: "completed-bench-workout",
+  name: "Chest & Triceps Strength",
+  dateTime: new Date("2025-01-12T18:30:00"),
+  status: TrainingSessionStatus.Completed,
+  estimatedDuration: 45,
+  actualDuration: 52,
+  startedAt: new Date("2025-01-12T18:30:00"),
+  completedAt: new Date("2025-01-12T19:22:00"),
+  intensityRating: 9,
+  enjoymentRating: 8,
+  blocks: [
+    {
+      id: "chest-main-block",
+      name: "Bench Press Focus",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "bench-press-block",
+        name: "Bench Press Sets",
+        type: "exercise",
+        exercises: [
+          {
+            id: "bench-press-main",
+            exerciseDefinitionId: "bench-press",
+            variationId: "barbell-bench",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "bench-set-1",
+                setNumber: 1,
+                plannedReps: 8,
+                plannedWeight: { type: "absolute", weight: { weight: 155, unit: "lbs" } },
+                actualReps: 8,
+                actualWeight: { weight: 165, unit: "lbs" }, // increased by 10lbs
+                completed: true,
+                restAfter: 120,
+                notes: "Felt strong, bumped up weight"
+              },
+              {
+                id: "bench-set-2",
+                setNumber: 2,
+                plannedReps: 6,
+                plannedWeight: { type: "absolute", weight: { weight: 165, unit: "lbs" } },
+                actualReps: 6,
+                actualWeight: { weight: 175, unit: "lbs" }, // increased by 10lbs
+                completed: true,
+                restAfter: 150,
+                notes: "Still felt good, increased again"
+              },
+              {
+                id: "bench-set-3",
+                setNumber: 3,
+                plannedReps: 4,
+                plannedWeight: { type: "absolute", weight: { weight: 175, unit: "lbs" } },
+                actualReps: 5, // got an extra rep!
+                actualWeight: { weight: 185, unit: "lbs" }, // increased by 10lbs
+                completed: true,
+                restAfter: 180,
+                notes: "PR! Got 5 reps at 185lbs instead of planned 4 at 175lbs"
+              }
+            ],
+            notes: "Amazing session - hit PRs on all sets!"
+          },
+          {
+            id: "tricep-dips-accessory",
+            exerciseDefinitionId: "tricep-dip",
+            variationId: "parallel-bar-dip",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "dip-set-1",
+                setNumber: 1,
+                plannedReps: 12,
+                plannedWeight: { type: "bodyweight" },
+                actualReps: 10, // got fewer reps due to fatigue from bench PRs
+                actualWeight: { weight: 0, unit: "lbs" },
+                completed: true,
+                restAfter: 90,
+                notes: "Triceps were fried from heavy bench press"
+              },
+              {
+                id: "dip-set-2",
+                setNumber: 2,
+                plannedReps: 10,
+                plannedWeight: { type: "bodyweight" },
+                actualReps: 8,
+                actualWeight: { weight: 0, unit: "lbs" },
+                completed: true,
+                restAfter: 90,
+                notes: "As expected, still feeling the bench work"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  notes: "Incredible session! Hit new PRs on bench press. The extra weight felt manageable and I was able to maintain good form throughout.",
+  tags: ["strength", "chest", "triceps", "PR", "evening"]
+};
+
+// 3. Ongoing Lift Session - Currently in progress  
+export const ongoingSquatWorkout: TrainingSession = {
+  id: "ongoing-squat-workout",
+  name: "Lower Body Power",
+  dateTime: new Date("2025-01-13T17:00:00"),
+  status: TrainingSessionStatus.InProgress,
+  estimatedDuration: 60,
+  startedAt: new Date("2025-01-13T17:00:00"),
+  pausedDuration: 180, // 3 minutes of rest time so far
+  currentBlockIndex: 1, // on the second block (main squats)
+  currentExerciseIndex: 0, // first exercise in the block
+  currentSetIndex: 2, // on the third set
+  blocks: [
+    {
+      id: "leg-warmup-block",
+      name: "Leg Warm-up",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "leg-warmup-exercises",
+        name: "Dynamic Warm-up",
+        type: "circuit",
+        rounds: 1,
+        exercises: [
+          {
+            id: "bodyweight-squats-warmup",
+            exerciseDefinitionId: "squat",
+            variationId: "air-squat",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "warmup-squat-set",
+                setNumber: 1,
+                plannedReps: 15,
+                plannedWeight: { type: "bodyweight" },
+                actualReps: 15,
+                actualWeight: { weight: 0, unit: "lbs" },
+                completed: true,
+                restAfter: 30,
+                notes: "Good warm-up, felt loose"
+              }
+            ]
+          },
+          {
+            id: "leg-swings-warmup",
+            exerciseDefinitionId: "leg-swing",
+            variationId: "standing-leg-swing",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "leg-swing-set",
+                setNumber: 1,
+                plannedReps: 20,
+                actualReps: 20,
+                completed: true,
+                restAfter: 60,
+                notes: "Hip mobility felt good"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: "main-squat-block",
+      name: "Back Squat Sets",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "back-squat-main",
+        name: "Heavy Back Squats",
+        type: "exercise",
+        exercises: [
+          {
+            id: "back-squat-main-exercise",
+            exerciseDefinitionId: "squat",
+            variationId: "back-squat",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "squat-set-1",
+                setNumber: 1,
+                plannedReps: 5,
+                plannedWeight: { type: "absolute", weight: { weight: 185, unit: "lbs" } },
+                actualReps: 5,
+                actualWeight: { weight: 185, unit: "lbs" },
+                completed: true,
+                restAfter: 180,
+                notes: "Solid first set, felt strong"
+              },
+              {
+                id: "squat-set-2",
+                setNumber: 2,
+                plannedReps: 5,
+                plannedWeight: { type: "absolute", weight: { weight: 205, unit: "lbs" } },
+                actualReps: 5,
+                actualWeight: { weight: 205, unit: "lbs" },
+                completed: true,
+                restAfter: 180,
+                notes: "Good depth, maintaining form"
+              },
+              {
+                id: "squat-set-3",
+                setNumber: 3,
+                plannedReps: 3,
+                plannedWeight: { type: "absolute", weight: { weight: 225, unit: "lbs" } },
+                // This set is in progress - no actual data yet
+                restAfter: 240
+              },
+              {
+                id: "squat-set-4",
+                setNumber: 4,
+                plannedReps: 2,
+                plannedWeight: { type: "absolute", weight: { weight: 245, unit: "lbs" } },
+                restAfter: 240
+              }
+            ],
+            notes: "Working up to a heavy double. Feeling strong so far."
+          }
+        ]
+      }
+    },
+    {
+      id: "accessory-leg-block",
+      name: "Leg Accessories",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "leg-accessories",
+        name: "Romanian Deadlifts & Lunges",
+        type: "exercise",
+        exercises: [
+          {
+            id: "romanian-deadlift",
+            exerciseDefinitionId: "romanian-deadlift",
+            variationId: "barbell-rdl",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "rdl-set-1",
+                setNumber: 1,
+                plannedReps: 10,
+                plannedWeight: { type: "absolute", weight: { weight: 135, unit: "lbs" } },
+                restAfter: 120
+              },
+              {
+                id: "rdl-set-2",
+                setNumber: 2,
+                plannedReps: 10,
+                plannedWeight: { type: "absolute", weight: { weight: 135, unit: "lbs" } },
+                restAfter: 120
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  tags: ["strength", "legs", "squat", "evening", "in-progress"]
 };
