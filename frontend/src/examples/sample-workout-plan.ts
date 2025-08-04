@@ -19,7 +19,7 @@ import { threeMileRunSession, upperBodyStrengthSession, murphWorkoutSession, ful
 export const sampleWorkoutPlan: WorkoutPlan = {
   id: "beginner-plan-2025",
   name: "Beginner Strength & Cardio Plan",
-  description: "4-week plan combining strength training and cardiovascular fitness",
+  description: "4-week plan combining weightlifting and cardiovascular fitness",
   startDate: new Date("2025-01-06"),
   endDate: new Date("2025-02-02"),
   tags: ["beginner", "strength", "cardio"],

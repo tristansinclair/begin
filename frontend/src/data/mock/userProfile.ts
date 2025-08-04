@@ -29,7 +29,7 @@ const generateWorkoutHistory = (): WorkoutData[] => {
   threeMonthsAgo.setMonth(today.getMonth() - 3);
   
   const workoutTypes = [
-    { type: 'Strength Training', duration: [60, 90], calories: [400, 600] },
+    { type: 'weightlifting', duration: [60, 90], calories: [400, 600] },
     { type: 'Cardio', duration: [45, 75], calories: [500, 750] },
     { type: 'HIIT', duration: [30, 50], calories: [450, 650] },
     { type: 'Recovery/Yoga', duration: [30, 60], calories: [150, 250] },

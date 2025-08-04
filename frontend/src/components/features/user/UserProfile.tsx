@@ -183,7 +183,7 @@ const UserProfile = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Before Strength Training</label>
+                      <label className="text-sm font-medium text-muted-foreground">Before weightlifting</label>
                       <div className="mt-1 py-2 px-3 bg-muted/50 rounded-lg border border-dashed">
                         <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add warmup routine</button>
                       </div>

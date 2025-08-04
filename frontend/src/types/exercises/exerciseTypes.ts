@@ -27,7 +27,7 @@ export const exerciseTypes: ExerciseType[] = [
   },
   {
     id: 'strength',
-    name: 'Strength Training',
+    name: 'weightlifting',
     icon: '💪',
     description: 'Comprehensive strength building using various equipment and resistance methods. Combines free weights, machines, and bodyweight exercises to develop functional strength.',
     equipment: [

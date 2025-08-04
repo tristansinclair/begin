@@ -44,7 +44,7 @@ export const threeMileRunSession: TrainingSession = {
     tags: ["cardio", "easy"]
 } as TrainingSession
 
-// Session 2: Full Strength Training Session
+// Session 2: Full weightlifting Session
 export const upperBodyStrengthSession: TrainingSession = {
     id: "session-2",
     name: "Upper Body Strength",
@@ -644,7 +644,7 @@ export const plannedRunningSession: PlannedTrainingSession = {
     tags: ["cardio", "running", "morning"]
 };
 
-// Example 2: Planned Strength Training Session (Clean Template)
+// Example 2: Planned weightlifting Session (Clean Template)
 export const plannedStrengthSession: PlannedTrainingSession = {
     id: "planned_strength_1",
     name: "Upper Body Strength",

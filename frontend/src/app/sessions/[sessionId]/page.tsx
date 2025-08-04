@@ -39,7 +39,7 @@ export default function SessionPage({ params }: SessionPageProps) {
         <Button variant="outline" size="sm" asChild>
           <Link onClick={() => useNavigate.back()} href={""}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Plan
+            Back
           </Link>
         </Button>
       </div>

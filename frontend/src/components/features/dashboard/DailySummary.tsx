@@ -182,7 +182,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
     const getWorkoutIcon = () => {
       switch (upcomingWorkout.type.toLowerCase()) {
         case 'weightlifting':
-        case 'strength training':
+        case 'weightlifting':
           return <Dumbbell className="w-4 h-4" />;
         case 'cross training':
         case 'crossfit':
@@ -202,7 +202,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
     const getCategoryColor = () => {
       switch (upcomingWorkout.type.toLowerCase()) {
         case 'weightlifting':
-        case 'strength training':
+        case 'weightlifting':
           return 'bg-red-500/10 text-red-600 border-red-500/20';
         case 'cross training':
         case 'crossfit':
@@ -238,7 +238,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
         </div>
 
         {/* Workout Type Specific Info */}
-        {(upcomingWorkout.type.toLowerCase() === 'weightlifting' || upcomingWorkout.type.toLowerCase() === 'strength training') && (
+        {(upcomingWorkout.type.toLowerCase() === 'weightlifting') && (
           <>
             <div className="grid grid-cols-2 gap-2 mb-3">
               <div className="bg-background/60 backdrop-blur rounded-xl p-3 border">
@@ -339,7 +339,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
         )}
 
         {/* Default stats for other workout types */}
-        {!['weightlifting', 'strength training', 'running', 'swimming', 'biking', 'cycling', 'cross training', 'crossfit'].includes(upcomingWorkout.type.toLowerCase()) && (
+        {!['weightlifting', 'running', 'swimming', 'biking', 'cycling', 'cross training', 'crossfit'].includes(upcomingWorkout.type.toLowerCase()) && (
           <div className="grid grid-cols-3 gap-2 mb-3">
             <div className="bg-background/60 backdrop-blur rounded-xl p-2 text-center border">
               <p className="text-lg font-bold">{upcomingWorkout.exercises}</p>
@@ -357,7 +357,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
         )}
 
         {/* Exercise Preview - Weightlifting */}
-        {(upcomingWorkout.type.toLowerCase() === 'weightlifting' || upcomingWorkout.type.toLowerCase() === 'strength training') && upcomingWorkout.liftDetails && upcomingWorkout.liftDetails.length > 0 ? (
+        {(upcomingWorkout.type.toLowerCase() === 'weightlifting') && upcomingWorkout.liftDetails && upcomingWorkout.liftDetails.length > 0 ? (
           <div className="bg-background/40 rounded-xl p-3 mb-3 border">
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-medium text-muted-foreground">Exercise Preview</p>
@@ -449,7 +449,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({
         )}
 
         {/* Timing Info - Only for Weightlifting */}
-        {(upcomingWorkout.type.toLowerCase() === 'weightlifting' || upcomingWorkout.type.toLowerCase() === 'strength training') && (
+        {(upcomingWorkout.type.toLowerCase() === 'weightlifting') && (
           <div className="grid grid-cols-2 gap-2 mb-3">
             {upcomingWorkout.warmupTime && (
               <div className="bg-background/60 backdrop-blur rounded-xl p-2 text-center border">

@@ -103,7 +103,7 @@ export const CompletedStrengthWorkout: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A completed strength training workout with personal records achieved.',
+        story: 'A completed weightlifting workout with personal records achieved.',
       },
     },
   },

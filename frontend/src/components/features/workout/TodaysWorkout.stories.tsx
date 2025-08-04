@@ -21,7 +21,7 @@ import {
 const mockWorkoutTemplate = {
   id: 'upper-body-power',
   name: 'Upper Body Power',
-  type: 'Strength Training',
+  type: 'weightlifting',
   duration: '45 min',
   targetMuscles: 'Chest, Back, Shoulders, Arms',
   intensity: 'high' as const,
@@ -142,7 +142,7 @@ const WorkoutDetailsDisplay: React.FC<{
               {showActiveSession ? 'Active Workout' : showRestDay ? 'Rest Day' : 'Upper Body Power'}
             </h1>
             <div className="text-primary text-sm font-semibold uppercase tracking-wider">
-              {showRestDay ? 'REST' : 'STRENGTH TRAINING'} • THU, JULY 31
+              {showRestDay ? 'REST' : 'WEIGHTLIFTING'} • THU, JULY 31
             </div>
           </div>
         </div>
@@ -379,7 +379,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const StrengthWorkout: Story = {
-  name: 'Strength Training Workout',
+  name: 'weightlifting Workout',
   args: {
     showRestDay: false,
     showNoWorkout: false,
@@ -388,7 +388,7 @@ export const StrengthWorkout: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A typical strength training workout with compound movements, supersets, and finisher exercises.',
+        story: 'A typical weightlifting workout with compound movements, supersets, and finisher exercises.',
       },
     },
   },

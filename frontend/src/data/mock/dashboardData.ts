@@ -38,7 +38,7 @@ export const hardcodedWorkoutStats = {
 
 export const hardcodedUpcomingWorkout = {
   name: 'Upper Body Power',
-  type: 'Strength Training',
+  type: 'weightlifting',
   duration: '65',
   exercises: 8,
   targetMuscles: 'Chest, Back, Shoulders, Arms',
@@ -65,7 +65,7 @@ export const hardcodedUpcomingWorkout = {
 
 export const hardcodedTomorrowWorkout = {
   name: 'Lower Body Strength',
-  type: 'Strength Training',
+  type: 'weightlifting',
   targetMuscles: 'Quadriceps, Glutes, Hamstrings'
 };
 
