@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { CheckCircle, Play, Calendar, Trophy, Coffee, ArrowRight, Dumbbell, Activity, MapPin, Waves, Bike } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 
 interface WorkoutStats {
   duration: string;

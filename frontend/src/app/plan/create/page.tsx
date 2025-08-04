@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import SectionHeader from '@/components/ui/section-header';
-import { exerciseTypes, getAllEquipmentForExerciseTypes, getExerciseTypeById, getEquipmentForExerciseType } from '@/data/exerciseTypes';
+import { exerciseTypes, getAllEquipmentForExerciseTypes, getExerciseTypeById, getEquipmentForExerciseType } from '@/types/exercises/exerciseTypes';
 import { getExperienceLevel, getExperienceLevelDisplay } from '@/utils/experienceLevel';
 import {
   DndContext,

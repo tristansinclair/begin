@@ -1,38 +1,11 @@
 'use client';
 import React, { useEffect } from 'react';
-import { WorkoutStatus } from '../../data/workoutSchedule';
-
-
-const allWeeksData = [
-  {
-    year: 2025,
-    month: 'January',
-    workouts: [
-      {
-        date: '2025-01-01',
-        month: 'January',
-        day: 1,
-        type: 'Upper',
-        status: 'Completed',
-        duration: 45,
-        calories: 350,
-        isCompleted: true
-      },
-      {
-        date: '2025-01-02',
-        month: 'January',
-        day: 2,
-        type: 'Lower',
-        status: 'Future',
-        duration: 45,
-        calories: 400,
-        isCompleted: false
-      },
-    ]
-  }
-]
+import { hardcodedWorkoutActivity } from '../../../data/mock/dashboardData';
 
 const WorkoutActivity = () => {
+  useEffect(() => {
+    generateHeatmap();
+  }, []);
 
   const generateHeatmap = () => {
     const heatmapGrid = document.getElementById('heatmap-grid');
@@ -44,40 +17,21 @@ const WorkoutActivity = () => {
     heatmapGrid.innerHTML = '';
     monthLabels.innerHTML = '';
 
-    // Create workout data lookup from allWeeksData
+    // Create workout data lookup from hardcoded data
     const workoutLookup: { [key: string]: Array<{ workoutType: string; duration: number; calories: number; isCompleted: boolean }> } = {};
 
-    allWeeksData.forEach(week => {
-      week.workouts.forEach(workout => {
-        const dateKey = `${workout.year}-${String(workout.month === 'January' ? 1 :
-          workout.month === 'February' ? 2 :
-            workout.month === 'March' ? 3 :
-              workout.month === 'April' ? 4 :
-                workout.month === 'May' ? 5 :
-                  workout.month === 'June' ? 6 :
-                    workout.month === 'July' ? 7 :
-                      workout.month === 'August' ? 8 :
-                        workout.month === 'September' ? 9 :
-                          workout.month === 'October' ? 10 :
-                            workout.month === 'November' ? 11 : 12).padStart(2, '0')}-${String(workout.date).padStart(2, '0')}`;
+    hardcodedWorkoutActivity.forEach(workout => {
+      const dateKey = workout.date;
 
-        // Only include completed workouts or estimate calories for scheduled ones
-        const isCompleted = workout.status === 'Completed';
-        const estimatedCalories = workout.type === 'Rest' ? 0 :
-          workout.type === 'Upper' ? 350 :
-            workout.type === 'Lower' ? 400 :
-              workout.type === 'Full Body' ? 450 : 300;
+      if (!workoutLookup[dateKey]) {
+        workoutLookup[dateKey] = [];
+      }
 
-        if (!workoutLookup[dateKey]) {
-          workoutLookup[dateKey] = [];
-        }
-
-        workoutLookup[dateKey].push({
-          workoutType: workout.type,
-          duration: isCompleted ? 45 : 0, // Assume 45 min if completed, 0 if not
-          calories: isCompleted ? estimatedCalories : (workout.status === WorkoutStatus.Future ? estimatedCalories * 0.5 : 0),
-          isCompleted: isCompleted
-        });
+      workoutLookup[dateKey].push({
+        workoutType: workout.type,
+        duration: workout.duration,
+        calories: workout.calories,
+        isCompleted: workout.isCompleted
       });
     });
 

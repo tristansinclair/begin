@@ -11,14 +11,13 @@ import {
     WeightSpecification,
     // New types for planned vs execution
     PlannedTrainingSession,
-    WorkoutExecution,
     createWorkoutExecution,
     getWorkoutProgress,
     // Unified approach utilities
     startWorkout,
     completeWorkout
-} from "@/types/workout-types"
-import { RepetitionType } from "@/types/exercise-definitions"
+} from "@/types/workouts/workout-types"
+import { RepetitionType } from "@/types/workouts/exercise-definitions"
 
 // Session 1: Simple 3 Mile Run
 export const threeMileRunSession: TrainingSession = {
@@ -611,6 +610,7 @@ export const plannedRunningSession: PlannedTrainingSession = {
     id: "planned_run_1",
     name: "Morning 5K Run",
     dateTime: new Date("2024-01-15T07:00:00"),
+    status: TrainingSessionStatus.Upcoming,
     estimatedDuration: 30, // 30 minutes
     blocks: [
         {
@@ -649,6 +649,7 @@ export const plannedStrengthSession: PlannedTrainingSession = {
     id: "planned_strength_1",
     name: "Upper Body Strength",
     dateTime: new Date("2024-01-15T18:00:00"),
+    status: TrainingSessionStatus.Upcoming,
     estimatedDuration: 60, // 60 minutes
     blocks: [
         {
@@ -699,12 +700,12 @@ export const plannedStrengthSession: PlannedTrainingSession = {
 };
 
 // Example 3: Starting a Workout (Convert Planned to Execution)
-export const startRunningWorkout = (): WorkoutExecution => {
+export const startRunningWorkout = (): TrainingSession => {
     return createWorkoutExecution(plannedRunningSession);
 };
 
 // Example 4: Completed Running Workout - Actual vs Planned Performance
-export const completedRunningWorkout: WorkoutExecution = (() => {
+export const completedRunningWorkout: TrainingSession = (() => {
     const execution = createWorkoutExecution(plannedRunningSession);
 
     // User completed the warm-up walk
@@ -734,7 +735,7 @@ export const completedRunningWorkout: WorkoutExecution = (() => {
 })();
 
 // Example 5: Completed Strength Workout - User Increased Weight
-export const completedStrengthWorkout: WorkoutExecution = (() => {
+export const completedStrengthWorkout: TrainingSession = (() => {
     const execution = createWorkoutExecution(plannedStrengthSession);
 
     // Get the bench press exercise
@@ -765,7 +766,7 @@ export const completedStrengthWorkout: WorkoutExecution = (() => {
 })();
 
 // Example 6: Progress Tracking Function
-export const trackWorkoutProgress = (execution: WorkoutExecution) => {
+export const trackWorkoutProgress = (execution: TrainingSession) => {
     const progress = getWorkoutProgress(execution);
 
     console.log(`Overall Progress: ${progress.overall.toFixed(1)}%`);
@@ -776,8 +777,8 @@ export const trackWorkoutProgress = (execution: WorkoutExecution) => {
 };
 
 // Example 7: Comparison Function - Planned vs Actual
-export const compareActualVsPlanned = (execution: WorkoutExecution) => {
-    console.log(`\n=== WORKOUT COMPARISON: ${execution.plannedSessionId} ===`);
+export const compareActualVsPlanned = (execution: TrainingSession) => {
+    console.log(`\n=== WORKOUT COMPARISON: ${execution.id} ===`);
 
     execution.blocks.forEach((block, blockIndex) => {
         console.log(`\nBlock ${blockIndex + 1}: ${block.name}`);
@@ -949,7 +950,7 @@ export const compareUnifiedSession = (session: TrainingSession) => {
     console.log(`Duration: Planned ${session.estimatedDuration}min, Actual ${session.actualDuration}min`);
   }
   
-  session.blocks.forEach((block, blockIndex) => {
+  session.blocks.forEach((block) => {
     if (block.cardioActivity) {
       const cardio = block.cardioActivity;
       if (cardio.plannedDistance && cardio.actualDistance) {

@@ -1,17 +1,17 @@
 'use client';
 import React from 'react';
-import { fakeUserProfile } from '../data/fakeUserData';
-import { getExperienceLevel, getExperienceLevelDisplay } from '../utils/experienceLevel';
+import { extendedUserProfile as userProfile } from '../../../data/mock/userProfile';
+import { getExperienceLevel, getExperienceLevelDisplay } from '../../../utils/experienceLevel';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from '@/components/ui/select';
 
 const UserProfile = () => {
-  const { name, email, avatar, memberSince, stats, goals, measurements, achievements } = fakeUserProfile;
+  const { name, email, avatar, memberSince, stats, goals, measurements, achievements } = userProfile;
   
   const latestWeight = measurements.weight[measurements.weight.length - 1];
   const latestBodyFat = measurements.bodyFat[measurements.bodyFat.length - 1];
@@ -62,14 +62,14 @@ const UserProfile = () => {
                       <div className="space-y-3">
                         <div className="text-center p-4 bg-primary/10 rounded-lg">
                           <div className="text-lg font-bold text-primary mb-1">
-                            {getExperienceLevelDisplay(fakeUserProfile.experienceLevel)}
+                            {getExperienceLevelDisplay(userProfile.experienceLevel)}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            Level {fakeUserProfile.experienceLevel}/10
+                            Level {userProfile.experienceLevel}/10
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground text-center">
-                          {getExperienceLevel(fakeUserProfile.experienceLevel).description}
+                          {getExperienceLevel(userProfile.experienceLevel).description}
                         </p>
                       </div>
                     </div>
@@ -197,7 +197,7 @@ const UserProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Units</label>
-                      <Select defaultValue={fakeUserProfile.preferences.units}>
+                      <Select defaultValue={userProfile.preferences.units}>
                         <SelectTrigger className="mt-1 w-full">
                           <SelectValue />
                         </SelectTrigger>
@@ -209,7 +209,7 @@ const UserProfile = () => {
                     </div>
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Preferred Workout Time</label>
-                      <Select defaultValue={fakeUserProfile.preferences.preferredWorkoutTime}>
+                      <Select defaultValue={userProfile.preferences.preferredWorkoutTime}>
                         <SelectTrigger className="mt-1 w-full">
                           <SelectValue />
                         </SelectTrigger>

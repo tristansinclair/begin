@@ -144,3 +144,158 @@ export const userProfile: UserProfile = {
     averageCaloriesPerWorkout: 520
   }
 };
+
+// Extended user profile for UserProfile component
+export const extendedUserProfile = {
+  id: '1',
+  name: 'Alex Johnson',
+  email: 'alex.johnson@example.com',
+  avatar: '/avatars/alex.jpg',
+  memberSince: '2023-09-15',
+  
+  stats: {
+    totalWorkouts: 127,
+    totalVolume: '18,540 lbs',
+    totalDuration: '89h 24m',
+    currentStreak: 8,
+    longestStreak: 23,
+    personalRecords: 15,
+    averageWorkoutTime: '52 min',
+    lastWorkout: '2024-08-03'
+  },
+  
+  measurements: {
+    weight: [
+      { date: '2023-09-15', value: 175, unit: 'lbs' },
+      { date: '2023-12-15', value: 172, unit: 'lbs' },
+      { date: '2024-03-15', value: 168, unit: 'lbs' },
+      { date: '2024-06-15', value: 165, unit: 'lbs' },
+      { date: '2024-08-01', value: 162, unit: 'lbs' }
+    ],
+    bodyFat: [
+      { date: '2023-09-15', value: 18.5, unit: '%' },
+      { date: '2023-12-15', value: 17.2, unit: '%' },
+      { date: '2024-03-15', value: 15.8, unit: '%' },
+      { date: '2024-06-15', value: 14.5, unit: '%' },
+      { date: '2024-08-01', value: 13.2, unit: '%' }
+    ]
+  },
+  
+  goals: [
+    {
+      id: '1',
+      title: 'Lose Weight',
+      current: 162,
+      target: 155,
+      unit: 'lbs',
+      status: 'in_progress',
+      deadline: '2024-12-31'
+    },
+    {
+      id: '2',
+      title: 'Bench Press PR',
+      current: 185,
+      target: 225,
+      unit: 'lbs',
+      status: 'in_progress',
+      deadline: '2024-10-31'
+    },
+    {
+      id: '3',
+      title: 'Workout Streak',
+      current: 8,
+      target: 30,
+      unit: 'days',
+      status: 'in_progress',
+      deadline: '2024-09-15'
+    },
+    {
+      id: '4',
+      title: 'Body Fat',
+      current: 13.2,
+      target: 12.0,
+      unit: '%',
+      status: 'in_progress',
+      deadline: '2024-11-30'
+    },
+    {
+      id: '5',
+      title: 'Marathon Training',
+      current: 15,
+      target: 26.2,
+      unit: 'miles',
+      status: 'not_started',
+      deadline: '2025-05-01'
+    },
+    {
+      id: '6',
+      title: 'Squat PR',
+      current: 225,
+      target: 275,
+      unit: 'lbs',
+      status: 'completed',
+      deadline: '2024-07-31'
+    }
+  ],
+  
+  achievements: [
+    {
+      id: '1',
+      title: 'First Week Strong',
+      description: 'Completed 7 consecutive workouts',
+      icon: '🔥',
+      unlockedDate: '2024-07-28'
+    },
+    {
+      id: '2',
+      title: 'Weight Loss Champion',
+      description: 'Lost 10+ pounds in 3 months',
+      icon: '🏆',
+      unlockedDate: '2024-06-15'
+    },
+    {
+      id: '3',
+      title: 'Strength Gains',
+      description: 'Increased bench press by 25 lbs',
+      icon: '💪',
+      unlockedDate: '2024-05-20'
+    },
+    {
+      id: '4',
+      title: 'Consistency King',
+      description: 'Worked out 4+ times per week for a month',
+      icon: '👑',
+      unlockedDate: '2024-04-30'
+    },
+    {
+      id: '5',
+      title: 'PR Setter',
+      description: 'Set 5 new personal records',
+      icon: '🎯',
+      unlockedDate: '2024-07-10'
+    },
+    {
+      id: '6',
+      title: 'Early Bird',
+      description: 'Completed 10 morning workouts',
+      icon: '🌅',
+      unlockedDate: '2024-03-22'
+    }
+  ],
+  
+  preferences: {
+    units: 'imperial' as const,
+    preferredWorkoutTime: 'morning' as const,
+    notifications: true,
+    privacy: 'friends' as const
+  },
+
+  experienceLevel: 6 as const,
+  fitnessGoals: ['weight-loss', 'strength', 'endurance'] as const,
+  workoutPreferences: {
+    duration: 60,
+    frequency: 5,
+    intensity: 'moderate' as const,
+    equipmentAccess: ['dumbbells', 'barbell', 'machine', 'bodyweight'] as const
+  }
+};

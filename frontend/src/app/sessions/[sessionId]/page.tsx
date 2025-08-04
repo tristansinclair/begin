@@ -9,16 +9,18 @@ import { formatDate, formatDay, formatTime } from "@/lib/format"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { useRouter } from "next/navigation"
+import { use } from "react"
 
 interface SessionPageProps {
-  params: {
+  params: Promise<{
     sessionId: string
-  }
+  }>
 }
 
 export default function SessionPage({ params }: SessionPageProps) {
+  const { sessionId } = use(params)
   const plan = sampleWorkoutPlan
-  const session = plan.sessions.find(s => s.id === params.sessionId)
+  const session = plan.sessions.find(s => s.id === sessionId)
   const useNavigate = useRouter()
 
   if (!session) {
@@ -258,7 +260,7 @@ export default function SessionPage({ params }: SessionPageProps) {
                         <div className="space-y-2">
                           <h5 className="text-sm font-medium">Sets:</h5>
                           <div className="grid gap-2">
-                            {exercise.sets.map((set, setIndex) => (
+                            {exercise.sets.map((set) => (
                               <div key={set.id} className="flex items-center justify-between p-2 bg-muted/50 rounded text-sm">
                                 <span className="font-medium">Set {set.setNumber}</span>
                                 
