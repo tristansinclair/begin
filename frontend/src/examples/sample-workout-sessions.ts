@@ -203,7 +203,7 @@ export const murphWorkoutSession: TrainingSession = {
         // Main Calisthenics Block
         {
             id: "murph-calisthenics",
-            name: "The Murph Calisthenics",
+            name: "Calisthenics",
             type: ActivityBlockType.Structured,
             structuredTraining: {
                 id: "murph-main",
