@@ -3,11 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Calendar, 
-  Dumbbell, 
-  User, 
-  Trophy, 
+import {
+  Calendar,
+  Dumbbell,
+  User,
+  Trophy,
   History,
   Library,
   Plus,
@@ -50,7 +50,7 @@ const menuItems = [
   {
     title: 'Workouts',
     icon: Dumbbell,
-    url: '/workouts',
+    url: '/today', // TODO: add a page that shows the current day + past workouts, for /workouts
     items: [
       { title: "Today's Workout", icon: Calendar, url: '/today' },
       { title: 'History', icon: History, url: '/workouts' },
@@ -59,10 +59,9 @@ const menuItems = [
   {
     title: 'Plans',
     icon: BookOpen,
-    url: '/plans',
+    url: '/plans/current', // TODO: add a page that is for just /plans?
     items: [
-      { title: 'Current Plan', icon: Trophy, url: '/plan' },
-      { title: 'Browse Plans', icon: Library, url: '/plans/browse' },
+      { title: 'Current Plan', icon: Trophy, url: '/plans/current' },
       { title: 'Create Plan', icon: Plus, url: '/plans/create' },
       { title: 'Plan History', icon: History, url: '/plans/history' },
     ],
@@ -71,11 +70,10 @@ const menuItems = [
     title: 'Profile',
     icon: User,
     url: '/profile',
-    items: [
-      { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
-      { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
-      
-    ],
+    // items: [
+    //   { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
+    //   { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
+    // ],
   },
   {
     title: 'Examples',

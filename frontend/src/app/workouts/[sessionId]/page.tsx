@@ -4,7 +4,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
+import {
   ArrowLeft,
   Clock,
   Trophy,
@@ -31,8 +31,8 @@ const WorkoutDetailPage: React.FC = () => {
       <div className="min-h-screen bg-background">
         <div className="container max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center gap-4 mb-8">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={() => router.push('/workouts')}
               className="p-2"
@@ -111,8 +111,8 @@ const WorkoutDetailPage: React.FC = () => {
       <div className="container max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="sm"
             onClick={() => router.push('/workouts')}
             className="p-2"
@@ -302,9 +302,8 @@ const WorkoutDetailPage: React.FC = () => {
                               {exercise.sets.map((set, setIndex) => (
                                 <div
                                   key={setIndex}
-                                  className={`flex items-center justify-between p-3 rounded-lg border ${
-                                    set.completed ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
-                                  }`}
+                                  className={`flex items-center justify-between p-3 rounded-lg border ${set.completed ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+                                    }`}
                                 >
                                   <div className="flex items-center gap-3">
                                     <span className="text-sm font-medium">Set {setIndex + 1}</span>
@@ -314,7 +313,7 @@ const WorkoutDetailPage: React.FC = () => {
                                       <Circle className="w-4 h-4 text-gray-400" />
                                     )}
                                   </div>
-                                  
+
                                   <div className="flex items-center gap-4 text-sm">
                                     {set.completed ? (
                                       <>
