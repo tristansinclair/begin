@@ -9,10 +9,19 @@ export interface Exercise {
 
 export interface WorkoutSection {
   name: string;
-  type: 'warmup' | 'main' | 'superset' | 'circuit' | 'finisher' | 'cooldown';
+  type: WorkoutSectionType;
   exercises: Exercise[];
   rounds?: number;
   restBetweenRounds?: string;
+}
+
+export enum WorkoutSectionType {
+  Warmup = "Warmup",
+  Main = "Main",
+  Superset = "Superset",
+  Circuit = "Circuit",
+  Finisher = "Finisher",
+  Cooldown = "Cooldown",
 }
 
 export interface WorkoutTemplate {
@@ -48,7 +57,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Warmup',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Arm Circles', sets: 1, reps: '10 each direction', rest: '0s' },
           { name: 'Band Pull-Aparts', sets: 2, reps: '15', rest: '30s' },
@@ -57,7 +66,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Superset A',
-        type: 'superset',
+        type: WorkoutSectionType.Superset,
         rounds: 3,
         restBetweenRounds: '2 min',
         exercises: [
@@ -67,7 +76,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Superset B',
-        type: 'superset',
+        type: WorkoutSectionType.Superset,
         rounds: 3,
         restBetweenRounds: '90s',
         exercises: [
@@ -77,14 +86,14 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Isolation Work',
-        type: 'main',
+        type: WorkoutSectionType.Main,
         exercises: [
           { name: 'Cable Flyes', sets: 3, reps: '12-15', rest: '60s' }
         ]
       },
       {
         name: 'Finisher',
-        type: 'finisher',
+        type: WorkoutSectionType.Finisher,
         rounds: 2,
         restBetweenRounds: '90s',
         exercises: [
@@ -110,7 +119,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Warmup',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Light Jogging in Place', sets: 1, reps: '2 min', rest: '0s' },
           { name: 'Dynamic Stretching', sets: 1, reps: '3 min', rest: '0s' }
@@ -118,7 +127,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'HIIT Circuit',
-        type: 'circuit',
+        type: WorkoutSectionType.Circuit,
         rounds: 4,
         restBetweenRounds: '2 min',
         exercises: [
@@ -132,7 +141,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Cooldown',
-        type: 'cooldown',
+        type: WorkoutSectionType.Cooldown,
         exercises: [
           { name: 'Walking', sets: 1, reps: '3 min', rest: '0s' },
           { name: 'Static Stretching', sets: 1, reps: '5 min', rest: '0s' }
@@ -156,7 +165,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Warmup',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Leg Swings', sets: 1, reps: '10 each leg', rest: '0s' },
           { name: 'Bodyweight Squats', sets: 2, reps: '15', rest: '30s' },
@@ -165,7 +174,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Compound Movements',
-        type: 'main',
+        type: WorkoutSectionType.Main,
         exercises: [
           { name: 'Back Squats', sets: 4, reps: '8-10', weight: '80-90% 1RM', rest: '3 min' },
           { name: 'Romanian Deadlifts', sets: 4, reps: '8-10', weight: '75-85% 1RM', rest: '2.5 min' },
@@ -174,7 +183,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Isolation Work',
-        type: 'main',
+        type: WorkoutSectionType.Main,
         exercises: [
           { name: 'Leg Press', sets: 3, reps: '15-20', rest: '90s' },
           { name: 'Leg Curls', sets: 3, reps: '12-15', rest: '60s' },
@@ -183,7 +192,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Finisher',
-        type: 'finisher',
+        type: WorkoutSectionType.Finisher,
         exercises: [
           { name: 'Calf Raises', sets: 4, reps: '20', rest: '45s' },
           { name: 'Wall Sit', sets: 3, reps: '60s', rest: '60s' }
@@ -207,7 +216,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Dynamic Warmup',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Arm Circles', sets: 1, reps: '30s', rest: '0s' },
           { name: 'Leg Swings', sets: 1, reps: '30s', rest: '0s' },
@@ -217,7 +226,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Full Body Circuit',
-        type: 'circuit',
+        type: WorkoutSectionType.Circuit,
         rounds: 4,
         restBetweenRounds: '2 min',
         exercises: [
@@ -232,7 +241,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Core Finisher',
-        type: 'finisher',
+        type: WorkoutSectionType.Finisher,
         exercises: [
           { name: 'Russian Twists', sets: 3, reps: '30', rest: '45s' },
           { name: 'Dead Bug', sets: 3, reps: '10 each side', rest: '45s' }
@@ -256,7 +265,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Gentle Movement',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Cat-Cow Stretch', sets: 1, reps: '10', rest: '0s' },
           { name: 'Arm Circles', sets: 1, reps: '10 each direction', rest: '0s' },
@@ -265,7 +274,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Mobility Flow',
-        type: 'main',
+        type: WorkoutSectionType.Main,
         exercises: [
           { name: 'Hip Circles', sets: 2, reps: '10 each direction', rest: '30s' },
           { name: 'Leg Swings', sets: 2, reps: '10 each leg', rest: '30s' },
@@ -277,7 +286,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Foam Rolling',
-        type: 'cooldown',
+        type: WorkoutSectionType.Cooldown,
         exercises: [
           { name: 'IT Band Roll', sets: 1, reps: '60s each leg', rest: '30s' },
           { name: 'Calf Roll', sets: 1, reps: '60s each leg', rest: '30s' },
@@ -302,7 +311,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
     sections: [
       {
         name: 'Warmup',
-        type: 'warmup',
+        type: WorkoutSectionType.Warmup,
         exercises: [
           { name: 'Dynamic Warm-up Walk', sets: 1, reps: '5 min', rest: '0s' },
           { name: 'Light Jogging', sets: 1, reps: '5 min', rest: '0s' }
@@ -310,7 +319,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Main Run',
-        type: 'main',
+        type: WorkoutSectionType.Main,
         exercises: [
           { 
             name: 'Steady Pace Run', 
@@ -323,7 +332,7 @@ export const workoutTemplates: WorkoutTemplate[] = [
       },
       {
         name: 'Cooldown',
-        type: 'cooldown',
+        type: WorkoutSectionType.Cooldown,
         exercises: [
           { name: 'Cool-down Walk', sets: 1, reps: '5 min', rest: '0s' },
           { name: 'Static Stretching', sets: 1, reps: '10 min', rest: '0s' }

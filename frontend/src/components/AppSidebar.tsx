@@ -16,7 +16,8 @@ import {
   BarChart3,
   BookOpen,
   Heart,
-  Home
+  Home,
+  FileText
 } from 'lucide-react';
 import {
   Sidebar,
@@ -74,6 +75,14 @@ const menuItems = [
       { title: 'My Stats', icon: BarChart3, url: '/profile/stats' },
       { title: 'Preferences', icon: Heart, url: '/profile/preferences' },
       
+    ],
+  },
+  {
+    title: 'Examples',
+    icon: FileText,
+    url: '/plan/example',
+    items: [
+      { title: 'Sample Plan', icon: BookOpen, url: '/plan/example' },
     ],
   },
 ];

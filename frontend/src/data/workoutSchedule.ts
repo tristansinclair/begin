@@ -72,7 +72,7 @@ const formatWeekRange = (startDate: Date): string => {
 
 // Helper function to determine workout status based on date and completion
 const getWorkoutStatus = (date: Date, isCompleted: boolean = false): WorkoutStatus => {
-  const today = new Date(2025, 6, 31); // July 31st, 2025
+  const today = new Date(); // July 31st, 2025
   const workoutDate = new Date(date);
   
   // Set time to midnight for accurate date comparison
@@ -258,7 +258,7 @@ const generateWeek = (startDate: Date, weekOffset: number = 0): WeekData => {
   const currentDate = new Date(startDate);
   
   // Define realistic planning boundaries
-  const today = new Date(2025, 6, 31); // July 31st, 2025 (current day)
+  const today = new Date(); // July 31st, 2025 (current day)
   const planningStartDate = new Date(2025, 6, 1); // July 1st, 2025 (start of planned workouts)
   const planningEndDate = new Date(2025, 7, 31); // August 31st, 2025 (end of planning horizon)
   
@@ -395,7 +395,7 @@ export const generateAdditionalWeeks = (
 // Get current week index (for navigation) 
 export const getCurrentWeekIndex = (allWeeksData: WeekData[]): number => {
   // July 31st, 2025 - find which week contains this date
-  const today = new Date(2025, 6, 31); // July 31, 2025
+  const today = new Date();
   
   for (let i = 0; i < allWeeksData.length; i++) {
     const week = allWeeksData[i];

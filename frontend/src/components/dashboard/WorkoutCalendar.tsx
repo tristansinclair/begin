@@ -15,6 +15,7 @@ const WorkoutCalendar: React.FC = () => {
     isViewingCurrentWeek,
     todayIndex,
     selectedWorkoutIndex,
+    visibleCardsCount,
     
     // Actions
     goToPreviousWeek,
@@ -23,6 +24,8 @@ const WorkoutCalendar: React.FC = () => {
     selectWorkout,
     getDateKey,
     getResponsiveWeekRanges,
+    getVisibleWorkouts,
+    updateVisibleCardsCount,
     initialize
   } = useWorkoutStore();
   
@@ -30,6 +33,16 @@ const WorkoutCalendar: React.FC = () => {
   useEffect(() => {
     initialize();
   }, [initialize]);
+  
+  // Update visible cards count on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      updateVisibleCardsCount();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [updateVisibleCardsCount]);
 
 
   return (
@@ -45,18 +58,16 @@ const WorkoutCalendar: React.FC = () => {
         onBackToToday={goBackToToday}
       />
       
-      {/* Adaptive Daily Cards Grid */}
+      {/* Adaptive Daily Cards Flex Row */}
       <div className="mb-6">
-        {[
-          { breakpoint: 'md:hidden', cols: 3, gap: 2, count: 3 },
-          { breakpoint: 'hidden md:grid lg:hidden', cols: 4, gap: 3, count: 4 },
-          { breakpoint: 'hidden lg:grid xl:hidden', cols: 5, gap: 4, count: 5 },
-          { breakpoint: 'hidden xl:grid', cols: 7, gap: 4, count: 7 }
-        ].map(({ breakpoint, cols, gap, count }, layoutIndex) => (
-          <div key={layoutIndex} className={`grid grid-cols-${cols} gap-${gap} ${breakpoint}`}>
-            {workouts.slice(0, count).map((workout, index) => (
+        <div className="grid gap-2 md:gap-3 lg:gap-4" style={{
+          gridTemplateColumns: `repeat(${visibleCardsCount}, 1fr)`
+        }}>
+          {getVisibleWorkouts().map((workout, index) => {
+            const workoutIndex = workouts.findIndex(w => getDateKey(w) === getDateKey(workout));
+            return (
               <DayCard
-                key={index}
+                key={getDateKey(workout)}
                 day={workout.day}
                 date={workout.date}
                 workoutLabel={workout.workoutLabel}
@@ -65,13 +76,19 @@ const WorkoutCalendar: React.FC = () => {
                 metricUnit={workout.metricUnit}
                 workoutType={workout.workoutType}
                 isSelected={selectedDate === getDateKey(workout)}
-                isToday={isViewingCurrentWeek && index === todayIndex}
+                isToday={isViewingCurrentWeek && workoutIndex === todayIndex}
                 isCompleted={workout.isCompleted || false}
                 onClick={() => selectWorkout(workout)}
               />
-            ))}
-          </div>
-        ))}
+            );
+          })}
+          {/* Fill empty slots if we have fewer workouts than expected */}
+          {Array.from({ length: Math.max(0, visibleCardsCount - getVisibleWorkouts().length) }).map((_, index) => (
+            <div key={`empty-${index}`} className="invisible">
+              <div className="h-[70px]" />
+            </div>
+          ))}
+        </div>
       </div>
       
       {selectedWorkoutIndex !== null && workouts[selectedWorkoutIndex] && (

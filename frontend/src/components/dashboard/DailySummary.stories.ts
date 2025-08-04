@@ -18,7 +18,7 @@ const meta: Meta<typeof DailySummary> = {
     (Story) => React.createElement('div', {
       style: { 
         resize: 'both', 
-        overflow: 'auto', 
+        overflow: 'hidden', 
         border: '2px dashed #ccc', 
         padding: '16px',
         minWidth: '280px',
@@ -26,9 +26,17 @@ const meta: Meta<typeof DailySummary> = {
         width: '400px',
         height: '500px',
         maxWidth: '800px',
-        maxHeight: '800px'
+        maxHeight: '800px',
+        display: 'flex',
+        flexDirection: 'column'
       }
-    }, React.createElement(Story)),
+    }, React.createElement('div', {
+      style: {
+        flex: 1,
+        minHeight: 0,
+        display: 'flex'
+      }
+    }, React.createElement(Story))),
   ],
   argTypes: {
     isWorkoutCompleted: {
@@ -40,6 +48,44 @@ const meta: Meta<typeof DailySummary> = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+// Mobile preview decorator
+const MobileDecorator = (Story: any) => React.createElement('div', {
+  style: { 
+    width: '300px',
+    height: '400px',
+    border: '2px dashed #f39c12',
+    padding: '8px',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+}, React.createElement('div', {
+  style: {
+    flex: 1,
+    minHeight: 0,
+    display: 'flex'
+  }
+}, React.createElement(Story)));
+
+// Desktop preview decorator  
+const DesktopDecorator = (Story: any) => React.createElement('div', {
+  style: { 
+    width: '500px',
+    height: '500px',
+    border: '2px dashed #3498db',
+    padding: '16px',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+}, React.createElement('div', {
+  style: {
+    flex: 1,
+    minHeight: 0,
+    display: 'flex'
+  }
+}, React.createElement(Story)));
 
 // Completed Workout Stories
 export const CompletedStrengthWorkout: Story = {
@@ -105,53 +151,61 @@ export const CompletedHIITWorkout: Story = {
   },
 };
 
-// Upcoming Workout Stories
-export const UpcomingStrengthWorkout: Story = {
+// Upcoming Workout Stories - 5 Main Types
+export const UpcomingWeightliftingWorkout: Story = {
   args: {
     isWorkoutCompleted: false,
     upcomingWorkout: {
-      name: 'Push Day',
-      type: 'Strength Training',
-      duration: '60',
+      name: 'Push Day - Heavy',
+      type: 'Weightlifting',
+      duration: '75',
       exercises: 6,
       targetMuscles: 'Chest, Shoulders, Triceps',
       intensity: 'high',
       warmupTime: '10 min',
-      restTime: '2-3 min',
+      restTime: '3-4 min',
       liftDetails: [
         {
-          name: 'Bench Press',
-          sets: 4,
-          reps: '6-8',
-          weight: '185 lbs',
+          name: 'Barbell Bench Press',
+          sets: 5,
+          reps: '3-5',
+          weight: '225 lbs',
           type: 'compound',
         },
         {
-          name: 'Overhead Press',
+          name: 'Military Press',
+          sets: 4,
+          reps: '5-6',
+          weight: '155 lbs',
+          type: 'compound',
+        },
+        {
+          name: 'Incline Dumbbell Press',
           sets: 4,
           reps: '8-10',
-          weight: '135 lbs',
+          weight: '80 lbs',
           type: 'compound',
         },
         {
-          name: 'Dumbbell Flyes',
+          name: 'Cable Flyes',
           sets: 3,
           reps: '12-15',
-          weight: '30 lbs',
+          weight: '40 lbs',
           type: 'isolation',
         },
         {
-          name: 'Tricep Dips',
-          sets: 3,
-          reps: '10-12',
-          type: 'accessory',
-        },
-        {
-          name: 'Lateral Raises',
-          sets: 3,
+          name: 'Tricep Rope Pushdowns',
+          sets: 4,
           reps: '15-20',
-          weight: '15 lbs',
+          weight: '60 lbs',
           type: 'isolation',
+        },
+        {
+          name: 'Face Pulls',
+          sets: 3,
+          reps: '20-25',
+          weight: '30 lbs',
+          type: 'accessory',
         },
       ],
     },
@@ -159,12 +213,43 @@ export const UpcomingStrengthWorkout: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'An upcoming strength training workout with detailed lift information.',
+        story: 'A heavy weightlifting session focused on pushing movements with compound lifts.',
       },
     },
   },
 };
 
+export const UpcomingCrossTrainingWorkout: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    upcomingWorkout: {
+      name: 'MetCon Monday',
+      type: 'Cross Training',
+      duration: '45',
+      exercises: 8,
+      targetMuscles: 'Full Body',
+      intensity: 'high',
+      intervals: [
+        { type: 'Box Jumps', duration: '1 min', intensity: 'high' },
+        { type: 'Kettlebell Swings', duration: '45 sec', intensity: 'high' },
+        { type: 'Battle Ropes', duration: '30 sec', intensity: 'max' },
+        { type: 'Wall Balls', duration: '1 min', intensity: 'moderate' },
+        { type: 'Burpees', duration: '45 sec', intensity: 'high' },
+        { type: 'Assault Bike', duration: '1 min', intensity: 'max' },
+        { type: 'Rest', duration: '30 sec', intensity: 'easy' },
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A high-intensity cross training workout with varied functional movements.',
+      },
+    },
+  },
+};
+
+// Additional workout type examples
 export const UpcomingCardioWorkout: Story = {
   args: {
     isWorkoutCompleted: false,
@@ -261,24 +346,27 @@ export const UpcomingRunningWorkout: Story = {
   args: {
     isWorkoutCompleted: false,
     upcomingWorkout: {
-      name: 'Long Run',
+      name: 'Tempo Run',
       type: 'Running',
-      duration: '60',
-      exercises: 3,
-      targetMuscles: 'Legs, Cardio',
+      duration: '45',
+      exercises: 5,
+      targetMuscles: 'Cardiovascular Endurance',
       intensity: 'moderate',
-      warmupTime: '10 min',
-      exerciseList: [
-        'Dynamic Warm-up',
-        '5K Steady Pace',
-        'Cool Down Walk',
+      distance: '6 mi',
+      pace: '7:30',
+      intervals: [
+        { type: 'Easy Warmup', duration: '10 min', intensity: 'easy' },
+        { type: 'Tempo Pace', duration: '20 min', intensity: 'moderate' },
+        { type: 'Recovery', duration: '5 min', intensity: 'easy' },
+        { type: 'Tempo Pace', duration: '15 min', intensity: 'moderate' },
+        { type: 'Cool Down', duration: '5 min', intensity: 'easy' },
       ],
     },
   },
   parameters: {
     docs: {
       description: {
-        story: 'An upcoming running workout with distance focus.',
+        story: 'A tempo running workout designed to improve lactate threshold.',
       },
     },
   },
@@ -343,26 +431,60 @@ export const UpcomingSwimmingWorkout: Story = {
   args: {
     isWorkoutCompleted: false,
     upcomingWorkout: {
-      name: 'Pool Session',
+      name: 'Endurance Swim',
       type: 'Swimming',
-      duration: '45',
-      exercises: 4,
-      targetMuscles: 'Full Body',
+      duration: '60',
+      exercises: 8,
+      targetMuscles: 'Full Body Endurance',
       intensity: 'moderate',
-      warmupTime: '10 min',
-      restTime: '30 sec',
-      exerciseList: [
-        'Freestyle 400m',
-        'Backstroke 200m',
-        'Breaststroke 200m',
-        'Cool Down Easy Swim',
+      distance: '2000m',
+      strokes: ['Freestyle', 'Backstroke', 'Breaststroke', 'Butterfly'],
+      intervals: [
+        { type: 'Warm-up Mixed Strokes', duration: '10 min', intensity: 'easy' },
+        { type: '4x100m Freestyle', duration: '8 min', intensity: 'moderate' },
+        { type: '4x50m Backstroke', duration: '6 min', intensity: 'moderate' },
+        { type: '4x50m Breaststroke', duration: '8 min', intensity: 'moderate' },
+        { type: '8x25m Butterfly', duration: '8 min', intensity: 'high' },
+        { type: 'Cool Down', duration: '5 min', intensity: 'easy' },
       ],
     },
   },
   parameters: {
     docs: {
       description: {
-        story: 'An upcoming swimming workout with stroke variations.',
+        story: 'An endurance-focused swimming workout incorporating all four strokes.',
+      },
+    },
+  },
+};
+
+export const UpcomingBikingWorkout: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    upcomingWorkout: {
+      name: 'Hill Climb Challenge',
+      type: 'Biking',
+      duration: '90',
+      exercises: 6,
+      targetMuscles: 'Legs, Glutes',
+      intensity: 'high',
+      distance: '25 mi',
+      elevation: '1,200 ft',
+      pace: '16 mph',
+      intervals: [
+        { type: 'Flat Warmup', duration: '15 min', intensity: 'easy' },
+        { type: 'Rolling Hills', duration: '20 min', intensity: 'moderate' },
+        { type: 'Main Climb', duration: '25 min', intensity: 'high' },
+        { type: 'Descent Recovery', duration: '10 min', intensity: 'easy' },
+        { type: 'Sprint Intervals', duration: '15 min', intensity: 'max' },
+        { type: 'Cool Down', duration: '5 min', intensity: 'easy' },
+      ],
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A challenging bike workout featuring hill climbs and sprint intervals.',
       },
     },
   },
@@ -451,6 +573,21 @@ export const NoPlan: Story = {
   },
 };
 
+export const MobileNoPlan: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    hasPlan: false,
+  },
+  decorators: [MobileDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile view when user has no workout plan.',
+      },
+    },
+  },
+};
+
 export const NoWorkoutData: Story = {
   args: {
     isWorkoutCompleted: false,
@@ -485,6 +622,130 @@ export const MinimalCompletedWorkout: Story = {
   },
 };
 
+// Mobile responsive testing
+export const MobileWeightliftingWorkout: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    upcomingWorkout: {
+      name: 'Push Day - Heavy',
+      type: 'Weightlifting',
+      duration: '75',
+      exercises: 6,
+      targetMuscles: 'Chest, Shoulders, Triceps',
+      intensity: 'high',
+      warmupTime: '10 min',
+      restTime: '3-4 min',
+      liftDetails: [
+        {
+          name: 'Barbell Bench Press',
+          sets: 5,
+          reps: '3-5',
+          weight: '225 lbs',
+          type: 'compound',
+        },
+        {
+          name: 'Military Press',
+          sets: 4,
+          reps: '5-6',
+          weight: '155 lbs',
+          type: 'compound',
+        },
+        {
+          name: 'Incline Dumbbell Press',
+          sets: 4,
+          reps: '8-10',
+          weight: '80 lbs',
+          type: 'compound',
+        },
+      ],
+    },
+  },
+  decorators: [MobileDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile view (300x400) of weightlifting workout card.',
+      },
+    },
+  },
+};
+
+export const DesktopWeightliftingWorkout: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    upcomingWorkout: {
+      name: 'Push Day - Heavy',
+      type: 'Weightlifting',
+      duration: '75',
+      exercises: 6,
+      targetMuscles: 'Chest, Shoulders, Triceps',
+      intensity: 'high',
+      warmupTime: '10 min',
+      restTime: '3-4 min',
+      liftDetails: [
+        {
+          name: 'Barbell Bench Press',
+          sets: 5,
+          reps: '3-5',
+          weight: '225 lbs',
+          type: 'compound',
+        },
+        {
+          name: 'Military Press',
+          sets: 4,
+          reps: '5-6',
+          weight: '155 lbs',
+          type: 'compound',
+        },
+        {
+          name: 'Incline Dumbbell Press',
+          sets: 4,
+          reps: '8-10',
+          weight: '80 lbs',
+          type: 'compound',
+        },
+      ],
+    },
+  },
+  decorators: [DesktopDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Desktop view (500x500) of weightlifting workout card.',
+      },
+    },
+  },
+};
+
+export const MobileRunningWorkout: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    upcomingWorkout: {
+      name: 'Tempo Run',
+      type: 'Running',
+      duration: '45',
+      exercises: 5,
+      targetMuscles: 'Cardiovascular Endurance',
+      intensity: 'moderate',
+      distance: '6 mi',
+      pace: '7:30',
+      intervals: [
+        { type: 'Easy Warmup', duration: '10 min', intensity: 'easy' },
+        { type: 'Tempo Pace', duration: '20 min', intensity: 'moderate' },
+        { type: 'Recovery', duration: '5 min', intensity: 'easy' },
+      ],
+    },
+  },
+  decorators: [MobileDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile view of running workout card.',
+      },
+    },
+  },
+};
+
 export const IntenseCompletedWorkout: Story = {
   args: {
     isWorkoutCompleted: true,
@@ -501,6 +762,49 @@ export const IntenseCompletedWorkout: Story = {
     docs: {
       description: {
         story: 'An intense completed workout with high stats across all metrics.',
+      },
+    },
+  },
+};
+
+export const MobileCompleted: Story = {
+  args: {
+    isWorkoutCompleted: true,
+    workoutStats: {
+      duration: '75 min',
+      exercisesCompleted: 6,
+      totalSets: 18,
+      averageWeight: '185 lbs',
+      caloriesBurned: 420,
+      personalRecords: 2,
+    },
+  },
+  decorators: [MobileDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile view of completed workout card.',
+      },
+    },
+  },
+};
+
+export const MobileRestDay: Story = {
+  args: {
+    isWorkoutCompleted: false,
+    isOffDay: true,
+    hasPlan: true,
+    tomorrowWorkout: {
+      name: 'Push Day',
+      type: 'Strength',
+      targetMuscles: 'Chest, Shoulders, Triceps',
+    },
+  },
+  decorators: [MobileDecorator],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Mobile view of rest day card.',
       },
     },
   },

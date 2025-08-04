@@ -48,7 +48,7 @@ const TodaysWorkout: React.FC = () => {
     if (!currentWeek) return null;
 
     // Today is July 31st, 2025 based on the dashboard code
-    const today = new Date(2025, 6, 31);
+    const today = new Date();
     const todayDateKey = `${today.getFullYear()}-${today.toLocaleDateString('en-US', { month: 'long' })}-${today.getDate()}`;
     
     const todaysWorkout = currentWeek.workouts.find(workout => 

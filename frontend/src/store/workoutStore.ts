@@ -17,6 +17,8 @@ interface WorkoutStore {
   currentWeekIndexOffset: number;
   viewingWeekIndex: number;
   selectedDate: string | null;
+  cardStartIndex: number;
+  visibleCardsCount: number;
   
   // Computed values
   currentWeekIndex: number;
@@ -37,6 +39,8 @@ interface WorkoutStore {
   goToPreviousWeek: () => void;
   goToNextWeek: () => void;
   goBackToToday: () => void;
+  updateVisibleCardsCount: () => void;
+  getVisibleWorkouts: () => WeeklyWorkout[];
   
   // Workout actions
   selectWorkout: (workout: WeeklyWorkout) => void;
@@ -69,6 +73,8 @@ export const useWorkoutStore = create<WorkoutStore>()(
       currentWeekIndexOffset: 0,
       viewingWeekIndex: 0,
       selectedDate: null,
+      cardStartIndex: 0,
+      visibleCardsCount: 3,
       
       // Computed values (will be updated by actions)
       currentWeekIndex: 0,
@@ -85,15 +91,16 @@ export const useWorkoutStore = create<WorkoutStore>()(
       },
       
       getTodayDateKey: () => {
-        const today = new Date(2025, 6, 31); // July 31st, 2025
+        const today = new Date(); // July 31st, 2025
         const month = today.toLocaleDateString('en-US', { month: 'long' });
         return `${today.getFullYear()}-${month}-${today.getDate()}`;
       },
       
       getResponsiveWeekRanges: () => {
-        const { viewingWeekData, workouts } = get();
+        const { viewingWeekData } = get();
+        const visibleWorkouts = get().getVisibleWorkouts();
         
-        if (!viewingWeekData || workouts.length === 0) return {
+        if (!viewingWeekData || visibleWorkouts.length === 0) return {
           mobile: '',
           medium: '',
           large: '',
@@ -101,15 +108,16 @@ export const useWorkoutStore = create<WorkoutStore>()(
           full: ''
         };
         
-        const firstDay = workouts[0];
-        const getEndDay = (count: number) => workouts[Math.min(count - 1, workouts.length - 1)];
+        const firstDay = visibleWorkouts[0];
+        const lastDay = visibleWorkouts[visibleWorkouts.length - 1];
+        const dateRange = `${firstDay.month} ${firstDay.date} - ${lastDay.date}`;
         
         return {
-          mobile: `${firstDay.month} ${firstDay.date} - ${getEndDay(3).date}`,
-          medium: `${firstDay.month} ${firstDay.date} - ${getEndDay(4).date}`,
-          large: `${firstDay.month} ${firstDay.date} - ${getEndDay(5).date}`,
-          xl: viewingWeekData.weekOf,
-          full: viewingWeekData.weekOf
+          mobile: dateRange,
+          medium: dateRange,
+          large: dateRange,
+          xl: dateRange,
+          full: dateRange
         };
       },
       
@@ -136,45 +144,76 @@ export const useWorkoutStore = create<WorkoutStore>()(
       
       // Navigation actions
       goToPreviousWeek: () => {
-        const { viewingWeekIndex, allWeeksData } = get();
+        const { cardStartIndex, visibleCardsCount, workouts, viewingWeekIndex, allWeeksData } = get();
         
-        if (viewingWeekIndex > 0) {
-          get().setViewingWeekIndex(viewingWeekIndex - 1);
+        // Try to navigate within current week first
+        const newStartIndex = cardStartIndex - visibleCardsCount;
+        if (newStartIndex >= 0) {
+          set({ cardStartIndex: newStartIndex });
         } else {
-          // Generate more past weeks - unlimited navigation
-          const firstWeekStart = allWeeksData[0].startDate;
-          const additionalWeeks = generateAdditionalWeeks(firstWeekStart, 'past', 4, userDataLookup);
-          
-          set({ 
-            allWeeksData: [...additionalWeeks, ...allWeeksData],
-            viewingWeekIndex: 3 // Move to one of the newly added weeks
-          });
-          get().updateComputedValues();
+          // Need to go to previous week
+          if (viewingWeekIndex > 0) {
+            get().setViewingWeekIndex(viewingWeekIndex - 1);
+            get().updateComputedValues(); // Update workouts for new week
+            
+            // Position at the end of the previous week to show the last visibleCardsCount days
+            const newWorkouts = get().workouts;
+            const endStartIndex = Math.max(0, newWorkouts.length - visibleCardsCount);
+            set({ cardStartIndex: endStartIndex });
+          } else {
+            // Generate more past weeks
+            const firstWeekStart = allWeeksData[0].startDate;
+            const additionalWeeks = generateAdditionalWeeks(firstWeekStart, 'past', 4, userDataLookup);
+            
+            set({ 
+              allWeeksData: [...additionalWeeks, ...allWeeksData],
+              viewingWeekIndex: 3,
+              cardStartIndex: 0
+            });
+            get().updateComputedValues();
+          }
         }
       },
       
       goToNextWeek: () => {
-        const { viewingWeekIndex, allWeeksData } = get();
+        const { cardStartIndex, visibleCardsCount, workouts, viewingWeekIndex, allWeeksData } = get();
         
-        if (viewingWeekIndex < allWeeksData.length - 1) {
-          get().setViewingWeekIndex(viewingWeekIndex + 1);
+        // Try to navigate within current week first
+        const newStartIndex = cardStartIndex + visibleCardsCount;
+        if (newStartIndex + visibleCardsCount <= workouts.length) {
+          set({ cardStartIndex: newStartIndex });
         } else {
-          // Generate more future weeks - unlimited navigation
-          const lastWeekStart = allWeeksData[allWeeksData.length - 1].startDate;
-          const additionalWeeks = generateAdditionalWeeks(lastWeekStart, 'future', 4, userDataLookup);
-          
-          set({ 
-            allWeeksData: [...allWeeksData, ...additionalWeeks],
-            viewingWeekIndex: viewingWeekIndex + 1
-          });
-          get().updateComputedValues();
+          // Need to go to next week
+          if (viewingWeekIndex < allWeeksData.length - 1) {
+            get().setViewingWeekIndex(viewingWeekIndex + 1);
+            set({ cardStartIndex: 0 });
+            get().updateComputedValues();
+          } else {
+            // Generate more future weeks
+            const lastWeekStart = allWeeksData[allWeeksData.length - 1].startDate;
+            const additionalWeeks = generateAdditionalWeeks(lastWeekStart, 'future', 4, userDataLookup);
+            
+            set({ 
+              allWeeksData: [...allWeeksData, ...additionalWeeks],
+              viewingWeekIndex: viewingWeekIndex + 1,
+              cardStartIndex: 0
+            });
+            get().updateComputedValues();
+          }
         }
       },
       
       goBackToToday: () => {
-        const { currentWeekIndex, getTodayDateKey } = get();
+        const { currentWeekIndex, getTodayDateKey, todayIndex, visibleCardsCount } = get();
         get().setViewingWeekIndex(currentWeekIndex);
         get().setSelectedDate(getTodayDateKey());
+        // Set cardStartIndex to show today's workout
+        if (todayIndex >= 0) {
+          const startIndex = Math.max(0, Math.floor(todayIndex / visibleCardsCount) * visibleCardsCount);
+          set({ cardStartIndex: startIndex });
+        } else {
+          set({ cardStartIndex: 0 });
+        }
       },
       
       // Workout actions
@@ -196,6 +235,47 @@ export const useWorkoutStore = create<WorkoutStore>()(
         get().setAllWeeksData(updatedData);
       },
       
+      updateVisibleCardsCount: () => {
+        if (typeof window === 'undefined') return;
+        
+        const width = window.innerWidth;
+        let count = 3; // Default mobile
+        
+        if (width >= 1024) {
+          count = 7; // Desktop
+        } else if (width >= 768) {
+          count = 5; // Tablet
+        }
+        
+        const { visibleCardsCount, cardStartIndex, workouts } = get();
+        if (count !== visibleCardsCount) {
+          // Adjust cardStartIndex to maintain similar view but don't go beyond bounds
+          const newStartIndex = Math.max(0, Math.min(
+            Math.floor(cardStartIndex / visibleCardsCount) * count,
+            workouts.length - count
+          ));
+          set({ 
+            visibleCardsCount: count,
+            cardStartIndex: newStartIndex >= 0 ? newStartIndex : 0
+          });
+        }
+      },
+      
+      getVisibleWorkouts: () => {
+        const { workouts, cardStartIndex, visibleCardsCount } = get();
+        
+        // Always ensure we show the exact number of cards expected
+        const availableWorkouts = workouts.slice(cardStartIndex, cardStartIndex + visibleCardsCount);
+        
+        // If we don't have enough workouts, adjust the start index to fill all cards
+        if (availableWorkouts.length < visibleCardsCount && workouts.length >= visibleCardsCount) {
+          const adjustedStartIndex = Math.max(0, workouts.length - visibleCardsCount);
+          return workouts.slice(adjustedStartIndex, adjustedStartIndex + visibleCardsCount);
+        }
+        
+        return availableWorkouts;
+      },
+      
       // Initialize the store
       initialize: () => {
         // Use the workout schedule data (June 8 - August 19)
@@ -206,9 +286,11 @@ export const useWorkoutStore = create<WorkoutStore>()(
           currentWeekIndexOffset: 0,
           viewingWeekIndex: currentWeekIndex,
           currentWeekIndex,
-          todayDateKey: get().getTodayDateKey()
+          todayDateKey: get().getTodayDateKey(),
+          cardStartIndex: 0
         });
         
+        get().updateVisibleCardsCount();
         get().updateComputedValues();
         
         // Initialize selected date
