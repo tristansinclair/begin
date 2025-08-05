@@ -181,7 +181,7 @@ export const upperBodyStrengthSession: TrainingSession = {
 // Session 3: Murph Workout (Run + Lift + Run)
 export const murphWorkoutSession: TrainingSession = {
     id: "murph-workout",
-    name: "🇺🇸 Murph Workout 🦅 LET'S GOOOO",
+    name: "🇺🇸 Murph Workout 🦅",
     dateTime: new Date("2025-01-08T10:00:00"),
     status: TrainingSessionStatus.Upcoming,
     blocks: [
@@ -962,6 +962,232 @@ export const compareUnifiedSession = (session: TrainingSession) => {
   
   if (session.intensityRating) console.log(`Intensity: ${session.intensityRating}/10`);
 };
+
+// ================================================================
+// NEW EXAMPLES FOR STORYBOOK
+// ================================================================
+
+// Single Block Example - Simple Push-ups
+export const singleBlockWorkout: TrainingSession = {
+  id: "single-pushup-block",
+  name: "Quick Push-ups",
+  dateTime: new Date("2025-01-15T12:00:00"),
+  status: TrainingSessionStatus.Upcoming,
+  estimatedDuration: 10,
+  blocks: [
+    {
+      id: "pushup-block",
+      name: "Push-up Set",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "pushup-exercise-block",
+        name: "Basic Push-ups",
+        type: "exercise",
+        exercises: [
+          {
+            id: "pushups-only",
+            exerciseDefinitionId: "pushup",
+            variationId: "standard-pushup",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              {
+                id: "pushup-set-1",
+                setNumber: 1,
+                plannedReps: 15,
+                plannedWeight: { type: "bodyweight" },
+                restAfter: 60
+              },
+              {
+                id: "pushup-set-2", 
+                setNumber: 2,
+                plannedReps: 12,
+                plannedWeight: { type: "bodyweight" },
+                restAfter: 60
+              },
+              {
+                id: "pushup-set-3",
+                setNumber: 3,
+                plannedReps: 10,
+                plannedWeight: { type: "bodyweight" },
+                restAfter: 0
+              }
+            ]
+          }
+        ]
+      }
+    } as ActivityBlock
+  ],
+  tags: ["quick", "bodyweight"]
+} as TrainingSession
+
+// Many Blocks Example - Complex Training Day
+export const manyBlocksWorkout: TrainingSession = {
+  id: "complex-training-day",
+  name: "Full Training Day",
+  dateTime: new Date("2025-01-16T09:00:00"), 
+  status: TrainingSessionStatus.Upcoming,
+  estimatedDuration: 120,
+  blocks: [
+    {
+      id: "warmup-block",
+      name: "Dynamic Warm-up",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "warmup-exercises",
+        name: "Movement Prep",
+        type: "circuit",
+        rounds: 2,
+        exercises: [
+          {
+            id: "arm-circles",
+            exerciseDefinitionId: "arm-circle",
+            variationId: "forward-arm-circle",
+            repetitionType: RepetitionType.Reps,
+            sets: [{ id: "ac1", setNumber: 1, plannedReps: 10, restAfter: 0 }]
+          }
+        ]
+      }
+    },
+    {
+      id: "strength-block-1",
+      name: "Upper Body Strength",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "upper-strength",
+        name: "Bench & Rows",
+        type: "exercise",
+        exercises: [
+          {
+            id: "bench-press",
+            exerciseDefinitionId: "bench-press",
+            variationId: "barbell-bench",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              { id: "bp1", setNumber: 1, plannedReps: 8, plannedWeight: { type: "absolute", weight: { weight: 135, unit: "lbs" } }, restAfter: 120 },
+              { id: "bp2", setNumber: 2, plannedReps: 6, plannedWeight: { type: "absolute", weight: { weight: 155, unit: "lbs" } }, restAfter: 120 },
+              { id: "bp3", setNumber: 3, plannedReps: 4, plannedWeight: { type: "absolute", weight: { weight: 175, unit: "lbs" } }, restAfter: 120 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: "strength-block-2", 
+      name: "Lower Body Strength",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "lower-strength",
+        name: "Squats & Deads",
+        type: "exercise",
+        exercises: [
+          {
+            id: "squats",
+            exerciseDefinitionId: "squat",
+            variationId: "back-squat",
+            repetitionType: RepetitionType.Reps,
+            sets: [
+              { id: "sq1", setNumber: 1, plannedReps: 8, plannedWeight: { type: "absolute", weight: { weight: 185, unit: "lbs" } }, restAfter: 150 },
+              { id: "sq2", setNumber: 2, plannedReps: 6, plannedWeight: { type: "absolute", weight: { weight: 205, unit: "lbs" } }, restAfter: 150 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: "accessory-block-1",
+      name: "Upper Accessories",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "upper-accessories",
+        name: "Arms & Shoulders",
+        type: "superset",
+        rounds: 3,
+        exercises: [
+          {
+            id: "bicep-curls",
+            exerciseDefinitionId: "bicep-curl",
+            variationId: "dumbbell-curl",
+            repetitionType: RepetitionType.Reps,
+            sets: [{ id: "bc1", setNumber: 1, plannedReps: 12, plannedWeight: { type: "absolute", weight: { weight: 25, unit: "lbs" } }, restAfter: 30 }]
+          }
+        ]
+      }
+    },
+    {
+      id: "accessory-block-2",
+      name: "Lower Accessories", 
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "lower-accessories",
+        name: "Glutes & Calves",
+        type: "superset",
+        rounds: 3,
+        exercises: [
+          {
+            id: "calf-raises",
+            exerciseDefinitionId: "calf-raise",
+            variationId: "standing-calf-raise",
+            repetitionType: RepetitionType.Reps,
+            sets: [{ id: "cr1", setNumber: 1, plannedReps: 15, plannedWeight: { type: "bodyweight" }, restAfter: 30 }]
+          }
+        ]
+      }
+    },
+    {
+      id: "cardio-block",
+      name: "HIIT Finisher",
+      type: ActivityBlockType.Cardio,
+      cardioActivity: {
+        id: "hiit-bike",
+        type: CardioType.Bike,
+        name: "Bike Intervals",
+        plannedTime: 900, // 15 minutes
+        notes: "8 rounds: 30s all-out, 90s recovery"
+      }
+    },
+    {
+      id: "core-block",
+      name: "Core Circuit",
+      type: ActivityBlockType.Structured, 
+      structuredTraining: {
+        id: "core-circuit",
+        name: "Abs & Stability",
+        type: "circuit",
+        rounds: 3,
+        exercises: [
+          {
+            id: "planks",
+            exerciseDefinitionId: "plank",
+            variationId: "standard-plank",
+            repetitionType: "Time" as any,
+            sets: [{ id: "pl1", setNumber: 1, plannedTime: 45, restAfter: 15 }]
+          }
+        ]
+      }
+    },
+    {
+      id: "cooldown-block",
+      name: "Cool-down Stretch",
+      type: ActivityBlockType.Structured,
+      structuredTraining: {
+        id: "cooldown-stretches",
+        name: "Static Stretching",
+        type: "circuit",
+        rounds: 1,
+        exercises: [
+          {
+            id: "hamstring-stretch",
+            exerciseDefinitionId: "hamstring-stretch",
+            variationId: "seated-hamstring-stretch",
+            repetitionType: "Time" as any,
+            sets: [{ id: "hs1", setNumber: 1, plannedTime: 30, restAfter: 0 }]
+          }
+        ]
+      }
+    }
+  ] as ActivityBlock[],
+  tags: ["full-body", "strength", "cardio", "long-session"]
+} as TrainingSession
 
 // ================================================================
 // NEW EXAMPLE SESSIONS - REQUESTED VARIATIONS
