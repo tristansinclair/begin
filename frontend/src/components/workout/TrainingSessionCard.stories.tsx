@@ -5,7 +5,10 @@ import {
   fullBodyStrengthSession,
   murphWorkoutSession,
   singleBlockWorkout,
-  manyBlocksWorkout
+  manyBlocksWorkout,
+  completedMorning5K,
+  completedBenchPressWorkout,
+  ongoingSquatWorkout
 } from '@/examples/sample-workout-sessions'
 
 const meta: Meta<typeof TrainingSessionCard> = {
@@ -90,6 +93,52 @@ export const ManyBlocksSession: Story = {
     docs: {
       description: {
         story: 'A complex training day with 8 blocks - demonstrates the truncation logic showing first 3 blocks with "+5 more blocks..." indicator.'
+      }
+    }
+  }
+}
+
+// ================================================================
+// COMPLETED STATE STORIES - Show actual workout results
+// ================================================================
+
+// Completed Cardio Session
+export const CompletedCardioSession: Story = {
+  args: {
+    session: completedMorning5K
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A completed 5K run showing actual performance data including time, pace, heart rate, and calories. Demonstrates how completed cardio sessions display results vs planned targets.'
+      }
+    }
+  }
+}
+
+// Completed Strength Session
+export const CompletedStrengthSession: Story = {
+  args: {
+    session: completedBenchPressWorkout
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A completed strength workout showing actual weights lifted, reps completed, and performance ratings. Shows how the card displays PR achievements and workout results.'
+      }
+    }
+  }
+}
+
+// In-Progress Session
+export const InProgressSession: Story = {
+  args: {
+    session: ongoingSquatWorkout
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A workout currently in progress, showing completed sets and upcoming sets. Demonstrates the in-progress state with partial completion data.'
       }
     }
   }

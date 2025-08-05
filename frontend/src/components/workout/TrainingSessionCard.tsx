@@ -142,68 +142,138 @@ export function TrainingSessionCard({ session, className }: TrainingSessionCardP
 // Cardio Session Content Component
 function CardioSessionContent({ session }: { session: TrainingSession }) {
   const cardio = session.blocks[0].cardioActivity!
+  const isCompleted = session.status === TrainingSessionStatus.Completed
   
   return (
     <>
       <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
         <Activity className="h-3 w-3" />
-        Run Overview
+        {cardio.type} Overview
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        {cardio.plannedDistance && (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-foreground">
-              {formatDistance(cardio.plannedDistance)}
+      {/* For completed runs, show actual data prominently if available */}
+      {isCompleted && (cardio.actualDistance || cardio.actualTime || cardio.actualPace) ? (
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {cardio.actualDistance && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatDistance(cardio.actualDistance)}
+              </div>
+              <div className="text-xs text-muted-foreground">Miles</div>
             </div>
-            <div className="text-xs text-muted-foreground">Miles</div>
-          </div>
-        )}
-        
-        {cardio.plannedTime && (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-foreground">
-              {formatTime(cardio.plannedTime)}
+          )}
+          
+          {cardio.actualTime && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatTime(cardio.actualTime)}
+              </div>
+              <div className="text-xs text-muted-foreground">Time</div>
             </div>
-            <div className="text-xs text-muted-foreground">Time</div>
-          </div>
-        )}
-        
-        {cardio.plannedPace && (
-          <div className="text-center">
-            <div className="text-2xl font-bold text-foreground">
-              {formatPace(cardio.plannedPace * 60)}
+          )}
+          
+          {cardio.actualPace && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatPace(cardio.actualPace * 60)}
+              </div>
+              <div className="text-xs text-muted-foreground">Pace</div>
             </div>
-            <div className="text-xs text-muted-foreground">Pace</div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        /* Show planned data for non-completed or when no actual data */
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {cardio.plannedDistance && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatDistance(cardio.plannedDistance)}
+              </div>
+              <div className="text-xs text-muted-foreground">Miles</div>
+            </div>
+          )}
+          
+          {cardio.plannedTime && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatTime(cardio.plannedTime)}
+              </div>
+              <div className="text-xs text-muted-foreground">Time</div>
+            </div>
+          )}
+          
+          {cardio.plannedPace && (
+            <div className="text-center">
+              <div className="text-2xl font-bold text-foreground">
+                {formatPace(cardio.plannedPace * 60)}
+              </div>
+              <div className="text-xs text-muted-foreground">Pace</div>
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Show actual vs planned for completed runs */}
-      {session.status === 'Completed' && (cardio.actualDistance || cardio.actualTime) && (
+      {/* Show additional metrics for completed cardio */}
+      {isCompleted && (cardio.heartRate || cardio.calories || cardio.elevation) && (
         <>
           <div className="border-t border-border pt-3 mb-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
               <Activity className="h-3 w-3" />
-              Actual Performance
+              Performance Metrics
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              {cardio.actualDistance && (
-                <div className="text-center">
-                  <div className="text-lg font-bold text-foreground">
-                    {formatDistance(cardio.actualDistance)}
-                  </div>
-                  <div className="text-xs text-muted-foreground">Actual Miles</div>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              {cardio.heartRate?.average && (
+                <div>
+                  <div className="text-lg font-bold text-foreground">{cardio.heartRate.average}</div>
+                  <div className="text-xs text-muted-foreground">Avg HR</div>
                 </div>
               )}
               
-              {cardio.actualTime && (
-                <div className="text-center">
-                  <div className="text-lg font-bold text-foreground">
-                    {formatTime(cardio.actualTime)}
-                  </div>
-                  <div className="text-xs text-muted-foreground">Actual Time</div>
+              {cardio.calories && (
+                <div>
+                  <div className="text-lg font-bold text-foreground">{cardio.calories}</div>
+                  <div className="text-xs text-muted-foreground">Calories</div>
+                </div>
+              )}
+              
+              {cardio.elevation && (
+                <div>
+                  <div className="text-lg font-bold text-foreground">{cardio.elevation}ft</div>
+                  <div className="text-xs text-muted-foreground">Elevation</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Show planned vs actual comparison for completed runs if both exist */}
+      {isCompleted && (cardio.actualDistance || cardio.actualTime) && 
+       (cardio.plannedDistance || cardio.plannedTime) && (
+        <>
+          <div className="border-t border-border pt-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+              <Activity className="h-3 w-3" />
+              Planned vs Actual
+            </div>
+            
+            <div className="space-y-2">
+              {cardio.plannedDistance && cardio.actualDistance && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Distance:</span>
+                  <span className="text-foreground">
+                    {formatDistance(cardio.plannedDistance)} → {formatDistance(cardio.actualDistance)} mi
+                  </span>
+                </div>
+              )}
+              
+              {cardio.plannedTime && cardio.actualTime && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Time:</span>
+                  <span className="text-foreground">
+                    {formatTime(cardio.plannedTime)} → {formatTime(cardio.actualTime)}
+                  </span>
                 </div>
               )}
             </div>
@@ -225,6 +295,15 @@ function StrengthSessionContent({
   totalExercises: number
   totalSets: number
 }) {
+  const isCompleted = session.status === TrainingSessionStatus.Completed
+  
+  // Calculate completed sets for completed sessions
+  const completedSets = isCompleted ? session.blocks.reduce((acc, block) => {
+    const exercises = block.structuredTraining?.exercises || []
+    return acc + exercises.reduce((setAcc, exercise) => 
+      setAcc + exercise.sets.filter(set => set.completed).length, 0)
+  }, 0) : 0
+
   return (
     <>
       <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
@@ -242,14 +321,50 @@ function StrengthSessionContent({
           <div className="text-xs text-muted-foreground">Exercises</div>
         </div>
         <div>
-          <div className="text-lg font-bold text-foreground">{session.estimatedDuration || 60}</div>
-          <div className="text-xs text-muted-foreground">Min</div>
+          <div className="text-lg font-bold text-foreground">
+            {isCompleted && session.actualDuration ? session.actualDuration : (session.estimatedDuration || 60)}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {isCompleted && session.actualDuration ? "Actual Min" : "Min"}
+          </div>
         </div>
         <div>
-          <div className="text-lg font-bold text-foreground">{totalSets}</div>
-          <div className="text-xs text-muted-foreground">Total Sets</div>
+          <div className="text-lg font-bold text-foreground">
+            {isCompleted ? `${completedSets}/${totalSets}` : totalSets}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {isCompleted ? "Completed" : "Total Sets"}
+          </div>
         </div>
       </div>
+
+      {/* Show workout performance for completed sessions */}
+      {isCompleted && (session.intensityRating || session.enjoymentRating) && (
+        <>
+          <div className="border-t border-border pt-3 mb-4">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+              <Activity className="h-3 w-3" />
+              Performance Ratings
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-center">
+              {session.intensityRating && (
+                <div>
+                  <div className="text-lg font-bold text-foreground">{session.intensityRating}/10</div>
+                  <div className="text-xs text-muted-foreground">Intensity</div>
+                </div>
+              )}
+              
+              {session.enjoymentRating && (
+                <div>
+                  <div className="text-lg font-bold text-foreground">{session.enjoymentRating}/10</div>
+                  <div className="text-xs text-muted-foreground">Enjoyment</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="border-t border-border pt-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
