@@ -1,11 +1,10 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TrainingSession, TrainingSessionStatus } from "@/types/workouts/workout-types"
 import { cn } from "@/lib/utils"
-import { 
-  Calendar, 
+import {
+  Calendar,
   Activity,
   CheckCircle2,
   Play,
@@ -56,76 +55,78 @@ export function TrainingSessionCard({ session, className }: TrainingSessionCardP
   }, 0)
 
   return (
-    <Card className={cn(
-      "overflow-hidden",
+    <div className={cn(
+      "rounded-lg border border-border bg-card text-card-foreground shadow-sm overflow-hidden",
       className
     )}>
-      <CardHeader className="bg-gray-50 border-b rounded-t-lg -m-6 -mb-0 mx-0 px-6 py-6">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="text-2xl font-bold text-gray-900">{session.name}</h3>
-          <Badge variant={statusProps.variant}>
-            <StatusIcon className="h-3 w-3 mr-1" />
-            {session.status}
-          </Badge>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Calendar className="h-4 w-4" />
-          <span>{new Date(session.dateTime).toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            month: 'short', 
-            day: 'numeric', 
-            year: 'numeric' 
-          })}</span>
-          <span>•</span>
-          <span>{new Date(session.dateTime).toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit' 
-          })}</span>
-        </div>
-      </CardHeader>
-      
-      <CardContent>
-        <div className="mb-4">
-          <div className="flex items-center gap-2 text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
-            <Activity className="h-3 w-3" />
-            Session Overview
-          </div>
-          
-          <div className="bg-gray-50 p-3 rounded-lg border">
-            <div className="grid grid-cols-4 gap-4 text-center">
-              <div>
-                <div className="text-lg font-bold text-gray-900">{session.blocks.length}</div>
-                <div className="text-xs text-gray-600">Blocks</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-gray-900">{totalExercises}</div>
-                <div className="text-xs text-gray-600">Exercises</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-gray-900">{session.estimatedDuration || 60}</div>
-                <div className="text-xs text-gray-600">Min</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold text-gray-900">{totalSets}</div>
-                <div className="text-xs text-gray-600">Total Sets</div>
-              </div>
+      {/* Header */}
+      <div className="border-b rounded-t-lg bg-muted px-6 py-4">
+        <div className="flex items-center justify-between gap-4 mb-2">
+          <h3 className="text-2xl font-bold text-foreground">{session.name}</h3>
+          <div className="relative group">
+            <Badge variant={statusProps.variant} size="sm" className="cursor-help rounded-full p-1">
+              <StatusIcon className="h-2.5 w-2.5" />
+            </Badge>
+            <div className="absolute right-0 top-full mt-1 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md border shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-10">
+              {session.status}
             </div>
           </div>
         </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4" />
+          <span>{new Date(session.dateTime).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })}</span>
+          <span>•</span>
+          <span>{new Date(session.dateTime).toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+          })}</span>
+        </div>
+      </div>
 
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+      {/* Content */}
+      <div className="bg-card px-6 py-6">
+        <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+          <Activity className="h-3 w-3" />
+          Session Overview
+        </div>
+
+        <div className="grid grid-cols-4 gap-4 text-center mb-4">
+          <div>
+            <div className="text-lg font-bold text-foreground">{session.blocks.length}</div>
+            <div className="text-xs text-muted-foreground">Blocks</div>
+          </div>
+          <div>
+            <div className="text-lg font-bold text-foreground">{totalExercises}</div>
+            <div className="text-xs text-muted-foreground">Exercises</div>
+          </div>
+          <div>
+            <div className="text-lg font-bold text-foreground">{session.estimatedDuration || 60}</div>
+            <div className="text-xs text-muted-foreground">Min</div>
+          </div>
+          <div>
+            <div className="text-lg font-bold text-foreground">{totalSets}</div>
+            <div className="text-xs text-muted-foreground">Total Sets</div>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-3">
+          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
             <Activity className="h-3 w-3" />
             Workout Summary
           </div>
-          
-          <div className="bg-gray-50 p-2 rounded-lg border space-y-1">
+
+          <div className="space-y-1">
             {session.blocks.map((block, idx) => (
               <div key={block.id} className="flex justify-between items-center text-xs py-1">
-                <span className="font-medium text-gray-900">{block.name || `Block ${idx + 1}`}</span>
-                <span className="text-xs text-gray-600">
-                  {block.cardioActivity ? 
-                    `${block.cardioActivity.type}` : 
+                <span className="font-medium text-foreground">{block.name || `Block ${idx + 1}`}</span>
+                <span className="text-xs text-muted-foreground">
+                  {block.cardioActivity ?
+                    `${block.cardioActivity.type}` :
                     `${block.structuredTraining?.exercises?.length || 0} exercises`
                   }
                 </span>
@@ -133,7 +134,7 @@ export function TrainingSessionCard({ session, className }: TrainingSessionCardP
             ))}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
