@@ -1,17 +1,16 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, MapPin, Target, Users, Activity, ArrowLeft, Timer, Weight, Repeat, CheckCircle2, Play, Clock4, XCircle, Pause } from "lucide-react"
+import { Calendar, Clock, MapPin, Target, Activity, ArrowLeft, Timer, Repeat, CheckCircle2, Play, Clock4, XCircle, Pause } from "lucide-react"
 import { sampleWorkoutPlan } from "@/examples/sample-workout-plan"
-import { TrainingSession, TrainingSessionStatus } from "@/types/workouts/workout-types"
-import { formatDate, formatDay, formatTime } from "@/lib/format"
-import Link from "next/link"
+import {  TrainingSessionStatus } from "@/types/workouts/workout-types"
+import {  formatDay, formatTime } from "@/lib/format"
 import { notFound } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { use } from "react"
 import React from "react"
+import { EmojiRain } from "@/components/common/EmojiRain"
 
 function getStatusBadgeProps(status: TrainingSessionStatus) {
   switch (status) {
@@ -334,13 +333,18 @@ export default function SessionPage({ params }: SessionPageProps) {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      {/* Emoji Rain for Murph Workout */}
+      {sessionId === "murph-workout" && <EmojiRain />}
+      
       {/* Navigation */}
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" asChild>
-          <Link onClick={() => useNavigate.back()} href={""}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Link>
+      <div>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full h-10 w-10"
+          onClick={() => useNavigate.back()}
+        >
+          <ArrowLeft className="h-4 w-4" />
         </Button>
       </div>
 

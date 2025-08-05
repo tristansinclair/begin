@@ -21,7 +21,7 @@ import { RepetitionType } from "@/types/workouts/exercise-definitions"
 
 // Session 1: Simple 3 Mile Run
 export const threeMileRunSession: TrainingSession = {
-    id: "session-1",
+    id: "easy-3-mile-run",
     name: "Easy 3 Mile Run",
     dateTime: new Date("2025-01-06T07:00:00"),
     status: TrainingSessionStatus.Upcoming,
@@ -46,7 +46,7 @@ export const threeMileRunSession: TrainingSession = {
 
 // Session 2: Full weightlifting Session
 export const upperBodyStrengthSession: TrainingSession = {
-    id: "session-2",
+    id: "upper-body-strength",
     name: "Upper Body Strength",
     dateTime: new Date("2025-01-07T18:00:00"),
     status: TrainingSessionStatus.Upcoming,
@@ -180,8 +180,8 @@ export const upperBodyStrengthSession: TrainingSession = {
 
 // Session 3: Murph Workout (Run + Lift + Run)
 export const murphWorkoutSession: TrainingSession = {
-    id: "session-3",
-    name: "Murph Workout",
+    id: "murph-workout",
+    name: "🇺🇸 Murph Workout 🦅 LET'S GOOOO",
     dateTime: new Date("2025-01-08T10:00:00"),
     status: TrainingSessionStatus.Upcoming,
     blocks: [
@@ -293,7 +293,7 @@ export const murphWorkoutSession: TrainingSession = {
 
 // Session 4: Full Body Strength
 export const fullBodyStrengthSession: TrainingSession = {
-    id: "session-4",
+    id: "full-body-strength",
     name: "Full Body Strength",
     dateTime: new Date("2025-01-09T18:00:00"),
     status: TrainingSessionStatus.Upcoming,
@@ -579,7 +579,7 @@ export const fullBodyStrengthSession: TrainingSession = {
 
 // Session 5: Active Recovery Walk
 export const recoveryWalkSession: TrainingSession = {
-    id: "session-5",
+    id: "recovery-walk",
     name: "Recovery Walk",
     dateTime: new Date("2025-01-10T16:00:00"),
     status: TrainingSessionStatus.Upcoming,
