@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar, Target, Users, Activity } from "lucide-react"
+import { Calendar, Target, Users, Activity, CheckCircle2, Play, Clock4, X, Filter, Dumbbell, Heart } from "lucide-react"
 import { sampleWorkoutPlan } from "@/examples/sample-workout-plan"
 import { formatDate } from "@/lib/format"
 import { TrainingSessionCard } from "@/components/workout/TrainingSessionCard"
@@ -128,12 +128,42 @@ export default function PlanExamplePage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value={TrainingSessionStatus.Upcoming}>Upcoming</SelectItem>
-              <SelectItem value={TrainingSessionStatus.InProgress}>In Progress</SelectItem>
-              <SelectItem value={TrainingSessionStatus.Completed}>Completed</SelectItem>
-              <SelectItem value={TrainingSessionStatus.Missed}>Missed</SelectItem>
-              <SelectItem value={TrainingSessionStatus.Cancelled}>Cancelled</SelectItem>
+              <SelectItem value="all">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-3 w-3 text-muted-foreground" />
+                  <span>All</span>
+                </div>
+              </SelectItem>
+              <SelectItem value={TrainingSessionStatus.Upcoming}>
+                <div className="flex items-center gap-2">
+                  <Clock4 className="h-3 w-3 text-purple-600" />
+                  <span className="text-purple-600 font-semibold uppercase text-xs">Upcoming</span>
+                </div>
+              </SelectItem>
+              <SelectItem value={TrainingSessionStatus.InProgress}>
+                <div className="flex items-center gap-2">
+                  <Play className="h-3 w-3 text-blue-600" />
+                  <span className="text-blue-600 font-semibold uppercase text-xs">In Progress</span>
+                </div>
+              </SelectItem>
+              <SelectItem value={TrainingSessionStatus.Completed}>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3 w-3 text-green-600" />
+                  <span className="text-green-600 font-semibold uppercase text-xs">Completed</span>
+                </div>
+              </SelectItem>
+              <SelectItem value={TrainingSessionStatus.Missed}>
+                <div className="flex items-center gap-2">
+                  <Clock4 className="h-3 w-3 text-red-600" />
+                  <span className="text-red-600 font-semibold uppercase text-xs">Missed</span>
+                </div>
+              </SelectItem>
+              <SelectItem value={TrainingSessionStatus.Cancelled}>
+                <div className="flex items-center gap-2">
+                  <Clock4 className="h-3 w-3 text-gray-500" />
+                  <span className="text-gray-500 font-semibold uppercase text-xs">Cancelled</span>
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -142,20 +172,40 @@ export default function PlanExamplePage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="cardio">Cardio</SelectItem>
-              <SelectItem value="strength">Strength</SelectItem>
-              <SelectItem value="mixed">Mixed</SelectItem>
+              <SelectItem value="all">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-3 w-3 text-muted-foreground" />
+                  <span>All</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="cardio">
+                <div className="flex items-center gap-2">
+                  <Heart className="h-3 w-3 text-red-500" />
+                  <span>Cardio</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="strength">
+                <div className="flex items-center gap-2">
+                  <Dumbbell className="h-3 w-3 text-blue-500" />
+                  <span>Strength</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="mixed">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-3 w-3 text-purple-500" />
+                  <span>Mixed</span>
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
 
           {/* Reset filters button */}
-          {(sortBy !== "date-asc" || statusFilter !== "all" || typeFilter !== "all") && (
+          {(sortBy !== "date-desc" || statusFilter !== "all" || typeFilter !== "all") && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => {
-                setSortBy("date-asc")
+                setSortBy("date-desc")
                 setStatusFilter("all")
                 setTypeFilter("all")
               }}
@@ -180,7 +230,7 @@ export default function PlanExamplePage() {
               size="sm"
               className="mt-2"
               onClick={() => {
-                setSortBy("date-asc")
+                setSortBy("date-desc")
                 setStatusFilter("all")
                 setTypeFilter("all")
               }}

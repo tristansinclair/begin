@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { TrainingSession, TrainingSessionStatus } from "@/types/workouts/workout-types"
 import { cn } from "@/lib/utils"
@@ -15,27 +16,37 @@ interface TrainingSessionCardProps {
   className?: string
 }
 
-function getStatusBadgeProps(status: TrainingSessionStatus) {
+function getStatusProps(status: TrainingSessionStatus) {
   switch (status) {
     case TrainingSessionStatus.Completed:
       return {
         icon: CheckCircle2,
-        variant: "completed" as const
+        color: "text-green-600"
       }
     case TrainingSessionStatus.InProgress:
       return {
         icon: Play,
-        variant: "inProgress" as const
+        color: "text-blue-600"
       }
     case TrainingSessionStatus.Upcoming:
       return {
         icon: Clock4,
-        variant: "upcoming" as const
+        color: "text-purple-600"
+      }
+    case TrainingSessionStatus.Missed:
+      return {
+        icon: Clock4,
+        color: "text-red-600"
+      }
+    case TrainingSessionStatus.Cancelled:
+      return {
+        icon: Clock4,
+        color: "text-gray-500"
       }
     default:
       return {
         icon: Clock4,
-        variant: "secondary" as const
+        color: "text-muted-foreground"
       }
   }
 }
@@ -76,7 +87,7 @@ function formatPace(seconds: number): string {
 }
 
 export function TrainingSessionCard({ session, className }: TrainingSessionCardProps) {
-  const statusProps = getStatusBadgeProps(session.status)
+  const statusProps = getStatusProps(session.status)
   const StatusIcon = statusProps.icon
 
   // Check if this is a single cardio session
@@ -95,47 +106,48 @@ export function TrainingSessionCard({ session, className }: TrainingSessionCardP
   }, 0)
 
   return (
-    <div className={cn(
-      "rounded-lg border border-border bg-card text-card-foreground shadow-sm overflow-hidden",
-      className
-    )}>
-      {/* Header - Same for all card types */}
-      <div className="border-b rounded-t-lg bg-muted px-4 py-3">
-        <div className="flex items-center justify-between gap-4 mb-2">
-          <h3 className="text-xl font-bold text-foreground">{session.name}</h3>
-          <div className="relative group">
-            <Badge variant={statusProps.variant} size="sm" className="cursor-help rounded-full p-1">
-              <StatusIcon className="h-2.5 w-2.5" />
-            </Badge>
-            <div className="absolute right-0 top-full mt-1 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md border shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-10">
-              {session.status}
-            </div>
+    <Link href={`/sessions/${session.id}`} className="block h-full">
+      <div className={cn(
+        "rounded-lg border border-border bg-card text-card-foreground shadow-sm overflow-hidden cursor-pointer h-full flex flex-col",
+        className
+      )}>
+        {/* Header - Same for all card types */}
+        <div className="border-b px-4 py-4">
+          {/* Status Label */}
+          <div className={`inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider mb-2 ${statusProps.color}`}>
+            <StatusIcon className="h-4 w-4" />
+            {session.status}
+          </div>
+          
+          {/* Title */}
+          <h3 className="text-xl font-bold text-foreground mb-1.5">{session.name}</h3>
+          
+          {/* Date and Time */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>{new Date(session.dateTime).toLocaleDateString('en-US', {
+              weekday: 'long',
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            })}</span>
+            <span>•</span>
+            <span>{new Date(session.dateTime).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit'
+            })}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{new Date(session.dateTime).toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-          })}</span>
-          <span>•</span>
-          <span>{new Date(session.dateTime).toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit'
-          })}</span>
+
+        {/* Content - Conditional based on session type */}
+        <div className="bg-card px-4 py-4 flex-1">
+          {isSingleCardioSession ? (
+            <CardioSessionContent session={session} />
+          ) : (
+            <StrengthSessionContent session={session} totalExercises={totalExercises} totalSets={totalSets} />
+          )}
         </div>
       </div>
-
-      {/* Content - Conditional based on session type */}
-      <div className="bg-card px-4 py-4">
-        {isSingleCardioSession ? (
-          <CardioSessionContent session={session} />
-        ) : (
-          <StrengthSessionContent session={session} totalExercises={totalExercises} totalSets={totalSets} />
-        )}
-      </div>
-    </div>
+    </Link>
   )
 }
 
