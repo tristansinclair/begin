@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+**IMPORTANT: Always use pnpm, NOT npm or yarn**
+
 **Development:**
 ```bash
 pnpm dev          # Start development server with Turbopack
