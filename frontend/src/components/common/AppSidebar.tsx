@@ -9,15 +9,9 @@ import {
   User,
   Trophy,
   History,
-  Library,
   Plus,
-  Settings,
-  Camera,
-  BarChart3,
   BookOpen,
-  Heart,
   Home,
-  FileText
 } from 'lucide-react';
 import {
   Sidebar,
@@ -25,7 +19,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -63,7 +56,6 @@ const menuItems = [
     items: [
       { title: 'Active Plan', icon: Trophy, url: '/plan' },
       { title: 'Create', icon: Plus, url: '/plan/create' },
-      { title: 'History', icon: History, url: '/plan/history' },
     ],
   },
   {

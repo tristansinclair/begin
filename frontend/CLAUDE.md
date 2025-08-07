@@ -4,15 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-**IMPORTANT: Always use pnpm, NOT npm or yarn**
+**CRITICAL: Always use pnpm for all package operations, NOT npm or yarn**
+**NEVER run servers - all servers are already running**
 
-**Development:**
 ```bash
-pnpm dev          # Start development server with Turbopack
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm lint         # Run ESLint
-pnpm storybook    # Start Storybook on port 6006
+pnpm add <package>     # Add new dependencies
+pnpm add -D <package>  # Add dev dependencies  
+pnpm remove <package>  # Remove dependencies
+
+# DO NOT RUN THESE - servers already running:
+# pnpm dev, pnpm build, pnpm start, pnpm lint, pnpm storybook
 ```
 
 ## Architecture
@@ -28,36 +29,50 @@ This is a Next.js 15 fitness tracking application called "BEGIN" using:
 ### Directory Structure
 
 **`/src/app/`** - Next.js App Router pages:
-- `/dashboard` - Main dashboard view
-- `/plan/create` - Workout plan creation
-- `/profile` - User profile management
-- `/settings` - Application settings
-- `/stats` - Analytics and progress tracking
-- `/today` - Today's workout view
+- `/(protected)/` - Protected routes requiring auth
+- `/plan/` - Workout plan management and creation
+- `/profile/` - User profile and stats  
+- `/sessions/` - Individual workout sessions
+- `/today/` - Today's workout view
+- `/auth/` - Authentication pages
+- `/login/` - Login page
 
 **`/src/components/`** - React components:
-- `ui/` - shadcn/ui base components
-- `dashboard/` - Dashboard-specific components
-- `plan/` - Plan creation and chat interface
-- `workout/` - Workout tracking components
-- `AppSidebar.tsx` - Main navigation
+- `ui/` - shadcn/ui base components (button, card, input, etc.)
+- `features/dashboard/` - Dashboard and stats components
+- `features/user/` - User profile components  
+- `features/workout/` - Workout tracking components
+- `workout/` - Session cards and workout components
+- `common/` - Shared components (AppSidebar, Breadcrumbs, etc.)
 
-**`/src/store/`** - Zustand state management:
-- `workoutStore.ts` - Workout data and operations
-- `dashboardStore.ts` - Dashboard state
-- `planStore.ts` - Workout plans
-- Each store exports hooks for component consumption
-
-**`/src/data/`** - Static data and mock data files
+**Other key directories:**
+- `/src/types/` - TypeScript definitions (workouts, exercises, etc.)
+- `/src/data/mock/` - Mock data for development
+- `/src/examples/` - Sample workout plans and sessions
+- `/src/hooks/` - Custom React hooks
+- `/src/lib/` - Utility functions and configurations
+- `/src/utils/` - Helper functions and Supabase client
 
 ### Key Patterns
 
-1. **State Management**: Zustand stores are feature-scoped with persist middleware for local storage persistence. Access via hooks exported from store files.
+1. **Authentication**: Supabase SSR with protected routes in `(protected)` folder
 
-2. **Component Structure**: Functional components with TypeScript. Server/Client component separation following Next.js App Router patterns.
+2. **Database**: Prisma ORM with PostgreSQL, schema in `/prisma/schema.prisma`
 
-3. **Styling**: Tailwind CSS with shadcn/ui theming. Design tokens via CSS custom properties support dark mode.
+3. **Component Structure**: Functional components with TypeScript, Server/Client separation
 
-4. **File Imports**: Use `@/*` alias for src imports (e.g., `@/components/ui/button`).
+4. **Styling**: Tailwind CSS 4 with shadcn/ui design system and CSS custom properties
 
-5. **No Testing Framework**: Currently no test setup. Consider Jest or Vitest if tests are needed.
+5. **File Imports**: Use `@/*` alias for src imports (e.g., `@/components/ui/button`)
+
+6. **Mock Data**: Use files in `/src/data/mock/` and `/src/examples/` for development
+
+7. **Storybook**: Component stories available for UI components
+
+## Important Notes
+
+- **CRITICAL**: ALL SERVERS ARE ALREADY RUNNING - never run `pnpm dev`, `pnpm start`, etc.
+- **Package Management**: Always use `pnpm add/remove` for dependencies
+- Components follow shadcn/ui patterns with Radix UI primitives
+- Prisma client available for database operations
+- Supabase handles authentication and some data operations
