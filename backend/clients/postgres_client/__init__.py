@@ -36,7 +36,7 @@ class AsyncPostgresClient(
     def __init__(self):
         # retrieve credentials from environment variables
         user = os.getenv("POSTGRES_USERNAME")
-        password = os.getenv("POSTGRES_PASS")
+        password = os.getenv("POSTGRES_PASSWORD")
         host = os.getenv("POSTGRES_HOST")
         port = os.getenv("POSTGRES_PORT", "5432")
         database = os.getenv("POSTGRES_DB")

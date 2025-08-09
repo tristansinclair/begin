@@ -158,7 +158,7 @@ async def get_federal_loan_repayment_plans(
         configurable = config.get("configurable", {})
         candidly_api: CandidlyAPIClient = configurable["candidly_api"]
         candidly_token = configurable["candidly_token"]
-        candidly_uuid = configurable["user_id"]
+        user_id = configurable["user_id"]
     except KeyError as e:
         logger.exception("Missing required configuration values.")
         raise ToolException("Unable to access user data. Please try again later.") from e
@@ -170,7 +170,7 @@ async def get_federal_loan_repayment_plans(
         # refresh reassess results from candidly api (errors must be caught)
         reassess_results: list[ReassessRepaymentPlanInfo] = await candidly_api.get_user_reassess_info(
             candidly_token=candidly_token,
-            candidly_uuid=candidly_uuid
+            user_id=user_id
         )
 
         # Filter repayment plans - first by validity, then optionally by selection

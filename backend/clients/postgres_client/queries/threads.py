@@ -14,28 +14,28 @@ class ThreadMethodsMixin:
     engine: AsyncEngine | None
     _skip_pings: bool
 
-    # method to insert thread_id candidly_uuid pair into db
-    async def insert_thread_id(self, candidly_uuid: str, thread_id: str) -> None:
+    # method to insert thread_id user_id pair into db
+    async def insert_thread_id(self, user_id: str, thread_id: str) -> None:
         # skip for local tests
         if self._skip_pings:
             return
 
         # sql query to insert
         thread_id_insert_query = '''
-            insert into public.conversations (thread_id, candidly_uuid)
-            values (:thread_id, :candidly_uuid)
+            insert into public.conversations (thread_id, user_id)
+            values (:thread_id, :user_id)
         '''.strip()
 
         # allow exceptions to surface to route
         try:
-            # begin transaction to write thread_id candidly_uuid pair
+            # begin transaction to write thread_id user_id pair
             async with self.engine.begin() as conn:
                 # passing in {...} prevents sql injection
                 result = await conn.execute(
                     statement=text(thread_id_insert_query),
                     parameters={
                         'thread_id': thread_id,
-                        'candidly_uuid': candidly_uuid
+                        'user_id': user_id
                     }
                 )
 
@@ -46,19 +46,19 @@ class ThreadMethodsMixin:
         except Exception as e:
             raise e
 
-    # method to list all thread(s) for a candidly_uuid
-    async def list_threads(self, candidly_uuid: str) -> list:
+    # method to list all thread(s) for a user_id
+    async def list_threads(self, user_id: str) -> list:
         # empty list for local tests
         if self._skip_pings:
             return []
 
-        # sql query to retrieve all thread(s) for a given candidly_uuid
+        # sql query to retrieve all thread(s) for a given user_id
         threads_query = '''
             select thread_id,
                    date_trunc('second', created_at)::timestamptz(0) as created_at,
                    title
             from public.conversations
-            where candidly_uuid = :candidly_uuid and
+            where user_id = :user_id and
                   deleted_at is null
             order by created_at desc;
         '''.strip()
@@ -71,7 +71,7 @@ class ThreadMethodsMixin:
                 result = await conn.execute(
                     statement=text(threads_query),
                     parameters={
-                        'candidly_uuid': candidly_uuid
+                        'user_id': user_id
                     }
                 )
                 rows = result.mappings().all()
@@ -81,31 +81,31 @@ class ThreadMethodsMixin:
         except Exception as e:
             raise e
 
-    # method to confirm whether a thread_id belongs to a candidly_uuid
-    async def confirm_thread_id(self, candidly_uuid: str, thread_id: str) -> bool:
+    # method to confirm whether a thread_id belongs to a user_id
+    async def confirm_thread_id(self, user_id: str, thread_id: str) -> bool:
         # default true for local tests
         if self._skip_pings:
             return True
 
-        # sql query to check existence of thread_id candidly_uuid pair
+        # sql query to check existence of thread_id user_id pair
         check_thread_id_query = '''
             select 1
             from public.conversations
-            where candidly_uuid = :candidly_uuid and
+            where user_id = :user_id and
                   thread_id = :thread_id and
                   deleted_at is null;
         '''
 
         # allow exceptions to surface to route
         try:
-            # begin transaction to write thread_id candidly_uuid pair
+            # begin transaction to write thread_id user_id pair
             async with self.engine.begin() as conn:
                 # passing in {...} prevents sql injection
                 result = await conn.execute(
                     statement=text(check_thread_id_query),
                     parameters={
                         'thread_id': thread_id,
-                        'candidly_uuid': candidly_uuid
+                        'user_id': user_id
                     }
                 )
 
@@ -119,7 +119,7 @@ class ThreadMethodsMixin:
             raise e
 
     # method to update title for a thread
-    async def update_thread_title(self, title: str, candidly_uuid: str, thread_id: str) -> None:
+    async def update_thread_title(self, title: str, user_id: str, thread_id: str) -> None:
         # basic return for local tests
         if self._skip_pings:
             return
@@ -130,7 +130,7 @@ class ThreadMethodsMixin:
             update public.conversations
                 set title = :title,
                     updated_at = now()
-            where candidly_uuid = :candidly_uuid and
+            where user_id = :user_id and
                   thread_id = :thread_id and
                   deleted_at is null;
         '''
@@ -145,7 +145,7 @@ class ThreadMethodsMixin:
                     parameters={
                         "title": title,
                         'thread_id': thread_id,
-                        'candidly_uuid': candidly_uuid
+                        'user_id': user_id
                     }
                 )
 
@@ -159,7 +159,7 @@ class ThreadMethodsMixin:
             raise e
 
     # method to delete a thread_id
-    async def delete_thread_id(self, candidly_uuid: str, thread_id: str) -> None:
+    async def delete_thread_id(self, user_id: str, thread_id: str) -> None:
         # basic return for local tests
         if self._skip_pings:
             return
@@ -170,7 +170,7 @@ class ThreadMethodsMixin:
             update public.conversations
                 set deleted_at = now(),
                     updated_at = now()
-            where candidly_uuid = :candidly_uuid and
+            where user_id = :user_id and
                   thread_id = :thread_id and
                   deleted_at is null;
         '''
@@ -184,7 +184,7 @@ class ThreadMethodsMixin:
                     statement=text(delete_thread_id_query),
                     parameters={
                         'thread_id': thread_id,
-                        'candidly_uuid': candidly_uuid
+                        'user_id': user_id
                     }
                 )
 

@@ -91,7 +91,7 @@ async def create_thread_title(
         if title is not None:
             await db_client.update_thread_title(
                 title=title,
-                candidly_uuid=user_id,
+                user_id=user_id,
                 thread_id=thread_id,
             )
             logger.info(f'updated title for thread: {thread_id}')

@@ -55,29 +55,18 @@ def render_dynamic_prompt(state: CandidlyAgentState) -> str:
     if isinstance(state, dict):
         state = CandidlyAgentState(**state)
 
-    # Create user_candidly_products dict
-    # user_candidly_products_information = {
-    #     product_slug: CANDIDLY_PRODUCT_DICT[product_slug]
-    #     for product_slug in state.user_info.product_combination or []
-    # }
-
-    # Build context for template rendering
+    # Handle case where user_info doesn't exist or is just a string (user_id)
+    # This is a temporary fix for the fitness app context
+    user_info = getattr(state, 'user_info', None)
+    
+    # Build context for template rendering with safe defaults
     context = {
         "current_date": datetime.now().strftime("%Y-%m-%d"),
-        "user_name": state.user_info.first_name,
-        "user_org_name": state.user_info.organization_name,
-        "user_income": state.user_info.user_income,
-        "user_marital_status": state.user_info.marital_status,
-        "user_tax_status": state.user_info.tax_status,
-        "user_org_pslf_eligibility": state.user_info.organization_pslf_eligible,
-        "user_employment_status": state.user_info.employment_type,
-        "user_candidly_products": state.user_info.product_combination,
-        # "user_candidly_products_information": user_candidly_products_information,
-        "rag_query": state.references.rag_query,
-        "retrieved_chunks": state.references.retrieved_chunks,
-        "perform_rag": state.references.perform_rag,
-        # "policy_section_updated_at": state.references.policy_section_updated_at, # TODO: We might want this to be a db pull. leaveing for now as a reminder.
-        # "recent_policy_updates": state.references.recent_policy_updates,
+        "user_name": getattr(user_info, 'first_name', 'User') if hasattr(user_info, 'first_name') else 'User',
+        # Handle references safely as well
+        "rag_query": getattr(getattr(state, 'references', None), 'rag_query', None) if hasattr(state, 'references') else None,
+        "retrieved_chunks": getattr(getattr(state, 'references', None), 'retrieved_chunks', []) if hasattr(state, 'references') else [],
+        "perform_rag": getattr(getattr(state, 'references', None), 'perform_rag', False) if hasattr(state, 'references') else False,
     }
 
     # Render the system prompt using the Jinja2 template
@@ -106,7 +95,7 @@ def dynamic_tool_binder(state: CandidlyAgentState) -> list[Callable]:
     # Add conditional tools based on user state
     # TODO: Now that reassess is removed from the state, we need a better way to dynamically bind this.
     # For now, we are just adding it back in.
-    available_tools.append(CONDITIONAL_TOOLS["reassess_results"])
+    # available_tools.append(CONDITIONAL_TOOLS["reassess_results"])
 
     return available_tools
 

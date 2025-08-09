@@ -117,36 +117,17 @@ async def create_initial_state_for_user(user_id: str, **kwargs) -> dict[str, Any
     Raises:
         ValueError: If CLIENT environment variable is missing or unsupported.
     """
-    client, _ = _get_env_variables()
+    # generate user info object
+    # user_info = await candidly_api.get_user_candidly_info(
+    #     candidly_token=candidly_token,
+    #     user_id=user_id
+    # )
 
-    logger.info("Creating initial state for user %s with CLIENT=%s", user_id, client)
+    # Return initial state with user info
+    user_info = {
+        "user_info": user_id,
+        "react_loop_iterations": 0,
+        "guardrail_assessment": None,
+    }
 
-    # construct and return initial state for candidly user
-    if client == "CANDIDLY":
-        # retrieve required vars from kwargs
-        candidly_api: CandidlyAPIClient = kwargs.get('candidly_api')
-        candidly_token: str = kwargs.get('candidly_token')
-
-        # generate user info object
-        user_info = await candidly_api.get_user_candidly_info(
-            candidly_token=candidly_token,
-            candidly_uuid=user_id
-        )
-
-        # Return initial state with user info
-        candidly_user_info = {
-            "user_info": user_info,
-            "artifacts": [],
-            "react_loop_iterations": 0,
-            "references": {
-                "perform_rag": False,
-                "rag_query": "",
-                "retrieved_chunks": [],
-            },
-            "guardrail_assessment": None,
-        }
-
-        return candidly_user_info
-
-    else:
-        raise ValueError(f"Unsupported CLIENT: {client}")
+    return user_info

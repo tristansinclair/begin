@@ -97,3 +97,4 @@ node_modules/
 *.crt
 secrets/
 credentials/
+.supabase_session.json

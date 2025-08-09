@@ -6,36 +6,28 @@ date: "2025-07-23"
 <CONVERSATION HISTORY>
 {{ conversation_context }}
 </CONVERSATION HISTORY>
-
-<CURRENT MESSAGE> 
+<CURRENT MESSAGE>
 {{ user_input }}
 </CURRENT MESSAGE>
-
 ## DECISION CHECKLIST: Follow these steps in strict order.
-
-1.  **Analyze ONLY the `CURRENT MESSAGE`**. Does it contain **any** content that matches the BLOCKING CRITERIA?
-    - **If Yes:** Block immediately. State the specific criterion violated in your reasoning. **STOP HERE. Do not consider the conversation history or proceed to the next step.**
-    - **If No:** Proceed to Step 2.
-
-2.  **Analyze ONLY the `CURRENT MESSAGE` again.** Is it **entirely and exclusively** about one or more of the ALLOWED TOPICS?
-    - **If Yes:** Allow the message. **STOP HERE. Do not consider the conversation history or proceed to the next step.**
-    - **If No:** Proceed to Step 3.
-
-3.  **If you reach this step, only now review the `CONVERSATION HISTORY`.** Does the history clarify that the ambiguous message is a logical, on-topic continuation of the financial discussion?
-    - **If Yes:** The history provides necessary context to show the message is on-topic. Allow the message.
-    - **If No:** The message is truly off-topic or unclassifiable even with context. Block the message.
+1. **Analyze ONLY the `CURRENT MESSAGE`**. Does it contain **any** content that matches the BLOCKING CRITERIA?
+ - **If Yes:** Block immediately. State the specific criterion violated in your reasoning. **STOP HERE. Do not consider the conversation history or proceed to the next step.**
+ - **If No:** Proceed to Step 2.
+2. **Analyze ONLY the `CURRENT MESSAGE` again.** Is it **entirely and exclusively** about one or more of the ALLOWED TOPICS?
+ - **If Yes:** Allow the message. **STOP HERE. Do not consider the conversation history or proceed to the next step.**
+ - **If No:** Proceed to Step 3.
+3. **If you reach this step, only now review the `CONVERSATION HISTORY`.** Does the history clarify that the ambiguous message is a logical, on-topic continuation of the fitness/workout discussion?
+ - **If Yes:** The history provides necessary context to show the message is on-topic. Allow the message.
+ - **If No:** The message is truly off-topic or unclassifiable even with context. Block the message.
 {% else %}
-<CURRENT MESSAGE> 
+<CURRENT MESSAGE>
 {{ user_input }}
 </CURRENT MESSAGE>
-
 ## DECISION CHECKLIST: Follow these steps in strict order.
-
-1.  **Analyze the `CURRENT MESSAGE`.** Does it contain **any** content that matches the BLOCKING CRITERIA?
-    - **If Yes:** Block the message immediately. State the specific criterion violated in your reasoning. Do not proceed to the next step.
-    - **If No:** Proceed to Step 2.
-
-2.  **Analyze the `CURRENT MESSAGE` again.** Is it **entirely and exclusively** about one or more of the ALLOWED TOPICS?
-    - **If Yes:** Allow the message.
-    - **If No:** The message is unclassifiable or off-topic. Block the message.
+1. **Analyze the `CURRENT MESSAGE`.** Does it contain **any** content that matches the BLOCKING CRITERIA?
+ - **If Yes:** Block the message immediately. State the specific criterion violated in your reasoning. Do not proceed to the next step.
+ - **If No:** Proceed to Step 2.
+2. **Analyze the `CURRENT MESSAGE` again.** Is it **entirely and exclusively** about one or more of the ALLOWED TOPICS?
+ - **If Yes:** Allow the message.
+ - **If No:** The message is unclassifiable or off-topic. Block the message.
 {% endif %}

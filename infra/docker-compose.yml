@@ -5,7 +5,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: ${BEGIN_USER}
-      POSTGRES_PASSWORD: ${BEGIN_PASSWORD}
+      POSTGRES_PASSWORDWORD: ${BEGIN_PASSWORD}
       POSTGRES_DB: ${BEGIN_DB_NAME}
     volumes:
       - begin_db_data:/var/lib/postgresql/data
