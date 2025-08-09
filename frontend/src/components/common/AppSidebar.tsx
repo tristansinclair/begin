@@ -12,6 +12,7 @@ import {
   Plus,
   BookOpen,
   Home,
+  MessageCircle,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -57,6 +58,11 @@ const menuItems = [
       { title: 'Active Plan', icon: Trophy, url: '/plan' },
       { title: 'Create', icon: Plus, url: '/plan/create' },
     ],
+  },
+  {
+    title: 'Chat',
+    icon: MessageCircle,
+    url: '/chat'
   },
   {
     title: 'Profile',
