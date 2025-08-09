@@ -11,30 +11,5 @@ services:
       - begin_db_data:/var/lib/postgresql/data
     restart: always
 
-  phoenix:
-    image: arizephoenix/phoenix:latest
-    depends_on:
-      - ${PHOENIX_DB_NAME}
-    ports:
-      - 6006:6006
-      - 4317:4317
-      - 9090:9090
-    environment:
-      - PHOENIX_SQL_DATABASE_URL=postgresql://${PHOENIX_USER}:${PHOENIX_PASSWORD}@${PHOENIX_DB_NAME}:5432/${PHOENIX_DB_NAME}
-    restart: always
-
-  phoenix_db:
-    image: postgres:17
-    restart: always
-    environment:
-      - POSTGRES_USER=${PHOENIX_USER}
-      - POSTGRES_PASSWORD=${PHOENIX_PASSWORD}
-      - POSTGRES_DB=${PHOENIX_DB_NAME}
-    ports:
-      - 5433:5432
-    volumes:
-      - ${PHOENIX_DB_NAME}_data:/var/lib/postgresql/data
-
 volumes:
   begin_db_data:
-  phoenix_db_data:

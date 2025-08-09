@@ -72,7 +72,8 @@ export function AppSidebar() {
     if (url === '/') {
       return pathname === '/';
     }
-    return pathname.startsWith(url);
+    // For exact matches and paths with sub-items, check if pathname matches exactly or is a direct child
+    return pathname === url || (pathname.startsWith(url + '/') && !pathname.substring(url.length + 1).includes('/'));
   };
 
   return (

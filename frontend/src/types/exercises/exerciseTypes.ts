@@ -4,6 +4,22 @@ export interface ExerciseType {
   icon: string;
   description: string;
   equipment?: ExerciseEquipment[];
+  preferences?: ExercisePreference[];
+}
+
+export interface ExercisePreference {
+  id: string;
+  label: string;
+  type: 'single' | 'multiple' | 'text';
+  options?: PreferenceOption[];
+  required?: boolean;
+  description?: string;
+}
+
+export interface PreferenceOption {
+  id: string;
+  label: string;
+  icon?: string;
 }
 
 export interface ExerciseEquipment {
@@ -19,23 +35,27 @@ export const exerciseTypes: ExerciseType[] = [
     icon: '🏋🏼‍♂️',
     description: 'Traditional weightlifting with dumbbells, barbells, and weight plates. Focus on compound movements like squats, deadlifts, and bench press to build strength and muscle mass.',
     equipment: [
-      { id: 'dumbbells', name: 'Dumbbells', icon: '🏋️' },
+      { id: 'squat_rack', name: 'Squat Rack/Power Rack', icon: '🏗️' },
       { id: 'barbells', name: 'Barbells', icon: '⚖️' },
-      { id: 'power_rack', name: 'Power Rack/Squat Rack', icon: '🏗️' },
+      { id: 'drop_area', name: 'Drop Area (for Cleans/Deadlifts)', icon: '🎯' },
+      { id: 'dumbbells', name: 'Dumbbells', icon: '🏋️' },
+      { id: 'kettlebells', name: 'Kettlebells', icon: '⛳' },
+      { id: 'resistance_bands', name: 'Resistance Bands', icon: '🔗' },
+      { id: 'cables', name: 'Cable Machine', icon: '🔌' },
       { id: 'bench', name: 'Weight Bench', icon: '🪑' }
-    ]
-  },
-  {
-    id: 'cardio',
-    name: 'Cardio',
-    icon: '🔥',
-    description: 'Cardiovascular training to improve heart health and endurance. Includes steady-state cardio and interval training using various machines and equipment.',
-    equipment: [
-      { id: 'treadmill', name: 'Treadmill', icon: '🏃' },
-      { id: 'elliptical', name: 'Elliptical Machine', icon: '⚪' },
-      { id: 'stationary_bike', name: 'Stationary Bike', icon: '🚴' },
-      { id: 'rowing_machine', name: 'Rowing Machine', icon: '🚣' },
-      { id: 'stair_climber', name: 'Stair Climber', icon: '🪶' }
+    ],
+    preferences: [
+      {
+        id: 'training_focus',
+        label: 'Training Focus',
+        type: 'single',
+        required: true,
+        options: [
+          { id: 'strength', label: 'Strength (Heavy, Low Reps)', icon: '💪' },
+          { id: 'hypertrophy', label: 'Muscle Building (Moderate Weight)', icon: '🏋️' },
+          { id: 'endurance', label: 'Muscular Endurance (Light, High Reps)', icon: '⚡' }
+        ]
+      }
     ]
   },
   {
@@ -44,11 +64,29 @@ export const exerciseTypes: ExerciseType[] = [
     icon: '⚡',
     description: 'High-Intensity Interval Training combines short bursts of intense exercise with periods of rest. Burns calories efficiently and improves both strength and cardio.',
     equipment: [
+      { id: 'treadmill', name: 'Treadmill', icon: '🏃' },
+      { id: 'stationary_bike', name: 'Stationary Bike', icon: '🚴' },
+      { id: 'rowing_machine', name: 'Rowing Machine', icon: '🚣' },
+      { id: 'elliptical', name: 'Elliptical', icon: '🏃' },
       { id: 'kettlebells', name: 'Kettlebells', icon: '⛳' },
       { id: 'battle_ropes', name: 'Battle Ropes', icon: '🔗' },
       { id: 'plyometric_box', name: 'Plyo Box', icon: '📦' },
       { id: 'medicine_ball', name: 'Medicine Ball', icon: '⚽' },
-      { id: 'agility_ladder', name: 'Agility Ladder', icon: '🪜' }
+      { id: 'agility_ladder', name: 'Agility Ladder', icon: '🪜' },
+      { id: 'burpee_space', name: 'Open Floor Space', icon: '🔳' }
+    ],
+    preferences: [
+      {
+        id: 'hiit_style',
+        label: 'HIIT Style Preference',
+        type: 'single',
+        required: true,
+        options: [
+          { id: 'cardio_focused', label: 'Cardio-Focused HIIT', icon: '❤️' },
+          { id: 'strength_focused', label: 'Strength-Focused HIIT', icon: '💪' },
+          { id: 'mixed', label: 'Mixed Cardio + Strength', icon: '⚡' }
+        ]
+      }
     ]
   },
   {
@@ -57,9 +95,20 @@ export const exerciseTypes: ExerciseType[] = [
     icon: '🏃',
     description: 'Outdoor and indoor running for cardiovascular fitness and endurance. From casual jogging to marathon training, running is accessible and effective for all fitness levels.',
     equipment: [
-      { id: 'running_shoes', name: 'Running Shoes', icon: '👟' },
       { id: 'treadmill', name: 'Treadmill', icon: '🏃' },
       { id: 'outdoor_space', name: 'Outdoor Running Space', icon: '🌳' }
+    ],
+    preferences: [
+      {
+        id: 'running_location',
+        label: 'Where do you prefer to run?',
+        type: 'multiple',
+        required: true,
+        options: [
+          { id: 'treadmill', label: 'Treadmill/Indoor', icon: '🏃' },
+          { id: 'outdoors', label: 'Outdoors', icon: '🌳' }
+        ]
+      }
     ]
   },
   {
@@ -83,6 +132,31 @@ export const exerciseTypes: ExerciseType[] = [
       { id: 'yoga_blocks', name: 'Yoga Blocks', icon: '🧱' },
       { id: 'yoga_strap', name: 'Yoga Strap', icon: '🔗' },
       { id: 'bolster', name: 'Yoga Bolster', icon: '🚯' }
+    ],
+    preferences: [
+      {
+        id: 'yoga_practice',
+        label: 'How do you practice yoga?',
+        type: 'single',
+        required: true,
+        options: [
+          { id: 'solo_home', label: 'Solo Practice at Home', icon: '🏠' },
+          { id: 'studio_classes', label: 'Studio Classes', icon: '🧘‍♀️' },
+          { id: 'both', label: 'Both Home & Studio', icon: '🔄' }
+        ]
+      },
+      {
+        id: 'yoga_style',
+        label: 'Preferred Yoga Style',
+        type: 'single',
+        options: [
+          { id: 'vinyasa', label: 'Vinyasa (Flow)', icon: '🌊' },
+          { id: 'hatha', label: 'Hatha (Slower)', icon: '🐌' },
+          { id: 'power', label: 'Power Yoga', icon: '💪' },
+          { id: 'restorative', label: 'Restorative', icon: '😌' },
+          { id: 'any', label: 'Any Style', icon: '🔄' }
+        ]
+      }
     ]
   },
   {
@@ -94,6 +168,18 @@ export const exerciseTypes: ExerciseType[] = [
       { id: 'bicycle', name: 'Bicycle', icon: '🚴' },
       { id: 'stationary_bike', name: 'Stationary Bike', icon: '🚴' },
       { id: 'bike_trainer', name: 'Indoor Bike Trainer', icon: '🔗' }
+    ],
+    preferences: [
+      {
+        id: 'biking_location',
+        label: 'Where do you prefer to bike?',
+        type: 'multiple',
+        required: true,
+        options: [
+          { id: 'indoor', label: 'Indoor (Stationary/Trainer)', icon: '🏠' },
+          { id: 'outdoor', label: 'Outdoor Cycling', icon: '🌳' }
+        ]
+      }
     ]
   },
   {
@@ -104,32 +190,32 @@ export const exerciseTypes: ExerciseType[] = [
     equipment: [
       { id: 'pool_access', name: 'Pool Access', icon: '🏊' },
       { id: 'swim_gear', name: 'Swimming Gear', icon: '🥽' }
+    ],
+    preferences: [
+      {
+        id: 'swimming_style',
+        label: 'What type of swimming do you prefer?',
+        type: 'single',
+        required: true,
+        options: [
+          { id: 'pool_laps', label: 'Pool Laps (Structured)', icon: '🏊' },
+          { id: 'open_water', label: 'Open Water/Ocean', icon: '🌊' },
+          { id: 'both', label: 'Both Pool & Open Water', icon: '🔄' }
+        ]
+      },
+      {
+        id: 'swimming_focus',
+        label: 'Swimming Focus',
+        type: 'single',
+        options: [
+          { id: 'technique', label: 'Technique & Form', icon: '🎯' },
+          { id: 'distance', label: 'Distance/Endurance', icon: '🏃' },
+          { id: 'speed', label: 'Speed/Intervals', icon: '⚡' },
+          { id: 'recreation', label: 'Recreational/Fun', icon: '😊' }
+        ]
+      }
     ]
   },
-  {
-    id: 'pilates',
-    name: 'Pilates',
-    icon: '🤸',
-    description: 'Low-impact exercise focusing on core strength, flexibility, and body awareness. Pilates uses controlled movements to improve posture, balance, and muscle tone.',
-    equipment: [
-      { id: 'pilates_mat', name: 'Pilates Mat', icon: '🧘' },
-      { id: 'pilates_ball', name: 'Pilates Ball', icon: '⚽' },
-      { id: 'resistance_bands', name: 'Resistance Bands', icon: '🎯' },
-      { id: 'pilates_reformer', name: 'Pilates Reformer', icon: '🏭' }
-    ]
-  },
-  {
-    id: 'stretching',
-    name: 'Stretching',
-    icon: '🤲',
-    description: 'Essential for flexibility, mobility, and injury prevention. Static and dynamic stretching routines help maintain range of motion and aid in muscle recovery.',
-    equipment: [
-      { id: 'yoga_mat', name: 'Exercise Mat', icon: '🧘' },
-      { id: 'foam_roller', name: 'Foam Roller', icon: '🌯' },
-      { id: 'massage_ball', name: 'Massage Ball', icon: '⚽' },
-      { id: 'stretching_strap', name: 'Stretching Strap', icon: '🔗' }
-    ]
-  }
 ];
 
 // Helper functions

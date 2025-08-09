@@ -72,7 +72,7 @@ const Dashboard = () => {
 
         </div>
 
-        {/* <WorkoutCalendar /> */}
+        <WorkoutCalendar />
       </main>
     </div>
   );

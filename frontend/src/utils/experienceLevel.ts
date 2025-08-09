@@ -19,16 +19,16 @@ export const experienceLevels: ExperienceLevel[] = [
     emoji: "⚡"
   },
   {
-    level: 3,
-    title: "Consistency Warrior",
-    description: "You're developing the habits that separate winners from dreamers!",
-    emoji: "🔥"
-  },
-  {
     level: 4,
     title: "Rising Star",
     description: "Your dedication is showing! People are starting to notice your transformation.",
     emoji: "⭐"
+  },
+  {
+    level: 3,
+    title: "Consistency Warrior",
+    description: "You're developing the habits that separate winners from dreamers!",
+    emoji: "🔥"
   },
   {
     level: 5,

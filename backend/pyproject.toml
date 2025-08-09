@@ -15,4 +15,7 @@ dependencies = [
     "langgraph-checkpoint-postgres>=2.0.0",
     "langchain-openai>=0.1.0",
     "langchain>=0.2.0",
+    "greenlet>=3.2.4",
+    "scipy>=1.16.1",
+    "json-repair>=0.48.0",
 ]
